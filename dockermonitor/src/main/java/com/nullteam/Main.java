@@ -1,4 +1,4 @@
-package com.nullteam;
+package com.nullproject;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
