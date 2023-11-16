@@ -1,4 +1,4 @@
-package com.nullproject;
+package com.nullteam;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
@@ -18,7 +18,7 @@ public class Main {
         containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 
         // Initialized menu//
-        System.out.println("Welcome nullteam, bootup menu *v.1* starting...");
+        System.out.println("Welcome null_team, boot-up menu *v.1* starting...");
         Scanner in = new Scanner(System.in);
         for(;;) {
             System.out.println("Choose one:\n1)Show ALL containers\n2)Show ACTIVE containers only\n3)Stop a container\n4)EXIT APP");
