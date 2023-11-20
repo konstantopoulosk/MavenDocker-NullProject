@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Modelisation {
-    private DockerClient dockerClient;
+    DockerClient dockerClient;
     static List<Image> images;
     static List<java.awt.Container> containers;
 
