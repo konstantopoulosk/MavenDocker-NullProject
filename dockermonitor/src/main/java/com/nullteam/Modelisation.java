@@ -29,7 +29,22 @@ public class Modelisation {
         this.containers = containers;
     }
 
-    //
+    public DockerClient getDockerClient() {
+        return this.dockerClient;
+    }
+
+    public List<Image> getImages() {
+        return this.images;
+    }
+
+    public List<java.awt.Container> getContainers() {
+        return this.containers;
+    }
+
+    public void setContainers(List<java.awt.Container> containers) {
+        this.containers = containers;
+    }
+
     //Images case 1 (Show all images like this *number.image:version*)
     public void showImages() {
         for (int i = 0; i < images.size(); i++) {
