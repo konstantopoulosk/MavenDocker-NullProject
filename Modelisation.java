@@ -9,13 +9,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Modelisation {
+<<<<<<< HEAD
   //  private DockerClient dockerClient = DockerClientBuilder.getInstance().build(); //Client
   //  private List<Image> images = dockerClient.listImagesCmd().exec(); //List images tou client
   //  private List<java.awt.Container> containers = dockerClient.listContainersCmd().exec(); // list containers tou client
 
+    private DockerClient dockerClient;
+    private List<Image> images;
+    private <java.awt.Container> containers;
+=======
     DockerClient dockerClient;
-    List<Image> images;
-    List<java.awt.Container> containers;
+    static List<Image> images;
+    static List<java.awt.Container> containers;
+>>>>>>> 04951bd969f0348663037cf8d970e5c95cd172b7
 
     //constructor for image methods
     Modelisation(DockerClient dockerClient, List<Image> images) {
@@ -66,6 +72,7 @@ public class Modelisation {
         System.out.println("Or press 0 to go back");
         int c = in.nextInt();
         if (c != 0) {
+            String id = containers.get(c-1).getId(); //container's id, parameter in executor
             char a = in.next().charAt();
             switch (a) {
                 case 'S':
@@ -102,6 +109,7 @@ public class Modelisation {
         int c = in.nextInt();
         if (c != 0) {
             char a = in.next().charAt();
+            String id = containers.get(c-1).getId(); //container's id, parameter in executor
             switch (a) {
                 case 'R':
                     //executor
