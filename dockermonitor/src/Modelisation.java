@@ -13,9 +13,9 @@ public class Modelisation {
   //  private List<Image> images = dockerClient.listImagesCmd().exec(); //List images tou client
   //  private List<java.awt.Container> containers = dockerClient.listContainersCmd().exec(); // list containers tou client
 
-    DockerClient dockerClient;
-    List<Image> images;
-    List<java.awt.Container> containers;
+    private DockerClient dockerClient;
+    private List<Image> images;
+    private List<java.awt.Container> containers;
 
     //constructor for image methods
     Modelisation(DockerClient dockerClient, List<Image> images) {
@@ -29,22 +29,6 @@ public class Modelisation {
         this.containers = containers;
     }
 
-    public DockerClient getDockerClient() {
-        return this.dockerClient;
-    }
-
-    public List<Image> getImages() {
-        return this.images;
-    }
-
-    public List<java.awt.Container> getContainers() {
-        return this.containers;
-    }
-
-    public void setContainers(List<java.awt.Container> containers) {
-        this.containers = containers;
-    }
-
     //Images case 1 (Show all images like this *number.image:version*)
     public void showImages() {
         for (int i = 0; i < images.size(); i++) {
@@ -53,7 +37,7 @@ public class Modelisation {
             System.out.println( (i+1) + ". " + s[0] + ":" + s[1]);  // It works!
         }
     }
-                                                                                                                    
+
     //Containers case 1 (Show all containers)
     public void allContainers() {
         System.out.println("--------------------------ALL CONTAINER INSTANCES--------------------------");
