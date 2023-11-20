@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public class Modelisation {
     private DockerClient dockerClient;
-    List<Image> images;
-    List<java.awt.Container> containers;
+    static List<Image> images;
+    static List<java.awt.Container> containers;
 
     //constructor for image methods
     Modelisation(DockerClient dockerClient, List<Image> images) {
