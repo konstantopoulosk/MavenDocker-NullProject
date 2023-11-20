@@ -1,5 +1,6 @@
 package com.nullteamproject;
 
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.listImagesCmd;
 import com.github.dockerjava.api.model.Container;
@@ -9,22 +10,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Modelisation {
-  //  private DockerClient dockerClient = DockerClientBuilder.getInstance().build(); //Client
-  //  private List<Image> images = dockerClient.listImagesCmd().exec(); //List images tou client
-  //  private List<java.awt.Container> containers = dockerClient.listContainersCmd().exec(); // list containers tou client
 
     private DockerClient dockerClient;
-    private List<Image> images;
-    private List<java.awt.Container> containers;
+    List<java.awt.Image> images;
+    List<java.awt.Container> containers;
 
     //constructor for image methods
-    Modelisation(DockerClient dockerClient, List<Image> images) {
+    Modelisation(DockerClient dockerClient, List<java.awt.Image> images) {
         this.dockerClient = dockerClient;
         this.images = images;
     }
 
     //constructor for container methods
-    Modelisation(DockerClient dockerClient, List<Container> containers) {
+    Modelisation(DockerClient dockerClient, List<java.awt.Container> containers) {
         this.dockerClient = dockerClient;
         this.containers = containers;
     }
@@ -33,7 +31,7 @@ public class Modelisation {
         return this.dockerClient;
     }
 
-    public List<Image> getImages() {
+    public List<java.awt.Image> getImages() {
         return this.images;
     }
 
@@ -57,7 +55,9 @@ public class Modelisation {
     }
 
     //Containers case 1 (Show all containers)
-    public void allContainers() {
+    public String[] allContainers() {
+	Scanner in = new Scanner(System.in);
+	String [] s = new String[2];
         System.out.println("--------------------------ALL CONTAINER INSTANCES--------------------------");
         containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 
@@ -66,23 +66,20 @@ public class Modelisation {
         System.out.println("Choose a container from the above (number) and an activity:");
         System.out.println("Start(S)\nRename(R)\nInspect(I)");
         System.out.println("Or press 0 to go back");
-        int c = in.nextInt();
+        int c = in.nextInt(); //user chooses a container by number.
         if (c != 0) {
-            char a = in.next().charAt();
-            switch (a) {
-                case 'S':
-                    //executor
-                    break;
-                case 'R':
-                    //executor
-                    break;
-                case 'I':
-                    //executor
-                    break;
-            }
+	    String id = containers.get(c-1).getId();
+            String a = in.nextLine(); //user chooses an activity for the container.
+            s[0] = id;
+	    s[1] = a;
+	 } else {
+	    s[0] = null;
+	    s[1] = null;
         }
+	return s;
     }
-
+    
+	//this method shows the user's containers like this: <number>. <name>, Image: <image>
     public void showContainers(List<java.awt.Container> containers) {
         for (int i = 0; i < containers.size(); i++) {
             String [] s = new String[7];
@@ -92,7 +89,9 @@ public class Modelisation {
     }
 
     //Containers case 2 (Show active containers)
-    public void activeContainers() {
+    public String[] activeContainers() {
+	Scanner in = new Scanner(System.in);
+	String [] s = new String[2];
         System.out.println("--------------------------ACTIVE CONTAINER INSTANCES------------------------");
         containers = dockerClient.listContainersCmd().withShowAll(false).exec();
 
@@ -101,26 +100,22 @@ public class Modelisation {
         System.out.println("Choose a container from the above (number) and an activity:");
         System.out.println("Restart(R)\nPause(P)\nUnpause(U)\nStop(S)\nKill(K)");
         System.out.println("Or press 0 to go back");
-        int c = in.nextInt();
+        int c = in.nextInt(); // user chooses a container by number.
         if (c != 0) {
-            char a = in.next().charAt();
-            switch (a) {
-                case 'R':
-                    //executor
-                    break;
-                case 'P':
-                    //executor
-                    break;
-                case 'U':
-                    //executor
-                    break;
-                case 'S':
-                    //executor
-                    break;
-                case 'K':
-                    //executor
-                    break;                    
-            }
-        }        
-    }
+	    String id = containers.get(c-1).getId();
+            String a = in.nextLine();
+            s[0] = id;
+	    s[1] = a;
+	 } else {
+	    s[0] = null;
+	    s[1] = null;
+        }
+	return s;
+   }
+
 }
+
+
+
+
+
