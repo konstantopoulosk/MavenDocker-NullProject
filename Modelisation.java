@@ -9,19 +9,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Modelisation {
-<<<<<<< HEAD
+	
   //  private DockerClient dockerClient = DockerClientBuilder.getInstance().build(); //Client
   //  private List<Image> images = dockerClient.listImagesCmd().exec(); //List images tou client
   //  private List<java.awt.Container> containers = dockerClient.listContainersCmd().exec(); // list containers tou client
 
-    private DockerClient dockerClient;
-    private List<Image> images;
-    private <java.awt.Container> containers;
-=======
+
     DockerClient dockerClient;
-    static List<Image> images;
-    static List<java.awt.Container> containers;
->>>>>>> 04951bd969f0348663037cf8d970e5c95cd172b7
+    List<Image> images;
+    List<java.awt.Container> containers;
 
     //constructor for image methods
     Modelisation(DockerClient dockerClient, List<Image> images) {
@@ -48,7 +44,7 @@ public class Modelisation {
     }
 
     public void setContainers(List<java.awt.Container> containers) {
-        this.containers = containers;
+        this.containers = containers; // Se kathe allagh tha kaleitai h setContainers me orisma tin ananeomenh lista.
     }
 
     //Images case 1 (Show all images like this *number.image:version*)
