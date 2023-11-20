@@ -45,6 +45,8 @@ public class Modelisation {
         this.containers = containers;
     }
 
+    //WARNING! MPOROUME NA VALOYME METHODS GETID PX AN XRHSIMOPOIOUNTAI POLLES FORES STON KWDIKA. AYTH H KLASH EINAI SAN VASH MPOROUME NA PATAME PANW THS!
+
     //Images case 1 (Show all images like this *number.image:version*)
     public void showImages() {
         for (int i = 0; i < images.size(); i++) {
