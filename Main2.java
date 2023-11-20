@@ -28,7 +28,7 @@ public class Main {
 
         do{
             System.out.print("Open Images menu(I) or Containers menu(C) or Exit the app(E): "); //exception if not I or C or E
-            char menu = in.next().charAt();
+            String menu = in.nextLine();
             if (menu == "I") {
                 for(;;) {
                     System.out.println("Choose one:\n1)Show ALL images\n2)EXIT this menu"); //na baloume kialles epiloges opws inspect remove ktl
