@@ -54,6 +54,16 @@ public class Modelisation {
         }
     }
 
+    //this method shows the user's containers like this: <number>. <name>, Image: <image>
+    public void showContainers(List<java.awt.Container> containers) {
+        for (int i = 0; i < containers.size(); i++) {
+            String [] s = new String[7];
+            s = containers.get(i).toString().split(" ", 7);
+            System.out.println((i+1) + ". " + s[6] + ", Image: " + s[1]);
+        }
+    }
+
+
     //Containers case 1 (Show all containers)
     public String[] allContainers() {
 	Scanner in = new Scanner(System.in);
@@ -80,13 +90,6 @@ public class Modelisation {
     }
     
 	//this method shows the user's containers like this: <number>. <name>, Image: <image>
-    public void showContainers(List<java.awt.Container> containers) {
-        for (int i = 0; i < containers.size(); i++) {
-            String [] s = new String[7];
-            s = containers.get(i).toString().split(" ", 7);
-            System.out.println((i+1) + ". " + s[6] + ", Image: " + s[1]);
-        }
-    }
 
     //Containers case 2 (Show active containers)
     public String[] activeContainers() {
