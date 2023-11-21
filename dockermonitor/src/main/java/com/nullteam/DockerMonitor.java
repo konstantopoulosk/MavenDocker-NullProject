@@ -53,7 +53,7 @@ public class DockerMonitor implements Runnable {
 
 
     } catch (InterruptedException e) {
-        System.out.println("ERROR");
+        System.out.println("ERROR Interrupted");
     }
     try(FileWriter writer = new FileWriter(null)) {
         writer.write(stbuilder.toString());
