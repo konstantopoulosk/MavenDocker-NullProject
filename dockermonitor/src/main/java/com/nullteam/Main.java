@@ -17,7 +17,7 @@ public class Main {
         List<Container> containers;
         containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 
-        // Initialized menu//
+        //Initialized menu//
         System.out.println("Welcome null_team, boot-up menu *v.1* starting...");
         Scanner in = new Scanner(System.in);
         for(;;) {

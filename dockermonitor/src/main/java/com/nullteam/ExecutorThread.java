@@ -15,10 +15,10 @@ public class ExecutorThread implements Runnable {
     Scanner in = new Scanner(System.in); //xreiazetai gia to rename
     @Override
     public void run() { //TOADD STRING ID KAI STRING TASK
-        switch(task) {
+        switch(this.task) {
             case "ST": //start
-             
-            //   this.dockerClient.startContainer(this.id);
+                this.m.getDockerClient().startContainerCmd(this.id);
+          //    this.m.getDockerClient().startContainerCmd(this.id).exec();   TA VRHKA KAI ME TO .EXEC() STO GOOGLE ... LOGIKA DEN XREIAZETAI
                 break;
             case "RN": //rename
                 System.out.print("New container ID: ");

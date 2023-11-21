@@ -22,7 +22,7 @@ public class Main {
         Scanner in = new Scanner(System.in);
         
         Modelisation mdl = new Modelisation(dockerClient, images, containers);        //create 2 objects from class Modelisation
-        ExecutorThread ex = new ExecutorThread<>(dockerClient, images, containers); //object to call method run
+       // ExecutorThread ex = new ExecutorThread<>(dockerClient, images, containers); //object to call method run
 
         do{
             System.out.print("Open Images menu(I) or Containers menu(C) or Exit the app(E): "); //exception if not I or C or E
@@ -55,7 +55,8 @@ public class Main {
                             break;
                     }
                     if (s[0] != null) {
-                        ex.run(s[0], s[1]);
+                        ExecutorThread ex = new ExecutorThread<>(mdl, s[0], s[1]);
+                        ex.run();
                     }
                 }
             } else {

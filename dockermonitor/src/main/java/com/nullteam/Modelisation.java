@@ -26,21 +26,12 @@ public class Modelisation{
     public List<Image> getImages() {
         return this.images;
     }
-<<<<<<< HEAD
-
     public List<Container> getContainers() {
         return this.containers;
     }
-
-=======
-    public List<Container> getContainers() {
-        return this.containers;
-    }
->>>>>>> f860782585b54ee14ddfeb80d92b89eff8c7bb48
     public void setContainers(List<Container> containers) {
         this.containers = containers;
     }
-
     //WARNING! MPOROUME NA VALOYME METHODS GETID PX AN XRHSIMOPOIOUNTAI POLLES FORES STON KWDIKA. AYTH H KLASH EINAI SAN VASH MPOROUME NA PATAME PANW THS!
 
     //Images case 1 (Show all images like this: <number>. <image>:<version>)
@@ -77,23 +68,15 @@ public class Modelisation{
         System.out.println("Or press 0 to go back");
         int c = in.nextInt(); //user chooses a container by number.
         if (c != 0) {
-	    String id = containers.get(c-1).getId();
+	        String id = containers.get(c-1).getId();
             String a = in.nextLine(); //user chooses an activity for the container.
             s[0] = id;
-	    s[1] = a;
-<<<<<<< HEAD
-	 } else {
-	    s[0] = null;
-	    s[1] = null;
-    }
-    in.close();
-=======
+	        s[1] = a;
 	    } else {
 	        s[0] = null;
 	        s[1] = null;
         }
         in.close();
->>>>>>> f860782585b54ee14ddfeb80d92b89eff8c7bb48
 	    return s;
     }
 
@@ -115,20 +98,11 @@ public class Modelisation{
             String a = in.nextLine(); //user chooses an activity for the container.
             s[0] = id;
 	    s[1] = a;
-<<<<<<< HEAD
-	 } else {
-	    s[0] = null;
-	    s[1] = null;
-    }
-    in.close();
-	return s;
-=======
 	    } else {
 	        s[0] = null;
 	        s[1] = null;
         }
         in.close();
 	    return s;
->>>>>>> f860782585b54ee14ddfeb80d92b89eff8c7bb48
    }
 }
