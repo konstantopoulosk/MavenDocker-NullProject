@@ -7,7 +7,7 @@ import com.github.dockerjava.api.model.Image;
 import java.util.List;
 import java.util.Scanner;
 
-public class Modelisation {
+public class Modelisation{
 
     private DockerClient dockerClient;
     List<Image> images;
@@ -26,11 +26,17 @@ public class Modelisation {
     public List<Image> getImages() {
         return this.images;
     }
+<<<<<<< HEAD
 
     public List<Container> getContainers() {
         return this.containers;
     }
 
+=======
+    public List<Container> getContainers() {
+        return this.containers;
+    }
+>>>>>>> f860782585b54ee14ddfeb80d92b89eff8c7bb48
     public void setContainers(List<Container> containers) {
         this.containers = containers;
     }
@@ -47,7 +53,7 @@ public class Modelisation {
     }
 
     //this method shows the user's containers like this: <number>. <name>, Image: <image>
-    public void showContainers(List<java.awt.Container> containers) {
+    public void showContainers(List<Container> containers) {
         for (int i = 0; i < containers.size(); i++) {
             String [] s = new String[7];
             s = containers.get(i).toString().split(" ", 7);
@@ -59,8 +65,8 @@ public class Modelisation {
 	
     //Containers case 1 (Show all containers)
     public String[] allContainers() {
-	Scanner in = new Scanner(System.in);
-	String [] s = new String[2];
+	    Scanner in = new Scanner(System.in);
+	    String [] s = new String[2];
         System.out.println("--------------------------ALL CONTAINER INSTANCES--------------------------");
         containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 
@@ -75,18 +81,26 @@ public class Modelisation {
             String a = in.nextLine(); //user chooses an activity for the container.
             s[0] = id;
 	    s[1] = a;
+<<<<<<< HEAD
 	 } else {
 	    s[0] = null;
 	    s[1] = null;
     }
     in.close();
+=======
+	    } else {
+	        s[0] = null;
+	        s[1] = null;
+        }
+        in.close();
+>>>>>>> f860782585b54ee14ddfeb80d92b89eff8c7bb48
 	    return s;
     }
 
     //Containers case 2 (Show active containers)
     public String[] activeContainers() {
-	Scanner in = new Scanner(System.in);
-	String [] s = new String[2];
+	    Scanner in = new Scanner(System.in);
+	    String [] s = new String[2];
         System.out.println("--------------------------ACTIVE CONTAINER INSTANCES------------------------");
         containers = dockerClient.listContainersCmd().withShowAll(false).exec();
 
@@ -101,11 +115,20 @@ public class Modelisation {
             String a = in.nextLine(); //user chooses an activity for the container.
             s[0] = id;
 	    s[1] = a;
+<<<<<<< HEAD
 	 } else {
 	    s[0] = null;
 	    s[1] = null;
     }
     in.close();
 	return s;
+=======
+	    } else {
+	        s[0] = null;
+	        s[1] = null;
+        }
+        in.close();
+	    return s;
+>>>>>>> f860782585b54ee14ddfeb80d92b89eff8c7bb48
    }
 }

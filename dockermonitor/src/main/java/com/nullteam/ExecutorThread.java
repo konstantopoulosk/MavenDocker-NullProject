@@ -1,48 +1,47 @@
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.Container;
-import java.util.List;
+package com.nullteam;
 import java.util.Scanner;
 
-public class ExecutorThread<DockerClient, Image, Container> implements Runnable {
-    DockerClient dockerClient;
-    List<Image> images;
-    List<java.awt.Container> containers;
-    public <DockerClient> ExecutorThread(DockerClient dockerClient, List<Image> images, List<java.awt.Container> containers) {
-        this.dockerClient = dockerClient;
-        this.images = images;
-        this.containers = containers;
+
+public class ExecutorThread implements Runnable {
+    Modelisation m;
+    String id;
+    String task;
+
+    public ExecutorThread(Modelisation m, String id, String task) {
+        this.m = m;
+        this.id = id;
+        this.task = task;
     }
     Scanner in = new Scanner(System.in); //xreiazetai gia to rename
-    <ContainerInfo> void run(String id, String task){
+    @Override
+    public void run() { //TOADD STRING ID KAI STRING TASK
         switch(task) {
             case "ST": //start
-                this.dockerClient.startContainer(id);
+             
+            //   this.dockerClient.startContainer(this.id);
                 break;
             case "RN": //rename
                 System.out.print("New container ID: ");
-                String newId = in.nextLine();
-                this.dockerClient.renameContainer(id, newId);
+                //String newId = in.nextLine();//
+                this.m.getDockerClient().renameContainerCmd(id);
                 break;
-            case "I": //inspect (mallon afora to monitor)
-                final ContainerInfo info = this.dockerClient.inspectContainer("containerID");
-                break; 
             case "RM": //remove
-                this.dockerClient.removeContainer(id);
+                this.m.getDockerClient().removeContainerCmd(id);
                 break;           
             case "RS": //restart
-                this.dockerClient.restartContainer(id);
+                this.m.getDockerClient().restartContainerCmd(id);
                 break;
             case "P": //pause
-                this.dockerClient.pauseContainer(id);
+                this.m.getDockerClient().pauseContainerCmd(id);
                 break;            
             case "U": //unpause
-                this.dockerClient.unpauseContainer(id);
+                this.m.getDockerClient().unpauseContainerCmd(id);
                 break;
             case "SP": //stop
-                this.dockerClient.stopContainer(id, 10); // kill after 10 seconds
+                this.m.getDockerClient().stopContainerCmd(id); // kill after 10 seconds
                 break;           
             case "K": //kill
-                this.dockerClient.killContainer(id);
+                this.m.getDockerClient().killContainerCmd(id);
                 break;
         }
     }
