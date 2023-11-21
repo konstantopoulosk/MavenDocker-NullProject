@@ -1,8 +1,6 @@
 package com.nullteam;
 
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.ContainerPort;
 import java.io.FileWriter;
 import java.util.ArrayList;

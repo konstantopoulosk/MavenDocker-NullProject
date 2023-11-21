@@ -2,10 +2,8 @@ package com.nullteam;
 
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.core.DockerClientBuilder;
 import java.util.List;
 import java.util.Scanner;
 
@@ -80,6 +78,7 @@ public class Modelisation{
 	        s[0] = null;
 	        s[1] = null;
         }
+        in.close();
 	    return s;
     }
 
@@ -105,6 +104,7 @@ public class Modelisation{
 	        s[0] = null;
 	        s[1] = null;
         }
+        in.close();
 	    return s;
    }
 }
