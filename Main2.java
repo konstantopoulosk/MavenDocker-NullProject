@@ -21,9 +21,7 @@ public class Main {
         System.out.println("Welcome null_team, boot-up menu *v.1* starting...");
         Scanner in = new Scanner(System.in);
         
-        Modelisation img = new Modelisation(dockerClient, images);        //create 2 objects from class Modelisation
-        Modelisation cont = new Modelisation(dockerClient, containers);   //to make references to the case methods
-
+        Modelisation mdl = new Modelisation(dockerClient, images, containers);        //create 2 objects from class Modelisation
         ExecutorThread ex = new ExecutorThread<>(dockerClient, images, containers); //object to call method run
 
         do{
@@ -35,7 +33,7 @@ public class Main {
                     int ansI= in.nextInt();
                     switch (ansI) {
                         case 1: 
-                            img.showImages();
+                            mdl.showImages();
                             break;                
                         case 2:
                             break;
@@ -48,10 +46,10 @@ public class Main {
                     String[] s = new String[2];
                     switch(ansC) {
                         case 1:
-                            s = cont.allContainers();
+                            s = mdl.allContainers();
                             break;
                         case 2:
-                            s = cont.activeContainers();
+                            s = mdl.activeContainers();
                             break;
                         case 3:
                             break;
