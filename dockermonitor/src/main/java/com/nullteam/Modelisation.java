@@ -2,44 +2,36 @@ package com.nullteam;
 
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.listImagesCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.core.DockerClientBuilder;
 import java.util.List;
 import java.util.Scanner;
 
 public class Modelisation {
 
     private DockerClient dockerClient;
-    List<java.awt.Image> images;
-    List<java.awt.Container> containers;
+    List<Image> images;
+    List<Container> containers;
 
     //constructor for image methods
-    Modelisation(DockerClient dockerClient, List<java.awt.Image> images) {
+    Modelisation(DockerClient dockerClient, List<Image> images, List<Container> containers) {
         this.dockerClient = dockerClient;
         this.images = images;
-    }
-
-    //constructor for container methods
-    Modelisation(DockerClient dockerClient, List<java.awt.Container> containers) {
-        this.dockerClient = dockerClient;
         this.containers = containers;
     }
-
     public DockerClient getDockerClient() {
         return this.dockerClient;
     }
 
-    public List<java.awt.Image> getImages() {
+    public List<Image> getImages() {
         return this.images;
     }
 
-    public List<java.awt.Container> getContainers() {
+    public List<Container> getContainers() {
         return this.containers;
     }
 
-    public void setContainers(List<java.awt.Container> containers) {
+    public void setContainers(List<Container> containers) {
         this.containers = containers;
     }
 
@@ -86,8 +78,9 @@ public class Modelisation {
 	 } else {
 	    s[0] = null;
 	    s[1] = null;
-        }
-	return s;
+    }
+    in.close();
+	    return s;
     }
 
     //Containers case 2 (Show active containers)
@@ -111,7 +104,8 @@ public class Modelisation {
 	 } else {
 	    s[0] = null;
 	    s[1] = null;
-        }
+    }
+    in.close();
 	return s;
    }
 }
