@@ -52,7 +52,7 @@ public class Modelisation{
         }
     }
 	
-//The following methods return an array with 2 valuse: The ID of the container that the user chose and th TASK for the executor
+//The following methods return an array with 2 values: The ID of the container that the user chose and th TASK for the executor
 	
     //Containers case 1 (Show all containers)
     public String[] allContainers() {

@@ -1,48 +1,115 @@
 package com.nullteam;
+
 import java.util.Scanner;
 
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.command.*;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientBuilder;
 
-public class ExecutorThread implements Runnable {
-    Modelisation m;
-    String id;
-    String task;
+public class ExecutorThread extends Thread {
+    final private Scanner in = new Scanner(System.in); //xreiazetai gia to rename
+    String id; //container id
+    TaskType task; // taskType
+    public enum TaskType {
+        START,
+        STOP,
+        RENAME,
+        RESTART,
+        PAUSE,
+        UNPAUSE,
+        REMOVE,
+        KILL
+    }
 
-    public ExecutorThread(Modelisation m, String id, String task) {
-        this.m = m;
+    public ExecutorThread(String id, TaskType task) {
         this.id = id;
         this.task = task;
     }
-    Scanner in = new Scanner(System.in); //xreiazetai gia to rename
+
     @Override
     public void run() { //TOADD STRING ID KAI STRING TASK
-        switch(this.task) {
-            case "ST": //start
-                this.m.getDockerClient().startContainerCmd(this.id);
-          //    this.m.getDockerClient().startContainerCmd(this.id).exec();   TA VRHKA KAI ME TO .EXEC() STO GOOGLE ... LOGIKA DEN XREIAZETAI
+        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
+        builder.withDockerHost("tcp://localhost:2375");
+        DockerClient dockerClient = DockerClientBuilder.getInstance(builder).build();
+        dockerClient.versionCmd().exec();
+        switch (task) {
+            case START: //start
+                startContainer(id);
                 break;
-            case "RN": //rename
-                System.out.print("New container ID: ");
-                //String newId = in.nextLine();//
-                this.m.getDockerClient().renameContainerCmd(id);
+            case STOP: //stop
+                stopContainer(id);
                 break;
-            case "RM": //remove
-                this.m.getDockerClient().removeContainerCmd(id);
-                break;           
-            case "RS": //restart
-                this.m.getDockerClient().restartContainerCmd(id);
-                break;
-            case "P": //pause
-                this.m.getDockerClient().pauseContainerCmd(id);
-                break;            
-            case "U": //unpause
-                this.m.getDockerClient().unpauseContainerCmd(id);
-                break;
-            case "SP": //stop
-                this.m.getDockerClient().stopContainerCmd(id); // kill after 10 seconds
-                break;           
-            case "K": //kill
-                this.m.getDockerClient().killContainerCmd(id);
-                break;
+            default:
+                System.out.println("Invalid action type");
+        }
+    }
+
+    //ALL THE EXECUTION METHODS
+    private void startContainer(String containerId) {
+        for (DockerInstance c : DockerInstance.containerslist) {
+            if (c.getContainerId().equals(containerId)) {
+                DockerInstance.containerslist.get(DockerInstance.containerslist.indexOf(c)).startContainer();
+            }
+        }
+    }
+
+    private void stopContainer(String containerId) {
+        for (DockerInstance c : DockerInstance.containerslist) {
+            if (c.getContainerId().equals(containerId)) {
+                DockerInstance.containerslist.get(DockerInstance.containerslist.indexOf(c)).stopContainer();
+            }
         }
     }
 }
+    /*
+    private void renameContainer(String containerId, String newName) {
+        RenameContainerCmd renameContainerCmd = m.getDockerClient().renameContainerCmd(containerId).withName(newName);
+        renameContainerCmd.exec();
+    }
+    private void removeContainer(String containerId) {
+        RemoveContainerCmd removeContainerCmd = m.getDockerClient().removeContainerCmd(containerId).withForce(true);
+        removeContainerCmd.exec();
+    }
+
+    private void restartContainer(String containerId) {
+        RestartContainerCmd restartContainerCmd = m.getDockerClient().restartContainerCmd(containerId);
+        restartContainerCmd.exec();
+    }
+
+    private void pauseContainer(String containerId) {
+        PauseContainerCmd pauseContainerCmd = m.getDockerClient().pauseContainerCmd(containerId);
+        pauseContainerCmd.exec();
+    }
+
+    private void unpauseContainer(String containerId) {
+        UnpauseContainerCmd unpauseContainerCmd = m.getDockerClient().unpauseContainerCmd(containerId);
+        unpauseContainerCmd.exec();
+    }
+
+    private void killContainer(String containerId) {
+        KillContainerCmd killContainerCmd = m.getDockerClient().killContainerCmd(containerId);
+        killContainerCmd.exec();
+    }
+    case RENAME: //rename
+                System.out.print("Give the new name :");
+                renameContainer(id, in.nextLine());
+                break;
+            case REMOVE:
+                removeContainer(id);
+                break;
+            case RESTART:
+                restartContainer(id);
+                break;
+            case PAUSE:
+                pauseContainer(id);
+                break;
+            case UNPAUSE:
+                unpauseContainer(id);
+                break;
+            case KILL:
+                killContainer(id);
+                break;
+            // Add more
+     */
