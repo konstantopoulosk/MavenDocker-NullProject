@@ -37,6 +37,7 @@ public class Main {
                 case 1:
                     System.out.println("--------------------------ALL CONTAINER INSTANCES--------------------------");
                     DockerInstance.listAllContainers();
+                    
                     break;
                 case 2:
                     System.out.println("------------------------- ACTIVE CONTAINER INSTANCES -----------------------");
