@@ -34,11 +34,11 @@ public class Main {
         Scanner in = new Scanner(System.in);
         for(;;) {
             System.out.println("IMAGES MENU (1) / CONTAINERS MENU (2) / EXIT APP (3)");
-            int f = in.nextInt();
-            switch (f) {
+            int menu = in.nextInt(); //Which menu to show
+            switch (menu) {
                 case 1:
                     //images menu
-                    boolean flagI = true;
+                    boolean flagI = true; //Flag to exit Images Menu
                     while (flagI) {
                         System.out.println(" \nIMAGES MENU\n");
                         System.out.println("Choose one: \n1)Show All Images\n2)EXIT THIS MENU\n3)EXIT APP");
@@ -61,12 +61,14 @@ public class Main {
                                 }
                                 System.exit(0);
                                 break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + ansI);
                         }
                     }
                     break;
                 case 2:
                     //containers menu
-                    boolean flagC = true;
+                    boolean flagC = true; //Flag to exit Containers menu
                     while (flagC) {
                         System.out.println(" \nCONTAINERS MENU\n");
                         System.out.println("Choose one:\n1)Show ALL containers\n2)Show ACTIVE containers only" +
@@ -171,6 +173,8 @@ public class Main {
                     }
                     System.exit(0);
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + menu);
             }
         }
     }
