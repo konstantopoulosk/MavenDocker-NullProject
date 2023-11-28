@@ -68,22 +68,26 @@ public class DockerInstance {
 
     public static void listAllContainers() {
         System.out.println("Listing all the containers...\n.\n.\n.");
+        int i = 0;
         for (DockerInstance c : containerslist) {
-            System.out.println("Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
+            i++;
+            System.out.println(i + ") Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
                     + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
         }
     }
     public static void listActiveContainers() {
         System.out.println("Listing active containers...\n.\n.\n.");
+        int i = 0;
         for (DockerInstance c : containerslist) {
             if(c.getContainerStatus().substring(0,2).equals("Up")) {
-                System.out.println("Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
+                i++;
+                System.out.println(i+") Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
                         + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
             }
         }
     }
     public static String chooseAnActiveContainer() { //returns container's id
-        System.out.println("Choose one of the containers bellow to STOP it.");
+
         List<DockerInstance> actives = new ArrayList<DockerInstance>();
         int i=1;
         for (DockerInstance c :containerslist) {
@@ -115,5 +119,34 @@ public class DockerInstance {
         System.out.print("YOUR CHOICE---> ");
         int answer = in.nextInt();
         return containerslist.get(containerslist.indexOf(stopped.get(answer-1))).getContainerId();
+    }
+    /*
+    public static String chooseAContainerToRename() {
+        System.out.println("Choose one of the containers below to RENAME it.");
+        DockerInstance.listAllContainers();
+        Scanner in = new Scanner(System.in);
+        int choice = in.nextInt();
+        return containerslist.get(choice - 1).getContainerId();
+    }
+    public static String chooseAContainerToRemove() {
+        System.out.println("Choose one of the containers below to REMOVE it");
+        DockerInstance.listAllContainers();
+        Scanner in = new Scanner(System.in);
+        int choice = in.nextInt();
+        return containerslist.get(choice - 1).getContainerId();
+    }
+    public static String chooseAContainerToRestart() {
+        System.out.println("Choose one of the containers below to RESTART it.");
+        DockerInstance.listAllContainers();
+        Scanner in = new Scanner(System.in);
+        int choice = in.nextInt();
+        return containerslist.get(choice - 1).getContainerId();
+    }
+    */
+    public static String chooseAContainer() {
+        DockerInstance.listAllContainers();
+        Scanner in = new Scanner(System.in);
+        int choice = in.nextInt();
+        return containerslist.get(choice - 1).getContainerId();
     }
 }
