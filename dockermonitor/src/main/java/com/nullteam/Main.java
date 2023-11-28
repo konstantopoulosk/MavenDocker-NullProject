@@ -32,16 +32,18 @@ public class Main {
         for(;;) {
             System.out.println("Choose one:\n1)Show ALL containers\n2)Show ACTIVE containers only" +
                     "\n3)Stop a container\n4)Start a container\n5)EXIT APP");
+            System.out.print("Your Choice ---> ");
             int ans = in.nextInt();
             switch(ans) {
                 case 1:
                     System.out.println("--------------------------ALL CONTAINER INSTANCES--------------------------");
                     DockerInstance.listAllContainers();
-                    
+                    System.out.println(" ");
                     break;
                 case 2:
                     System.out.println("------------------------- ACTIVE CONTAINER INSTANCES -----------------------");
                     DockerInstance.listActiveContainers();
+                    System.out.println(" ");
                     break;
                 case 3:
                     String containeridStop = DockerInstance.chooseAnActiveContainer();
