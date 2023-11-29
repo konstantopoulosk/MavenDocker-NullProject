@@ -1,11 +1,9 @@
 package com.nullteam;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.DockerContextMetaFile;
 
 import java.io.IOException;
 import java.util.List;

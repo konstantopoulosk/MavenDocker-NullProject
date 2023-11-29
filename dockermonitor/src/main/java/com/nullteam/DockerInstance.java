@@ -5,9 +5,6 @@ import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.DockerContextMetaFile;
-
-import java.sql.Array;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +84,6 @@ public class DockerInstance {
         }
     }
     public static String chooseAnActiveContainer() { //returns container's id
-
         List<DockerInstance> actives = new ArrayList<DockerInstance>();
         int i=1;
         for (DockerInstance c :containerslist) {
@@ -120,33 +116,20 @@ public class DockerInstance {
         int answer = in.nextInt();
         return containerslist.get(containerslist.indexOf(stopped.get(answer-1))).getContainerId();
     }
-    /*
-    public static String chooseAContainerToRename() {
-        System.out.println("Choose one of the containers below to RENAME it.");
-        DockerInstance.listAllContainers();
-        Scanner in = new Scanner(System.in);
-        int choice = in.nextInt();
-        return containerslist.get(choice - 1).getContainerId();
-    }
-    public static String chooseAContainerToRemove() {
-        System.out.println("Choose one of the containers below to REMOVE it");
-        DockerInstance.listAllContainers();
-        Scanner in = new Scanner(System.in);
-        int choice = in.nextInt();
-        return containerslist.get(choice - 1).getContainerId();
-    }
-    public static String chooseAContainerToRestart() {
-        System.out.println("Choose one of the containers below to RESTART it.");
-        DockerInstance.listAllContainers();
-        Scanner in = new Scanner(System.in);
-        int choice = in.nextInt();
-        return containerslist.get(choice - 1).getContainerId();
-    }
-    */
     public static String chooseAContainer() {
         DockerInstance.listAllContainers();
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
         return containerslist.get(choice - 1).getContainerId();
+    }
+    public static void rename() {
+        System.out.println("Choose one of the containers below to RENAME it.");
+        String containerIdRename = DockerInstance.chooseAContainer();
+        System.out.println("Give me the new name.");
+        System.out.print("New Name: ");
+        Scanner in = new Scanner(System.in);
+        String newName = in.nextLine();
+        ExecutorThread executor_rename = new ExecutorThread(containerIdRename, ExecutorThread.TaskType.RENAME, newName);
+        executor_rename.start();
     }
 }

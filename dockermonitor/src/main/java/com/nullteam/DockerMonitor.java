@@ -15,41 +15,23 @@ import java.util.ArrayList;
 public class DockerMonitor extends Thread {
     private final String csvFilePath = "containers.csv";
     private List<String[]> lastState = null;
+    private List<String[]> currentData = null;
 
     public void run() {
-        try(CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFilePath, false))) {
-            // Write CSV header
-            csvWriter.writeNext(new String[]{"Container ID", "Image", "Status", "Command", "Created"}); //o header sto csv file
-            while (!Thread.currentThread().isInterrupted()) {
-                monitorContainers(csvWriter);
-                Thread.sleep(500);
+        while (!Thread.currentThread().isInterrupted()) {
+            if(hasNewData()) {
+                writeCsv();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (InterruptedException | IOException e) {
-            Thread.currentThread().interrupt();
-            e.printStackTrace();
-        } //ISWS XRISTASTEI SE FINALLY NA KLEINW TON DOCKER CLIENT AN TO THREAD GINEI INTERRUPTED
-    }
-    private void monitorContainers(CSVWriter csvWriter) {
-        DefaultDockerClientConfig.Builder builder= DefaultDockerClientConfig.createDefaultConfigBuilder();
-        builder.withDockerHost("tcp://localhost:2375");
-        DockerClient dockerClient = DockerClientBuilder.getInstance(builder).build();
-        dockerClient.versionCmd().exec();
-        List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
-        List<String[]> currentData = new ArrayList<>();
-        for (Container c : containers) {
-            String[] csvData = new String[]{
-                    c.getId(),
-                    c.getImage(),
-                    c.getState(),
-                    c.getCommand(),
-                    c.getCreated().toString()
-            };
-            currentData.add(csvData);
         }
-        // Check if the data has changed
-        if (!listsAreEqual(currentData, lastState)) {
-
-            // Write the current data to the CSV file
+    }
+    private void writeCsv() { //Write/update the csv file
+        try(CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFilePath, false))){
+            csvWriter.writeNext(new String[]{"Container ID", "Image", "Status", "Command", "Created"}); // CSVFile header
             for (String[] csvData : currentData) {
                 csvWriter.writeNext(csvData);
             }
@@ -60,6 +42,32 @@ public class DockerMonitor extends Thread {
             }
             // Update the lastState with the currentData
             lastState = new ArrayList<>(currentData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private boolean hasNewData(){ // Check if there is any change inside the cluster
+        DefaultDockerClientConfig.Builder builder= DefaultDockerClientConfig.createDefaultConfigBuilder();
+        builder.withDockerHost("tcp://localhost:2375");
+        DockerClient dockerClient = DockerClientBuilder.getInstance(builder).build();
+        dockerClient.versionCmd().exec();
+        List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
+        currentData = new ArrayList<>();
+        for (Container c : containers) {
+            String[] csvData = new String[]{
+                    c.getId(),
+                    c.getImage(),
+                    c.getState(),
+                    c.getCommand(),
+                    c.getCreated().toString()
+            };
+            currentData.add(csvData);
+        }
+        if (!listsAreEqual(currentData, lastState)) {
+            lastState = new ArrayList<>(currentData);
+            return true;
+        } else {
+            return false;
         }
     }
     private boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
