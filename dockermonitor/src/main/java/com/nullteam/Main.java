@@ -122,8 +122,7 @@ public class Main {
                         }
                     }
                     break;
-                case "3":
-                    //exiting APP!!!
+                case "3"://exiting APP!!!
                     System.out.println("\nBye..." +
                             "\n*******EXITING APP*******");
                     System.exit(0);

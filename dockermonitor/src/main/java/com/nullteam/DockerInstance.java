@@ -10,7 +10,7 @@ import java.util.List;
 public class DockerInstance {
     public static List<DockerInstance> containerslist = new ArrayList<>();
     //fields
-    private String containerId;
+    private final String containerId;
     // enas container afora mia mono eikona, h idia eikona mporei na xrisimopoietai se pollous diaforetikous containers
     private DockerImage dockerImage; // to image pou afora o container
     private String status;
@@ -75,7 +75,7 @@ public class DockerInstance {
         System.out.println("Listing active containers...\n.\n.\n.");
         int i = 0;
         for (DockerInstance c : containerslist) {
-            if(c.getContainerStatus().substring(0,2).equals("Up")) {
+            if(c.getContainerStatus().startsWith("Up")) {
                 i++;
                 System.out.println(i+") Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
                         + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
@@ -120,15 +120,5 @@ public class DockerInstance {
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
         return containerslist.get(choice - 1).getContainerId();
-    }
-    public static void rename() {
-        System.out.println("Choose one of the containers below to RENAME it.");
-        String containerIdRename = DockerInstance.chooseAContainer();
-        System.out.println("Give me the new name.");
-        System.out.print("New Name: ");
-        Scanner in = new Scanner(System.in);
-        String newName = in.nextLine();
-        ExecutorThread executor_rename = new ExecutorThread(containerIdRename, ExecutorThread.TaskType.RENAME, newName);
-        executor_rename.start();
     }
 }

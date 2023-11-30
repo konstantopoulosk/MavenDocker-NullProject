@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class DockerMonitor extends Thread {
-    private final String csvFilePath = "containers.csv";
     private List<String[]> lastState = null;
     private List<String[]> currentData = null;
 
@@ -17,15 +16,11 @@ public class DockerMonitor extends Thread {
         while (!Thread.currentThread().isInterrupted()) {
             if(hasNewData()) {
                 writeCsv();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
     private void writeCsv() { //Write/update the csv file
+        final String csvFilePath = "containers.csv";
         try(CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFilePath, false))){
             csvWriter.writeNext(new String[]{"Container ID","Name", "Image", "Status", "Command", "Created"}); // CSVFile header
             for (String[] csvData : currentData) {
