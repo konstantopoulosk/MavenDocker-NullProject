@@ -1,10 +1,8 @@
 package com.nullteam;
 
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StopContainerCmd;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,28 +39,29 @@ public class DockerInstance {
     public void setContainerStatus(String status) {
         this.status = status;
     }
+    //tools
     public void stopContainer() {
-        DefaultDockerClientConfig.Builder builder= DefaultDockerClientConfig.createDefaultConfigBuilder();
-        builder.withDockerHost("tcp://localhost:2375");
-        DockerClient dockerClient = DockerClientBuilder.getInstance(builder).build();
-        dockerClient.versionCmd().exec();
-        StopContainerCmd stopContainerCmd = dockerClient.stopContainerCmd(containerId)
+        StopContainerCmd stopContainerCmd = ClientUpdater.getUpdatedClient().stopContainerCmd(containerId)
                 .withTimeout(1);
         stopContainerCmd.exec();
         System.out.println("Container stopped: " + containerId);
         this.setContainerStatus("Exited");
     }
     public void startContainer() {
-        DefaultDockerClientConfig.Builder builder= DefaultDockerClientConfig.createDefaultConfigBuilder();
-        builder.withDockerHost("tcp://localhost:2375");
-        DockerClient dockerClient = DockerClientBuilder.getInstance(builder).build();
-        dockerClient.versionCmd().exec();
-        StartContainerCmd startContainerCmd = dockerClient.startContainerCmd(containerId);
+        StartContainerCmd startContainerCmd = ClientUpdater.getUpdatedClient().startContainerCmd(containerId);
         startContainerCmd.exec();
         System.out.println("Container started: " + containerId);
         this.setContainerStatus("Up");
     }
+    public void renameContainer(String newName) {
+        RenameContainerCmd renameContainerCmd = ClientUpdater.getUpdatedClient().renameContainerCmd
+                (containerId).withName(newName);
+        renameContainerCmd.exec();
+        this.name = newName;
+    }
 
+
+    //aid methods
     public static void listAllContainers() {
         System.out.println("Listing all the containers...\n.\n.\n.");
         int i = 0;
@@ -84,10 +83,10 @@ public class DockerInstance {
         }
     }
     public static String chooseAnActiveContainer() { //returns container's id
-        List<DockerInstance> actives = new ArrayList<DockerInstance>();
+        List<DockerInstance> actives = new ArrayList<>();
         int i=1;
         for (DockerInstance c :containerslist) {
-            if (c.getContainerStatus().substring(0,2).equals("Up")) {
+            if (c.getContainerStatus().startsWith("Up")) {
                 System.out.println(i + ") " + "Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
                         + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
                 actives.add(c);
@@ -101,10 +100,10 @@ public class DockerInstance {
     }
     public static String chooseAStoppedContainer() {
         System.out.println("Choose one of the containers bellow to START it.");
-        List<DockerInstance> stopped = new ArrayList<DockerInstance>();
+        List<DockerInstance> stopped = new ArrayList<>();
         int i=1;
         for (DockerInstance c :containerslist) {
-            if (!(c.getContainerStatus().substring(0,2).equals("Up"))) {
+            if (!(c.getContainerStatus().startsWith("Up"))) {
                 System.out.println(i + ") " + "Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
                         + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
                 stopped.add(c);

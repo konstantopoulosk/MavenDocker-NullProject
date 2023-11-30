@@ -1,12 +1,8 @@
 package com.nullteam;
 
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
 import com.opencsv.CSVWriter;
 import java.util.List;
 import java.util.Arrays;
@@ -31,7 +27,7 @@ public class DockerMonitor extends Thread {
     }
     private void writeCsv() { //Write/update the csv file
         try(CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFilePath, false))){
-            csvWriter.writeNext(new String[]{"Container ID", "Image", "Status", "Command", "Created"}); // CSVFile header
+            csvWriter.writeNext(new String[]{"Container ID","Name", "Image", "Status", "Command", "Created"}); // CSVFile header
             for (String[] csvData : currentData) {
                 csvWriter.writeNext(csvData);
             }
@@ -47,15 +43,12 @@ public class DockerMonitor extends Thread {
         }
     }
     private boolean hasNewData(){ // Check if there is any change inside the cluster
-        DefaultDockerClientConfig.Builder builder= DefaultDockerClientConfig.createDefaultConfigBuilder();
-        builder.withDockerHost("tcp://localhost:2375");
-        DockerClient dockerClient = DockerClientBuilder.getInstance(builder).build();
-        dockerClient.versionCmd().exec();
-        List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
         currentData = new ArrayList<>();
         for (Container c : containers) {
             String[] csvData = new String[]{
                     c.getId(),
+                    c.getNames()[0],
                     c.getImage(),
                     c.getState(),
                     c.getCommand(),
