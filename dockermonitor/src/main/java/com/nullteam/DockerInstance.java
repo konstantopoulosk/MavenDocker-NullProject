@@ -44,19 +44,20 @@ public class DockerInstance {
         StopContainerCmd stopContainerCmd = ClientUpdater.getUpdatedClient().stopContainerCmd(containerId)
                 .withTimeout(1);
         stopContainerCmd.exec();
-        System.out.println("Container stopped: " + containerId);
+        System.out.println("Container stopped: " + containerId + "\n\n");
         this.setContainerStatus("Exited");
     }
     public void startContainer() {
         StartContainerCmd startContainerCmd = ClientUpdater.getUpdatedClient().startContainerCmd(containerId);
         startContainerCmd.exec();
-        System.out.println("Container started: " + containerId);
+        System.out.println("Container started: " + containerId + "\n\n");
         this.setContainerStatus("Up");
     }
     public void renameContainer(String newName) {
         RenameContainerCmd renameContainerCmd = ClientUpdater.getUpdatedClient().renameContainerCmd
                 (containerId).withName(newName);
         renameContainerCmd.exec();
+        System.out.println("Container with id: " + this.getContainerId() + "has been renamed to: " + newName + "\n\n");
         this.name = newName;
     }
 

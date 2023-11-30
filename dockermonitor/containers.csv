@@ -1,4 +1,4 @@
 "Container ID","Name","Image","Status","Command","Created"
-"6f2b5a5a9aa44708b2d08f0b23506125b35ebe3c08e9f66123f2b887aa5be131","/container1","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1699293303"
-"8076fe39e07dfb4942e402d0f65914980ce9c8824dc9eda3db12fee62f51d61b","/container2","redis","exited","docker-entrypoint.sh redis-server","1699292457"
+"6f2b5a5a9aa44708b2d08f0b23506125b35ebe3c08e9f66123f2b887aa5be131","/container1","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1699293303"
+"8076fe39e07dfb4942e402d0f65914980ce9c8824dc9eda3db12fee62f51d61b","/container2.2","redis","exited","docker-entrypoint.sh redis-server","1699292457"
 "f45552827b9fa2097647daa7c0966f5b23e0ed9f1dde0aaccb7c779591a37af2","/container3","mongo:latest","exited","docker-entrypoint.sh mongod","1699292253"

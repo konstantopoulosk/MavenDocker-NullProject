@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner in = new Scanner(System.in);
         //Creating instances of DockerInstance and DockerImage using info from the DockerClient
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
@@ -60,6 +60,12 @@ public class Main {
                                             ExecutorThread executor_stop = new ExecutorThread
                                                     (containerIdStop, ExecutorThread.TaskType.STOP);
                                             executor_stop.start();
+                                            System.out.println("Stopping the container...");
+                                            try {
+                                                executor_stop.join(); // waiting for the thread to finish
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
                                             break;
                                         case "2": //START a container
                                             System.out.println("Choose one of the exited containers bellow " +
@@ -68,7 +74,12 @@ public class Main {
                                             ExecutorThread executor_start = new ExecutorThread
                                                     (containerIdStart, ExecutorThread.TaskType.START);
                                             executor_start.start();
-                                            System.out.println(" ");
+                                            System.out.println("Starting the container...");
+                                            try {
+                                                executor_start.join(); // waiting for the thread to finish
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
                                             break;
                                         case "3": //RENAME a container
                                             System.out.println("Choose one of the containers bellow " +
@@ -79,6 +90,12 @@ public class Main {
                                             ExecutorThread executor_rename = new ExecutorThread
                                                     (containerIdRename, ExecutorThread.TaskType.RENAME, newName);
                                             executor_rename.start();
+                                            System.out.println("Renaming the container...");
+                                            try {
+                                                executor_rename.join(); // waiting for the thread to finish
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
                                             break;
                                         case "4": //REMOVE a container
                                             break;
