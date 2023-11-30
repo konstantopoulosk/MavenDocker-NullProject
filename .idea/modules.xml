@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MavenDocker-NullProject.iml" filepath="$PROJECT_DIR$/.idea/MavenDocker-NullProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dockermonitor/nullteamproject.iml" filepath="$PROJECT_DIR$/dockermonitor/nullteamproject.iml" />
     </modules>
   </component>
 </project>
