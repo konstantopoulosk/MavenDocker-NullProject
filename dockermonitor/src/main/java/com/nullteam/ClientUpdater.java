@@ -29,4 +29,15 @@ public class ClientUpdater {
         dockerClient.versionCmd().exec();
         return dockerClient;
     }
+    //this method updates the status every time to monitor the time the container has been Up or Exited
+    public static String getUpdatedStatus(String containerId) {
+        String status = null;
+        List<Container> containers = getUpdatedContainersFromClient();
+        for (Container c : containers) {
+            if (c.getId().equals(containerId)) {
+                status = c.getStatus();
+            }
+        }
+        return status;
+    }
 }
