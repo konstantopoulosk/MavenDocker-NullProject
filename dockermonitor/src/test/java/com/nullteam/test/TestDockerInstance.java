@@ -88,4 +88,8 @@ public class TestDockerInstance {
         final String expectedOutput = "1) Name: NewContainer ID: 123456 Image: mongo STATUS: Exited";
         
     }
+    @Test
+    public void testChooseAnActiveContainer() {
+
+    }
 }
