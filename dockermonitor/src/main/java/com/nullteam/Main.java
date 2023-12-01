@@ -31,7 +31,7 @@ public class Main {
                         //Containers Menu
                         flagCon:
                         while (true) {
-                            System.out.println("          ~Container Menu~" +
+                            System.out.println("\n          ~Container Menu~" +
                                     "\n         ------------------");
                             System.out.println("(1) View ALL the containers\n(2) View ACTIVE containers only" +
                                     "\n(3) Container Tools\n(4) Go Back(Main Menu)");
@@ -48,28 +48,33 @@ public class Main {
                                     case "3":
                                         flagTools:
                                         while (true) {
-                                            System.out.println("          ~Container Tools~" +
+                                            System.out.println("\n          ~Container Tools~" +
                                                     "\n         -------------------");
-                                            System.out.println("\n(1)Stop a container\n(2)Start a container\n" +
-                                                    "(3)Rename a container\n(4)Remove a container" +
-                                                    "\n(5)Restart a container\n(6)Pause a container\n(7)Unpause a container" +
-                                                    "\n(8)Kill a container\n(9)Go Back(Container Menu)");
-                                            System.out.print("--->");
+                                            System.out.println("(1) Stop a container\n(2) Start a container\n" +
+                                                    "(3) Rename a container\n(4) Remove a container" +
+                                                    "\n(5) Restart a container\n(6) Pause a container\n(7) Unpause a container" +
+                                                    "\n(8) Kill a container\n(9) INSPECT a container\n(0) Go Back(Container Menu)");
+                                            System.out.print("---> ");
                                             String ansT = in.nextLine();
                                             try {
                                             switch (ansT) {
                                                 case "1": //STOP a container
-                                                    System.out.println("Choose one of the active containers bellow " +
-                                                            "to STOP it.");
-                                                    String containerIdStop = DockerInstance.chooseAnActiveContainer();
-                                                    ExecutorThread executor_stop = new ExecutorThread
-                                                            (containerIdStop, ExecutorThread.TaskType.STOP);
-                                                    executor_stop.start();
-                                                    System.out.println("Stopping the container...");
-                                                    try {
-                                                        executor_stop.join(); // waiting for the thread to finish
-                                                    } catch (InterruptedException e) {
-                                                        e.printStackTrace();
+                                                    if (DockerInstance.noActiveContainers()) { //there is no reason to continue without active containers
+                                                        System.out.println("There are no active containers.");
+                                                        Thread.sleep(3000); //to show the message before the app goes back to the ~Container Tools~
+                                                    } else {
+                                                        System.out.println("Choose one of the active containers bellow " +
+                                                                "to STOP it.");
+                                                        String containerIdStop = DockerInstance.chooseAnActiveContainer();
+                                                        ExecutorThread executor_stop = new ExecutorThread
+                                                                (containerIdStop, ExecutorThread.TaskType.STOP);
+                                                        executor_stop.start();
+                                                        System.out.println("Stopping the container...");
+                                                        try {
+                                                            executor_stop.join(); // waiting for the thread to finish
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
                                                     }
                                                     break;
                                                 case "2": //START a container
@@ -103,16 +108,110 @@ public class Main {
                                                     }
                                                     break;
                                                 case "4": //REMOVE a container
+                                                    System.out.println("Choose one of the containers bellow " +
+                                                            "to REMOVE it.");
+                                                    String containerIdRemove = DockerInstance.chooseAContainer();
+                                                    ExecutorThread executor_remove = new ExecutorThread
+                                                            (containerIdRemove, ExecutorThread.TaskType.REMOVE);
+                                                    executor_remove.start();
+                                                    System.out.println("Removing the container...");
+                                                    try {
+                                                        executor_remove.join();
+                                                    } catch (InterruptedException e) {
+                                                        e.printStackTrace();
+                                                    }
                                                     break;
                                                 case "5": //RESTART a container
+                                                    if (DockerInstance.noActiveContainers()) {
+                                                        System.out.println("There are no active containers.");
+                                                        Thread.sleep(3000);
+                                                    } else {
+                                                        System.out.println("Choose one of the active containers bellow " +
+                                                                "to RESTART it.");
+                                                        String containerIdRestart = DockerInstance.chooseAnActiveContainer();
+                                                        ExecutorThread executor_restart = new ExecutorThread
+                                                                (containerIdRestart, ExecutorThread.TaskType.RESTART);
+                                                        executor_restart.start();
+                                                        System.out.println("Restarting the container...");
+                                                        try {
+                                                            executor_restart.join(); // waiting for the thread to finish
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
                                                     break;
                                                 case "6": //PAUSE a container
+                                                    if (DockerInstance.noActiveContainers()) {
+                                                        System.out.println("There are no active containers.");
+                                                        Thread.sleep(3000);
+                                                    } else {
+                                                        System.out.println("Choose one of the active containers bellow " +
+                                                                "to PAUSE it.");
+                                                        String containerIdPause = DockerInstance.chooseAnActiveContainer();
+                                                        ExecutorThread executor_pause = new ExecutorThread
+                                                                (containerIdPause, ExecutorThread.TaskType.PAUSE);
+                                                        executor_pause.start();
+                                                        System.out.println("Pausing the container...");
+                                                        try {
+                                                            executor_pause.join(); // waiting for the thread to finish
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
                                                     break;
                                                 case "7": //UNPAUSE a container
+                                                    if (DockerInstance.noActiveContainers()) {
+                                                        System.out.println("There are no active containers.");
+                                                        Thread.sleep(3000);
+                                                    } else {
+                                                        System.out.println("Choose one of the active containers bellow " +
+                                                                "to UNPAUSE it.");
+                                                        String containerIdUnpause = DockerInstance.chooseAnActiveContainer();
+                                                        ExecutorThread executor_unpause = new ExecutorThread
+                                                                (containerIdUnpause, ExecutorThread.TaskType.UNPAUSE);
+                                                        executor_unpause.start();
+                                                        System.out.println("Unpausing the container...");
+                                                        try {
+                                                            executor_unpause.join(); // waiting for the thread to finish
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
                                                     break;
                                                 case "8": //KILL a container
+                                                    if (DockerInstance.noActiveContainers()) {
+                                                        System.out.println("There are no active containers.");
+                                                        Thread.sleep(3000);
+                                                    } else {
+                                                        System.out.println("Choose one of the active containers bellow " +
+                                                                "to KILL it.");
+                                                        String containerIdKill = DockerInstance.chooseAnActiveContainer();
+                                                        ExecutorThread executor_kill = new ExecutorThread
+                                                                (containerIdKill, ExecutorThread.TaskType.KILL);
+                                                        executor_kill.start();
+                                                        System.out.println("Killing the container...");
+                                                        try {
+                                                            executor_kill.join();
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
                                                     break;
-                                                case "9": //going back to container menu...
+                                                case "9":
+                                                    System.out.println("Choose one of the containers bellow " +
+                                                            "to RENAME it.");
+                                                    String containerIdInspect = DockerInstance.chooseAContainer();
+                                                    ExecutorThread executor_inspect = new ExecutorThread
+                                                            (containerIdInspect, ExecutorThread.TaskType.INSPECT);
+                                                    executor_inspect.start();
+                                                    System.out.println("Inspecting the container...");
+                                                    try {
+                                                        executor_inspect.join();
+                                                    } catch (InterruptedException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    break;
+                                                case "0": //going back to container menu...
                                                     break flagTools;
                                                 default:
                                                     throw new IllegalStateException("Unexpected value: " + ansT);
@@ -132,30 +231,29 @@ public class Main {
                             }
                         }
                             break; //end of case 1
-
                     case "2": // Image menu
                         flagImage:
                         while (true) {
-                            System.out.println("          ~Image Menu~" +
+                            System.out.println("\n            ~Image Menu~" +
                                     "\n         ------------------");
                             System.out.println("(1) View available images\n(2) Implement an image(start a new container)" +
                                     "\n(3) Go Back(Main Menu)");
                             System.out.print("---> ");
                             String ansI = in.nextLine();
                             try {
-                            switch (ansI) {
-                                case "1":
-                                    //Method to view available images ~ TO BE MADE INSIDE THE DockerImage CLASS
-                                    break;
-                                case "2":
-                                    //Method to implement an image through a new container ~ TO BE MADE INSIDE THE DockerIm
-                                    break;
-                                case "3": //going back to main menu...
-                                    break flagImage;
-                                default:
-                                    throw new IllegalStateException("Unexpected value: " + ansI);
-                            }
-                        } catch (IllegalStateException e) {
+                                switch (ansI) {
+                                    case "1":
+                                        //Method to view available images ~ TO BE MADE INSIDE THE DockerImage CLASS
+                                        break;
+                                    case "2":
+                                        //Method to implement an image through a new container ~ TO BE MADE INSIDE THE DockerIm
+                                        break;
+                                    case "3": //going back to main menu...
+                                        break flagImage;
+                                    default:
+                                        throw new IllegalStateException("Unexpected value: " + ansI);
+                                }
+                            } catch (IllegalStateException e) {
                                 System.out.println("Please choose one of the valid options below.\n");
                             }
                         }
@@ -171,6 +269,7 @@ public class Main {
             }
             catch(IllegalStateException e){
             System.out.println("Please choose one of the valid options below.\n");
+            }
         }
-    }
-    } }
+    } 
+}
