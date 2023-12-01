@@ -2,6 +2,7 @@ package com.nullteam.test;
 
 import com.nullteam.DockerImage;
 import com.nullteam.DockerInstance;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -128,5 +129,10 @@ public class TestDockerInstance {
     public void testChooseAContainer() {
 
     }
+    @After
+    public void tearDown() {
+        allContainers = null;
+    }
+
 }
 
