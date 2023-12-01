@@ -45,25 +45,25 @@ public class DockerInstance {
     //tools
     public void stopContainer() {
         try {
-        StopContainerCmd stopContainerCmd = ClientUpdater.getUpdatedClient().stopContainerCmd(containerId)
-                .withTimeout(10);
-        stopContainerCmd.exec();
-        System.out.println("Container stopped: " + containerId + "\n\n");
-        this.setContainerStatus("Exited");
-    } catch (NotModifiedException e) {
-        // Container was already stopped or in the process of stopping
-        System.out.println("Container is already stopped or in the process of stopping: " + containerId + "\n\n");
-        this.setContainerStatus("Exited");
-    } catch (Exception e) {
-        // Handle other exceptions
-        e.printStackTrace();
-    }
+            StopContainerCmd stopContainerCmd = ClientUpdater.getUpdatedClient().stopContainerCmd(containerId)
+                    .withTimeout(10);
+            stopContainerCmd.exec();
+            System.out.println("Container stopped: " + containerId + "\n\n");
+            this.setContainerStatus("Exited");
+        } catch (NotModifiedException e) {
+            // Container was already stopped or in the process of stopping
+            System.out.println("Container is already stopped or in the process of stopping: " + containerId + "\n\n");
+            this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId)); 
+        } catch (Exception e) {
+            // Handle other exceptions
+            e.printStackTrace();
+        }
     }
     public void startContainer() {
         StartContainerCmd startContainerCmd = ClientUpdater.getUpdatedClient().startContainerCmd(containerId);
         startContainerCmd.exec();
         System.out.println("Container started: " + containerId + "\n\n");
-        this.setContainerStatus("Up");
+        this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId));
     }
     public void renameContainer(String newName) {
         RenameContainerCmd renameContainerCmd = ClientUpdater.getUpdatedClient().renameContainerCmd
@@ -72,14 +72,57 @@ public class DockerInstance {
         System.out.println("Container with id: " + this.getContainerId() + "has been renamed to: " + newName + "\n\n");
         this.name = newName;
     }
-
-
+    public void removeContainer() {
+        RemoveContainerCmd removeContainerCmd = ClientUpdater.getUpdatedClient().removeContainerCmd(containerId);
+        removeContainerCmd.exec();
+        System.out.println("Container removed: " + containerId + "\n\n");
+        containerslist.remove(this);
+    }
+    public void restartContainer() {
+        RestartContainerCmd restartContainerCmd = ClientUpdater.getUpdatedClient().restartContainerCmd(containerId);
+        restartContainerCmd.exec();
+        System.out.println("Container restarted: " + containerId + "\n\n");
+        this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId));
+    }
+    public void pauseContainer() {
+        PauseContainerCmd pauseContainerCmd = ClientUpdater.getUpdatedClient().pauseContainerCmd(containerId);
+        pauseContainerCmd.exec();
+        System.out.println("Container paused: " + containerId + "\n\n");
+        this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId));
+    }
+    public void unpauseContainer() {
+        UnpauseContainerCmd unpauseContainerCmd = ClientUpdater.getUpdatedClient().unpauseContainerCmd(containerId);
+        unpauseContainerCmd.exec();
+        System.out.println("Container unpaused: " + containerId + "\n\n");
+        this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId));
+    }
+    public void killContainer() {
+        KillContainerCmd killContainerCmd = ClientUpdater.getUpdatedClient().killContainerCmd(containerId);
+        killContainerCmd.exec();
+        System.out.println("Container killed: " + containerId + "\n\n");
+        this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId));
+    }
+    public void inspectContainer() { //this is wrong I will fix it
+        InspectContainerCmd inspectContainerCmd = ClientUpdater.getUpdatedClient().inspectContainerCmd(containerId);
+        inspectContainerCmd.exec();
+        /* kai auto einai polu lathos alla ypo epejergasia
+        String message = inspectContainerCmd.exec().toString();
+        String[] parts = message.split("(?<=\\]),\\s");
+        StringBuilder formattedMessage = new StringBuilder();
+        for (String part : parts) {
+            formattedMessage.append(part.replaceAll(",","\n")).append("/n");
+        }
+        System.out.println(formattedMessage.toString());
+         */
+    }
+    
     //aid methods
     public static void listAllContainers() {
         System.out.println("Listing all the containers...\n.\n.\n.");
         int i = 0;
         for (DockerInstance c : containerslist) {
             i++;
+            c.setContainerStatus(ClientUpdater.getUpdatedStatus(c.getContainerId()));
             System.out.println(i + ") Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
                     + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
         }
@@ -90,6 +133,7 @@ public class DockerInstance {
         for (DockerInstance c : containerslist) {
             if(c.getContainerStatus().startsWith("Up")) {
                 i++;
+                c.setContainerStatus(ClientUpdater.getUpdatedStatus(c.getContainerId()));
                 System.out.println(i+") Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
                         + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
             }
@@ -112,7 +156,6 @@ public class DockerInstance {
         return containerslist.get(containerslist.indexOf(actives.get(answer-1))).getContainerId();
     }
     public static String chooseAStoppedContainer() {
-        System.out.println("Choose one of the containers bellow to START it.");
         List<DockerInstance> stopped = new ArrayList<>();
         int i=1;
         for (DockerInstance c :containerslist) {
@@ -133,5 +176,17 @@ public class DockerInstance {
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
         return containerslist.get(choice - 1).getContainerId();
+    }
+    //this method is used to check in main if there are any active containers
+    //giati otan epelega STOP a container kai den eixa kanena active to menu ebgaze na epilejw apo to tipota
+    public static boolean noActiveContainers() {
+        boolean flag = true;
+        for (DockerInstance c :containerslist) {
+            if (c.getContainerStatus().startsWith("Up")) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
     }
 }
