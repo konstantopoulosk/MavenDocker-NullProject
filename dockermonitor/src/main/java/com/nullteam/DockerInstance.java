@@ -6,6 +6,9 @@ import com.github.dockerjava.api.command.RenameContainerCmd;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import com.github.dockerjava.api.exception.NotModifiedException;
+
+
 
 public class DockerInstance {
     public static List<DockerInstance> containerslist = new ArrayList<>();
@@ -41,11 +44,20 @@ public class DockerInstance {
     }
     //tools
     public void stopContainer() {
+        try {
         StopContainerCmd stopContainerCmd = ClientUpdater.getUpdatedClient().stopContainerCmd(containerId)
-                .withTimeout(1);
+                .withTimeout(10);
         stopContainerCmd.exec();
         System.out.println("Container stopped: " + containerId + "\n\n");
         this.setContainerStatus("Exited");
+    } catch (NotModifiedException e) {
+        // Container was already stopped or in the process of stopping
+        System.out.println("Container is already stopped or in the process of stopping: " + containerId + "\n\n");
+        this.setContainerStatus("Exited");
+    } catch (Exception e) {
+        // Handle other exceptions
+        e.printStackTrace();
+    }
     }
     public void startContainer() {
         StartContainerCmd startContainerCmd = ClientUpdater.getUpdatedClient().startContainerCmd(containerId);
