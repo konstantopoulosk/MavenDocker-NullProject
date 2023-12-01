@@ -15,12 +15,17 @@ public class TestDockerInstance {
     private final DockerImage image = new DockerImage("ee3b4d1239f1", "mongo", "Latest");
     private String status = "Exited";
     String name = "GREGORY";
+    DockerInstance container = new DockerInstance("NewContainer", "123456",
+            new DockerImage("456789","mongo","Latest"),"Up");
 
     @Before
     public void setUp() {
         allContainers = new ArrayList<>();
         allContainers.add(new DockerInstance(name, containerId,
                 new DockerImage("ee3b4d1239f1", "mongo", "Latest"), status));
+        DockerInstance container = new DockerInstance("NewContainer", "123456",
+                new DockerImage("456789", "mongo", "Latest"), "Up");
+        allContainers.add(container);
     }
 
     @Test
@@ -70,11 +75,8 @@ public class TestDockerInstance {
 
     @Test
     public void testListAllContainers() {
-        DockerInstance container = new DockerInstance("NewContainer", "123456",
-                new DockerImage("456789", "mongo", "Latest"), "Exited");
-        allContainers.add(container);
         final String expectedOutput = "1) Name: GREGORY ID: 89938596d8d0 Image: mongo STATUS: Exited" +
-                "\n2) Name: NewContainer ID: 123456 Image: mongo STATUS: Exited";
+                "\n2) Name: NewContainer ID: 123456 Image: mongo STATUS: Up";
         final String actualOutput = "1) Name: " + allContainers.get(0).getContainerName() + " ID: " + allContainers.get(0).getContainerId()
                 + " Image: " + allContainers.get(0).getContainerImage().getImageName() + " STATUS: " + allContainers.get(0).getContainerStatus()
                 + "\n2) Name: " + allContainers.get(1).getContainerName() + " ID: " + allContainers.get(1).getContainerId()
@@ -85,42 +87,33 @@ public class TestDockerInstance {
     @Test
     public void testListActiveContainers() {
         ArrayList<DockerInstance> actives = new ArrayList<>();
-        DockerInstance container = new DockerInstance("NewContainer", "123456",
-        new DockerImage("456789", "mongo", "Latest"), "Up");
-        allContainers.add(container);
         for (DockerInstance c : allContainers) {
             if (c.getContainerStatus().startsWith("Up")) {
                 actives.add(c);
             }
         }
         Assert.assertEquals("Failure wrong size", actives.size(), 1);
-        Assert.assertTrue("Failure does not contain Up Container", actives.contains(container));
+        Assert.assertTrue("Failure does not contain Up Container", actives.contains(allContainers.get(1)));
         Assert.assertFalse("Failure contains stopped container", actives.contains(allContainers.get(0)));
     }
 
     @Test
     public void testChooseAnActiveContainer() {
         List<DockerInstance> actives = new ArrayList<>();
-        DockerInstance container = new DockerInstance("NewContainer", "123456",
-                new DockerImage("456789", "mongo", "Latest"), "Up");
-        allContainers.add(container);
         for (DockerInstance c : allContainers) {
             if (c.getContainerStatus().startsWith("Up")) {
                 actives.add(c);
             }
         }
         Assert.assertEquals("Failure wrong size", actives.size(), 1);
-        Assert.assertEquals("Failure wrong head", actives.get(0), container);
-        Assert.assertTrue("Failure does not contain an Up Container", actives.contains(container));
+        Assert.assertEquals("Failure wrong head", actives.get(0), allContainers.get(1));
+        Assert.assertTrue("Failure does not contain an Up Container", actives.contains(allContainers.get(1)));
         Assert.assertFalse("Failure contains a stopped container", actives.contains(allContainers.get(0)));
     }
 
     @Test
     public void testChooseAStoppedContainer() {
         List<DockerInstance> stopped = new ArrayList<>();
-        DockerInstance container = new DockerInstance("NewContainer", "123456",
-                new DockerImage("456789", "mongo", "Latest"), "Up");
-        allContainers.add(container);
         for (DockerInstance c : allContainers) {
             if (c.getContainerStatus().startsWith("Exited")) {
                 stopped.add(c);
