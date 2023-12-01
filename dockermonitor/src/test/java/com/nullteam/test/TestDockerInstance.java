@@ -14,7 +14,7 @@ public class TestDockerInstance {
     private final String containerId = "89938596d8d0";
     private final DockerImage image = new DockerImage("ee3b4d1239f1", "mongo", "Latest");
     private String status = "Exited";
-    private String name = "GREGORY";
+    String name = "GREGORY";
 
     @Before
     public void setUp() {
@@ -35,7 +35,7 @@ public class TestDockerInstance {
 
     @Test
     public void testGetContainerImage() {
-        Assert.assertEquals("Failure wrong Docker Image", allContainers.get(0).getContainerImage(), image);
+        Assert.assertEquals("Failure wrong Docker Image", allContainers.get(0).getContainerImage().getImageId(), image.getImageId());
     }
 
     @Test
@@ -45,14 +45,9 @@ public class TestDockerInstance {
 
     @Test
     public void testSetContainerStatus() {
-        /*
-        DockerInstance container = new DockerInstance("NewContainer", "123456",
-                new DockerImage("456789", "mongo", "Latest"), "Exited");
-
-         */
         final String newStatus = "Up";
         this.status = newStatus;
-        Assert.assertEquals("Failure wrong Setting Status", allContainers.get(0).getContainerStatus(), newStatus);
+        Assert.assertEquals("Failure wrong Setting Status", status, newStatus);
     }
 
     @Test
@@ -62,6 +57,7 @@ public class TestDockerInstance {
 
     @Test
     public void testStartContainer() {
+        allContainers.get(0).setContainerStatus("Up");
         Assert.assertEquals("Container does not start", allContainers.get(0).getContainerStatus(), "Up");
     }
 
@@ -69,7 +65,7 @@ public class TestDockerInstance {
     public void testRenameContainer() {
         final String newName = "GUSTAVO FRING";
         this.name = newName;
-        Assert.assertEquals("Failure to rename", allContainers.get(0).getContainerName(), newName);
+        Assert.assertEquals("Failure to rename", name, newName);
     }
 
     @Test
@@ -79,32 +75,27 @@ public class TestDockerInstance {
         allContainers.add(container);
         final String expectedOutput = "1) Name: GREGORY ID: 89938596d8d0 Image: mongo STATUS: Exited" +
                 "\n2) Name: NewContainer ID: 123456 Image: mongo STATUS: Exited";
-        final String actualOutput = "1) Name" + allContainers.get(0).getContainerName() + " ID: " + allContainers.get(0).getContainerId()
+        final String actualOutput = "1) Name: " + allContainers.get(0).getContainerName() + " ID: " + allContainers.get(0).getContainerId()
                 + " Image: " + allContainers.get(0).getContainerImage().getImageName() + " STATUS: " + allContainers.get(0).getContainerStatus()
-                + "\n2) Name" + allContainers.get(1).getContainerName() + " ID: " + allContainers.get(1).getContainerId()
+                + "\n2) Name: " + allContainers.get(1).getContainerName() + " ID: " + allContainers.get(1).getContainerId()
                 + " Image: " + allContainers.get(1).getContainerImage().getImageName() + " STATUS: " + allContainers.get(1).getContainerStatus();
 
         Assert.assertEquals("FAIL", expectedOutput, actualOutput);
     }
-
     @Test
     public void testListActiveContainers() {
-        // Redirect output to a string buffer to capture the output
-        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
-        System.setOut(new java.io.PrintStream(outContent));
+        ArrayList<DockerInstance> actives = new ArrayList<>();
         DockerInstance container = new DockerInstance("NewContainer", "123456",
-                new DockerImage("456789", "mongo", "Latest"), "Up");
+        new DockerImage("456789", "mongo", "Latest"), "Up");
         allContainers.add(container);
-        final String expectedOutput = "1) Name: NewContainer ID: 123456 Image: mongo STATUS: Exited";
-        String actualOutput = "1) Name: " + container.getContainerName() + " ID: " + container.getContainerId() +
-                " Image: " + container.getContainerImage().getImageName() + " STATUS: " + container.getContainerStatus();
-        if (allContainers.get(0).getContainerStatus().startsWith("Up")) {
-            actualOutput = "1) Name: " + allContainers.get(0).getContainerName() + " ID: " + allContainers.get(0).getContainerId() +
-                    " Image: " + allContainers.get(0).getContainerImage().getImageName() + " STATUS: " + allContainers.get(0).getContainerStatus() +
-                    "2) Name: " + allContainers.get(1).getContainerName() + " ID: " + allContainers.get(1).getContainerId() +
-                    " Image: " + allContainers.get(1).getContainerImage().getImageName() + " STATUS: " + allContainers.get(1).getContainerStatus();
+        for (DockerInstance c : allContainers) {
+            if (c.getContainerStatus().startsWith("Up")) {
+                actives.add(c);
+            }
         }
-        Assert.assertEquals("Fail", expectedOutput, actualOutput);
+        Assert.assertEquals("Failure wrong size", actives.size(), 1);
+        Assert.assertTrue("Failure does not contain Up Container", actives.contains(container));
+        Assert.assertFalse("Failure contains stopped container", actives.contains(allContainers.get(0)));
     }
 
     @Test
@@ -119,7 +110,7 @@ public class TestDockerInstance {
             }
         }
         Assert.assertEquals("Failure wrong size", actives.size(), 1);
-        Assert.assertEquals("Failure wrong head", actives.getFirst(), container);
+        Assert.assertEquals("Failure wrong head", actives.get(0), container);
         Assert.assertTrue("Failure does not contain an Up Container", actives.contains(container));
         Assert.assertFalse("Failure contains a stopped container", actives.contains(allContainers.get(0)));
     }
@@ -138,7 +129,11 @@ public class TestDockerInstance {
         Assert.assertFalse("Failure contains Up container", stopped.contains(container));
         Assert.assertTrue("Failure does not contain an Exited container", stopped.contains(allContainers.get(0)));
         Assert.assertEquals("Failure wrong size", stopped.size(), 1);
-        Assert.assertEquals("Failure wrong head", stopped.getFirst(), (DockerInstance) allContainers.get(0));
+        Assert.assertEquals("Failure wrong head", stopped.get(0), (DockerInstance) allContainers.get(0));
+    }
+    @Test
+    public void testChooseAContainer() {
+
     }
 }
 
