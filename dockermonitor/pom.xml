@@ -48,17 +48,10 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-<<<<<<< HEAD
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-=======
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
->>>>>>> parent of 76552a5 (Tried to add Directory Test as in EduPortal maven project tree)
         </dependency>
     </dependencies>
 </project>
