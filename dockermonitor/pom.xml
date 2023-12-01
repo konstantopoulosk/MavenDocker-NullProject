@@ -18,14 +18,13 @@
                     <archive>
                         <manifest>
                             <mainClass>com.limetray.helper.App</mainClass>
-                            <testSourceDirectory>src/test</testSourceDirectory>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
+    
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -35,7 +34,7 @@
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>
-            <version>3.3.3</version>
+            <version>3.3.4</version>
         </dependency>
         <dependency>
             <groupId>com.opencsv</groupId>
@@ -49,10 +48,17 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+<<<<<<< HEAD
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+=======
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+>>>>>>> parent of 76552a5 (Tried to add Directory Test as in EduPortal maven project tree)
         </dependency>
     </dependencies>
 </project>
