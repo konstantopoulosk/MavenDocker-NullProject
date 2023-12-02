@@ -1,6 +1,7 @@
 package com.nullteam;
 
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.Image;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,10 +10,13 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Scanner in = new Scanner(System.in);
         //Creating instances of DockerInstance and DockerImage using info from the DockerClient
+        List<Image> images = ClientUpdater.getUpdatedImagesFromClient();
+        for (Image i : images) {
+            new DockerImage(i.getRepoDigests()[0], "latest", i.getId());
+        }
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
         for (Container c : containers) {
-            new DockerInstance(c.getNames()[0], c.getId(), new DockerImage
-                    (c.getImageId(), c.getImage(), "latest"), c.getStatus());
+            new DockerInstance(c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
         }
         //Initialized the monitor thread
         DockerMonitor monitor = new DockerMonitor();
@@ -243,7 +247,7 @@ public class Main {
                             try {
                                 switch (ansI) {
                                     case "1":
-                                        //Method to view available images ~ TO BE MADE INSIDE THE DockerImage CLASS
+                                        DockerImage.listAllImages();
                                         break;
                                     case "2":
                                         //Method to implement an image through a new container ~ TO BE MADE INSIDE THE DockerIm
