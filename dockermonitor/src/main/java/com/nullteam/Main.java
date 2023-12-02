@@ -57,12 +57,12 @@ public class Main {
                                         while (true) { //chooses to exit this menu
                                             System.out.println("\n          ~Container Tools~" +
                                                     "\n         -------------------");
-                                            System.out.println("(1) Stop a container\n(2) Start a container\n" +
-                                                    "(3) Rename a container\n(4) Remove a container" +
-                                                    "\n(5) Restart a container\n(6) Pause a container\n(7) Unpause a container" +
-                                                    "\n(8) Kill a container\n(9) INSPECT a container\n(0) Go Back(Container Menu)" +
+                                            System.out.println("(1) STOP a container\n(2) START a container\n" +
+                                                    "(3) RENAME a container\n(4) REMOVE a container" +
+                                                    "\n(5) RESTART a container\n(6) PAUSE a container\n(7) UNPAUSE a container" +
+                                                    "\n(8) KILL a container\n(9) INSPECT a container\n(0) Go Back(Container Menu)" +
                                                     "\nPress (*) to EXIT THE APP");
-                                            System.out.print("Tool Number: ");
+                                            System.out.print("YOUR CHOICE---> ");
                                             String ansT = in.nextLine();
                                             try {
                                                 switch (ansT) {
@@ -279,7 +279,17 @@ public class Main {
                                         break;
                                     case "2":
                                         System.out.println("You chose: 2) Implement an image(start a new container)\n");
-                                        //Method to implement an image through a new container ~ TO BE MADE INSIDE THE DockerIm
+                                        System.out.println("Choose one of the images bellow to IMPLEMENT it.");
+                                        String imageIdImplement = DockerImage.chooseAnImage();
+                                        ExecutorThread executor_implementImage = new ExecutorThread
+                                                (imageIdImplement, ExecutorThread.TaskType.IMPLEMENT);
+                                        executor_implementImage.start();
+                                        System.out.println("Creating a new instance of this image...");
+                                        try {
+                                            executor_implementImage.join(); // waiting for the thread to finish
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
                                         break;
                                     case "3": //going back to main menu...
                                         System.out.println("You chose: 3) Go Back(Main Menu)\n");

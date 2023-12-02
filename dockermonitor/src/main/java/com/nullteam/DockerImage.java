@@ -1,11 +1,14 @@
 package com.nullteam;
 
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.model.Container;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class DockerImage {
-    private static List<DockerImage> all_images = new ArrayList<>(); //List with all the Images
+    public static List<DockerImage> all_images = new ArrayList<>(); //List with all the Images
     private final String imageRep; //Image Rep = Image Name // These fields won't ever change
     private final String imageTag; //Tag = Version  // That's why they're final
     private final String imageId; //Image ID
@@ -49,9 +52,31 @@ public class DockerImage {
     public static String chooseAnImage() {
         DockerImage.listAllImages(); //Users sees his images with numbers
         Scanner in = new Scanner(System.in); //chooses the image by typing the number next to the image
+        System.out.print("YOUR CHOICE---> ");
         int choice = in.nextInt(); //We find out the id of this specific image with this method.
         return all_images.get(choice - 1).getImageId();
     }
 
-    //public static void implementAnImage(String imageId) {}  obviously not done yet...
+    public void implementImage() {  //this method creates and starts a container
+        CreateContainerCmd createContainerCmd = ClientUpdater.getUpdatedClient().createContainerCmd(getImageRep());
+        createContainerCmd.exec(); //new container has been created
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient(); //We get the updated container list
+        Container c = null;
+        for (Container container : containers) {
+            if (container.getStatus().startsWith("Created")) {
+                c = container;
+            }
+        } //We have to create a new DockerInstance object with the created container
+        DockerInstance newContainer = new DockerInstance(c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
+        String containerIdStart = newContainer.getContainerId(); //now we start the container
+        ExecutorThread executor_start = new ExecutorThread
+                (containerIdStart, ExecutorThread.TaskType.START);
+        executor_start.start();
+        try {
+            executor_start.join(); // waiting for the thread to finish
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("The new container has been created and is running" + "\n");
+    }
 }

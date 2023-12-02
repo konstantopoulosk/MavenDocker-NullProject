@@ -13,7 +13,8 @@ public class ExecutorThread extends Thread {
         UNPAUSE,
         REMOVE,
         KILL,
-        INSPECT
+        INSPECT,
+        IMPLEMENT
     }
 
     public ExecutorThread(String id, TaskType task, String name2Rename) {
@@ -56,6 +57,9 @@ public class ExecutorThread extends Thread {
             case INSPECT:
                 inspectContainer();
                 break;
+            case IMPLEMENT:
+                implementImage();
+                break;
             default:
                 System.out.println("Invalid action type");
         }
@@ -69,6 +73,15 @@ public class ExecutorThread extends Thread {
             }
         }
         return instance;
+    }
+    private DockerImage findImageInClient() {
+        DockerImage image = null;
+        for (DockerImage i : DockerImage.all_images) {
+            if (i.getImageId().equals(this.id)) {
+                image = i;
+            }
+        }
+        return image;
     }
     //ALL THE EXECUTION METHODS
     private void startContainer() {
@@ -97,5 +110,8 @@ public class ExecutorThread extends Thread {
     }
     private void inspectContainer() {
         findContainerInClient().inspectContainer();
+    }
+    private void implementImage() {
+        findImageInClient().implementImage();
     }
 }
