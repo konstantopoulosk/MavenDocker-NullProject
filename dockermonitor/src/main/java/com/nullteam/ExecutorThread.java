@@ -8,14 +8,12 @@ public class ExecutorThread extends Thread {
         START,
         STOP,
         RENAME,
-        /*
         RESTART,
         PAUSE,
         UNPAUSE,
         REMOVE,
         KILL,
         INSPECT
-         */
     }
 
     public ExecutorThread(String id, TaskType task, String name2Rename) {
@@ -40,26 +38,24 @@ public class ExecutorThread extends Thread {
             case RENAME: //rename
                 renameContainer();
                 break;
-            /*
-            /*case REMOVE:
-                removeContainer(id, dockerClient);
+            case REMOVE:
+                removeContainer();
                 break;
             case RESTART:
-                restartContainer(id, dockerClient);
+                restartContainer();
                 break;
             case PAUSE:
-                pauseContainer(id, dockerClient);
+                pauseContainer();
                 break;
             case UNPAUSE:
-               unpauseContainer(id, dockerClient);
+                unpauseContainer();
                 break;
             case KILL:
-                killContainer(id, dockerClient);
+                killContainer();
                 break;
             case INSPECT:
-                //inspect a container
+                inspectContainer();
                 break;
-             */
             default:
                 System.out.println("Invalid action type");
         }
@@ -84,27 +80,22 @@ public class ExecutorThread extends Thread {
     private void renameContainer() {
         findContainerInClient().renameContainer(this.name2Rename);
     }
-    /*
-    !!!KAPOIOS NA ANALABEI NA YLOPOIHSEI TIS PARAKATW ME PAROMOIO TROPO OPWS EKANA TA PANW!!!
     private void removeContainer() {
+        findContainerInClient().removeContainer();
     }
-
     private void restartContainer() {
+        findContainerInClient().restartContainer();
     }
-
     private void pauseContainer() {
+        findContainerInClient().pauseContainer();
     }
-
     private void unpauseContainer() {
+        findContainerInClient().unpauseContainer();
     }
-
     private void killContainer() {
+        findContainerInClient().killContainer();
     }
-
     private void inspectContainer() {
+        findContainerInClient().inspectContainer();
     }
-
- */
-
-
 }
