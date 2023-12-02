@@ -24,9 +24,7 @@ public class Main {
         //Initialized menu//
         System.out.println("Welcome!");
         for (;;) {
-            System.out.println("        ~Main Menu~     \n");
-            System.out.println("(1) Inspect Containers\n(2) Inspect Images\n(*) Exit"); //more functionality to be added
-            System.out.print("YOUR CHOICE ---> ");
+            Messages.mainMenu();
             String menu = in.nextLine(); //Which menu to show
             try {
                 switch (menu) {
@@ -34,11 +32,7 @@ public class Main {
                         //Containers Menu
                         flagCon: //Creating a loop to stay in the containers menu untill user chooses to leave
                         while (true) {
-                            System.out.println("\n          ~Container Menu~" +
-                                    "\n         ------------------");
-                            System.out.println("(1) View ALL the containers\n(2) View ACTIVE containers only" +
-                                    "\n(3) Container Tools\n(..) Go Back(Main Menu)\nPress (*) to EXIT THE APP");
-                            System.out.print("YOUR CHOICE ---> ");
+                            Messages.containersMenu();
                             String ansC = in.nextLine();
                             try {
                                 switch (ansC) {
@@ -55,14 +49,7 @@ public class Main {
                                         System.out.println("Transferring you to the Container Tools Menu ...");
                                         flagTools: //Another loop to stay into Container Tools menu until user
                                         while (true) { //chooses to exit this menu
-                                            System.out.println("\n          ~Container Tools~" +
-                                                    "\n         -------------------");
-                                            System.out.println("(1) STOP a container\n(2) START a container\n" +
-                                                    "(3) RENAME a container\n(4) REMOVE a container" +
-                                                    "\n(5) RESTART a container\n(6) PAUSE a container\n(7) UNPAUSE a container" +
-                                                    "\n(8) KILL a container\n(9) INSPECT a container\n(..) Go Back(Container Menu)" +
-                                                    "\nPress (*) to EXIT THE APP");
-                                            System.out.print("YOUR CHOICE---> ");
+                                            Messages.containerTools();
                                             String ansT = in.nextLine();
                                             try {
                                                 switch (ansT) {
@@ -265,11 +252,7 @@ public class Main {
                     case "2": // Image menu
                         flagImage: //loop to stay in Image Menu until user chooses to exit
                         while (true) {
-                            System.out.println("\n            ~Image Menu~" +
-                                    "\n         ------------------");
-                            System.out.println("(1) View available images\n(2) Implement an image(start a new container)" +
-                                    "\n(..) Go Back(Main Menu)\nPress (*) to EXIT THE APP");
-                            System.out.print("YOUR CHOICE ---> ");
+                            Messages.imagesMenu();
                             String ansI = in.nextLine();
                             try {
                                 switch (ansI) {
