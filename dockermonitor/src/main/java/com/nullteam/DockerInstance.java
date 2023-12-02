@@ -16,14 +16,7 @@ public class DockerInstance {
     private final String containerId;
     // enas container afora mia mono eikona, h idia eikona mporei na xrisimopoietai se pollous diaforetikous containers
 
-    //-------//
-    //private final String image; // to image pou afora o container
-    //Kanontas String to image, xanoume polles dinatotites kai kuriws tin sindesi DockerInstance DockerImage
-    //-------//
-
-    private final String image; //An Image runs inside the container. Which image is it?
-    //DockerImage type helps with the specifics of this image using methods
-    //into DockerImage class.
+    private final String image; //An Image runs inside the container
     private String status; //Up or Exited.
     private String name; //Name of the container.
     //constructor
