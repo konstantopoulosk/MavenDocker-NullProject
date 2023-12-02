@@ -15,7 +15,10 @@ public class TestDockerInstance {
     private final String containerId = "89938596d8d0";
     private final DockerImage image = new DockerImage("ee3b4d1239f1", "mongo", "Latest");
     private String status = "Exited";
-    String name = "GREGORY";
+}
+
+    //String name = "GREGORY";
+    /*
     DockerInstance container = new DockerInstance("NewContainer", "123456",
             new DockerImage("456789","mongo","Latest"),"Up");
 
@@ -135,4 +138,4 @@ public class TestDockerInstance {
     }
 
 }
-
+*/
