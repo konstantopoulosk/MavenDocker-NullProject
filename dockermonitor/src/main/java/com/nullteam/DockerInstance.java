@@ -15,14 +15,14 @@ public class DockerInstance {
     //fields
     private final String containerId;
     // enas container afora mia mono eikona, h idia eikona mporei na xrisimopoietai se pollous diaforetikous containers
-    private DockerImage dockerImage; // to image pou afora o container
+    private final String image; // to image pou afora o container
     private String status;
     private String name;
     //constructor
-    public DockerInstance(String name, String containerId, DockerImage dockerImage, String status) {
+    public DockerInstance(String name, String containerId, String image, String status) {
         this.name = name;
         this.containerId = containerId;
-        this.dockerImage = dockerImage;
+        this.image = image;
         this.status = status;
         containerslist.add(this);
     }
@@ -33,8 +33,8 @@ public class DockerInstance {
     public String getContainerName() {
         return name;
     }
-    public DockerImage getContainerImage() {
-        return dockerImage;
+    public String getContainerImage() {
+        return image;
     }
     public String getContainerStatus() {
         return status;
@@ -42,6 +42,11 @@ public class DockerInstance {
     public void setContainerStatus(String status) {
         this.status = status;
     }
+    @Override
+    public String toString() {
+        return "Name: " + name + "  ID: " + containerId + "  Image: " + image + "  STATUS: " + status;
+    }
+    
     //tools
     public void stopContainer() {
         try {
@@ -123,8 +128,7 @@ public class DockerInstance {
         for (DockerInstance c : containerslist) {
             i++;
             c.setContainerStatus(ClientUpdater.getUpdatedStatus(c.getContainerId()));
-            System.out.println(i + ") Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
-                    + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
+            System.out.println(i + ") " + c);  //ennoeitai c.toSrting()
         }
     }
     public static void listActiveContainers() {
@@ -134,8 +138,7 @@ public class DockerInstance {
             if(c.getContainerStatus().startsWith("Up")) {
                 i++;
                 c.setContainerStatus(ClientUpdater.getUpdatedStatus(c.getContainerId()));
-                System.out.println(i+") Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
-                        + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
+                System.out.println(i + ") " + c);
             }
         }
     }
@@ -144,8 +147,7 @@ public class DockerInstance {
         int i=1;
         for (DockerInstance c :containerslist) {
             if (c.getContainerStatus().startsWith("Up")) {
-                System.out.println(i + ") " + "Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
-                        + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
+                System.out.println(i + ") " + c);
                 actives.add(c);
                 i++;
             }
@@ -160,8 +162,7 @@ public class DockerInstance {
         int i=1;
         for (DockerInstance c :containerslist) {
             if (!(c.getContainerStatus().startsWith("Up"))) {
-                System.out.println(i + ") " + "Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
-                        + "  Image: " + c.getContainerImage().getImageName() + "  STATUS: " + c.getContainerStatus());
+                System.out.println(i + ") " + c);
                 stopped.add(c);
                 i++;
             }
@@ -189,4 +190,24 @@ public class DockerInstance {
         }
         return flag;
     }
+
+    /* den einai swsto alla nystaza opote avrio pali
+    !! TO AVOID REPETITIONS OF CODE BECAUSE WE ALSE NEED chooseAnUnpausedContainer() and chooseAPausedContainer() !!
+        public static String chooseBasedOnCondition(String condition) {
+        List<DockerInstance> mylist = new ArrayList<>();
+        int i=1;
+        for (DockerInstance c :containerslist) {
+            if (Boolean.parseBoolean(condition)) {
+                System.out.println(i + ") " + "Name: " + c.getContainerName() + "  ID: " + c.getContainerId()
+                        + "  Image: " + c.getContainerImage() + "  STATUS: " + c.getContainerStatus());
+                mylist.add(c);
+                i++;
+            }
+        }
+        Scanner in = new Scanner(System.in);
+        System.out.print("YOUR CHOICE---> ");
+        int answer = in.nextInt();
+        return containerslist.get(containerslist.indexOf(mylist.get(answer-1))).getContainerId();
+    }
+     */
 }
