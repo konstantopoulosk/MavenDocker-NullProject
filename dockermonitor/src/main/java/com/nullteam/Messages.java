@@ -1,5 +1,7 @@
 package com.nullteam;
 
+import java.util.Scanner;
+
 public class Messages {
     public static void mainMenu() {
         System.out.println("        ~Main Menu~     \n");
@@ -29,5 +31,18 @@ public class Messages {
         System.out.println("(1) View available images\n(2) Implement an image(start a new container)" +
                 "\n(..) Go Back(Main Menu)\nPress (*) to EXIT THE APP");
         System.out.print("YOUR CHOICE ---> ");
+    }
+    public static void exitApp() {
+        Scanner in = new Scanner(System.in);
+        System.out.println("\nAre you sure you want to exit? Answer Y or N (Yes/No)\n");
+        System.out.print("Answer: ");
+        String finalAnswer = in.nextLine();
+        if (finalAnswer.equals("Y")) {
+            System.out.println("\nBye..." +
+                    "\n*******EXITING APP*******");
+            System.exit(0);
+        } else {
+            System.out.println("Going Back to Main Menu ...");
+        }
     }
 }

@@ -220,9 +220,7 @@ public class Main {
                                                         System.out.println("Transferring you to the Container Menu ...");
                                                         break flagTools;
                                                     case "*": //Exiting the app
-                                                        System.out.println("\nBye..." +
-                                                                "\n*******EXITING APP*******");
-                                                        System.exit(0);
+                                                        Messages.exitApp();
                                                         break;
                                                     default:
                                                         throw new IllegalStateException("Unexpected value: " + ansT);
@@ -237,9 +235,7 @@ public class Main {
                                         System.out.println("Transferring you to the Main Menu ...");
                                         break flagCon;
                                     case "*": //Exiting the APP
-                                        System.out.println("\nBye..." +
-                                                "\n*******EXITING APP*******");
-                                        System.exit(0);
+                                        Messages.exitApp();
                                         break;
                                     default:
                                         throw new IllegalStateException("Unexpected value: " + ansC);
@@ -279,9 +275,7 @@ public class Main {
                                         System.out.println("Transferring you to the Main Menu ...");
                                         break flagImage;
                                     case "*": //Exiting the app
-                                        System.out.println("\nBye..." +
-                                                "\n*******EXITING APP*******");
-                                        System.exit(0);
+                                        Messages.exitApp();
                                         break;
                                     default:
                                         throw new IllegalStateException("Unexpected value: " + ansI);
@@ -292,18 +286,8 @@ public class Main {
                         }
                         break; //end of case 2
                     case "*"://exiting APP!!!
-                        System.out.println("\nAre you sure you want to exit? Answer Y or N (Yes/No)\n");
-                        System.out.print("Answer: ");
-                        String finalAnswer = in.nextLine();
-                        if (finalAnswer.equals("Y")) {
-                            System.out.println("\nBye..." +
-                                    "\n*******EXITING APP*******");
-                            System.exit(0);
-                            break;
-                        } else {
-                            System.out.println("Going Back to Main Menu ...");
-                            break;
-                        }
+                        Messages.exitApp();
+                        break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + menu);
                 }
