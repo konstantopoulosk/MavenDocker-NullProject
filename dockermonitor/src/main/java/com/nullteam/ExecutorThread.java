@@ -48,7 +48,7 @@ public class ExecutorThread extends Thread {
                 pauseContainer();
                 break;
             case UNPAUSE:
-               unpauseContainer();
+                unpauseContainer();
                 break;
             case KILL:
                 killContainer();
@@ -87,7 +87,7 @@ public class ExecutorThread extends Thread {
         findContainerInClient().restartContainer();
     }
     private void pauseContainer() {
-        findContainerInClient().pauseContainer(); 
+        findContainerInClient().pauseContainer();
     }
     private void unpauseContainer() {
         findContainerInClient().unpauseContainer();
