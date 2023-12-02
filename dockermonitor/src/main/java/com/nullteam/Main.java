@@ -37,7 +37,7 @@ public class Main {
                             System.out.println("\n          ~Container Menu~" +
                                     "\n         ------------------");
                             System.out.println("(1) View ALL the containers\n(2) View ACTIVE containers only" +
-                                    "\n(3) Container Tools\n(4) Go Back(Main Menu)\nPress (*) to EXIT THE APP");
+                                    "\n(3) Container Tools\n(..) Go Back(Main Menu)\nPress (*) to EXIT THE APP");
                             System.out.print("YOUR CHOICE ---> ");
                             String ansC = in.nextLine();
                             try {
@@ -60,7 +60,7 @@ public class Main {
                                             System.out.println("(1) STOP a container\n(2) START a container\n" +
                                                     "(3) RENAME a container\n(4) REMOVE a container" +
                                                     "\n(5) RESTART a container\n(6) PAUSE a container\n(7) UNPAUSE a container" +
-                                                    "\n(8) KILL a container\n(9) INSPECT a container\n(0) Go Back(Container Menu)" +
+                                                    "\n(8) KILL a container\n(9) INSPECT a container\n(..) Go Back(Container Menu)" +
                                                     "\nPress (*) to EXIT THE APP");
                                             System.out.print("YOUR CHOICE---> ");
                                             String ansT = in.nextLine();
@@ -228,7 +228,7 @@ public class Main {
                                                             e.printStackTrace();
                                                         }
                                                         break;
-                                                    case "0": //going back to container menu...
+                                                    case "..": //going back to container menu...
                                                         System.out.println("You chose: 0) Go back to Container Menu\n");
                                                         System.out.println("Transferring you to the Container Menu ...");
                                                         break flagTools;
@@ -245,9 +245,9 @@ public class Main {
                                             }
                                         }
                                         break;
-                                    case "4": //going back to main menu...
+                                    case "..": //going back to main menu...
                                         System.out.println("You chose: 4) Go Back(Main Menu)\n");
-                                        System.out.println("Transferring you to the Main Menu");
+                                        System.out.println("Transferring you to the Main Menu ...");
                                         break flagCon;
                                     case "*": //Exiting the APP
                                         System.out.println("\nBye..." +
@@ -268,7 +268,7 @@ public class Main {
                             System.out.println("\n            ~Image Menu~" +
                                     "\n         ------------------");
                             System.out.println("(1) View available images\n(2) Implement an image(start a new container)" +
-                                    "\n(3) Go Back(Main Menu)\nPress (*) to EXIT THE APP");
+                                    "\n(..) Go Back(Main Menu)\nPress (*) to EXIT THE APP");
                             System.out.print("YOUR CHOICE ---> ");
                             String ansI = in.nextLine();
                             try {
@@ -291,7 +291,7 @@ public class Main {
                                             e.printStackTrace();
                                         }
                                         break;
-                                    case "3": //going back to main menu...
+                                    case "..": //going back to main menu...
                                         System.out.println("You chose: 3) Go Back(Main Menu)\n");
                                         System.out.println("Transferring you to the Main Menu ...");
                                         break flagImage;

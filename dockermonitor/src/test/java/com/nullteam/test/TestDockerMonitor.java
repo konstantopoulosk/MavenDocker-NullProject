@@ -23,6 +23,6 @@ public class TestDockerMonitor {
         String[] container2 = {"Name1" , "Id", "image", "status"};
         List<String[]> array2 = new ArrayList<>();
         array2.add(container2);
-        
+
     }
 }
