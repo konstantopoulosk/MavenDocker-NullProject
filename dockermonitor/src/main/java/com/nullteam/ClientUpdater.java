@@ -9,10 +9,7 @@ import java.util.List;
 
 public class ClientUpdater {
     public static List<Container> getUpdatedContainersFromClient() {
-        DefaultDockerClientConfig.Builder builder= DefaultDockerClientConfig.createDefaultConfigBuilder();
-        builder.withDockerHost("tcp://localhost:2375");
-        DockerClient dockerClient = DockerClientBuilder.getInstance(builder).build();
-        dockerClient.versionCmd().exec();
+        DockerClient client = getUpdatedClient();
         List<Container> containers; // instances
         containers = dockerClient.listContainersCmd().withShowAll(true).exec();
         try {
@@ -21,6 +18,16 @@ public class ClientUpdater {
             System.out.println("Failed to close the client");
         }
         return containers;
+    }
+    public static List<Image> getUpdatedImagesFromClient() {
+        DockerClient client = getUpdatedClient();
+        List<Image> images = client.listImagesCmd().exec();
+        try {
+            client.close();
+        } catch (IOException e) {
+            System.out.println("Failed to close the client");
+        }
+        return images;
     }
     public static DockerClient getUpdatedClient() {
         DefaultDockerClientConfig.Builder builder= DefaultDockerClientConfig.createDefaultConfigBuilder();
