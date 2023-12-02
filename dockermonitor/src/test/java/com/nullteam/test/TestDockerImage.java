@@ -14,16 +14,17 @@ public class TestDockerImage {
     private final String imageId = "593aee2afb64";
     private final String imageName = "nginx";
     private final String imageTag = "Latest";
-    private final DockerImage dockerImage = new DockerImage(imageId,imageName,imageTag);
+    private final DockerImage dockerImage = new DockerImage(imageName,imageTag,imageId);
 
     @Before
-    public void setUp() {
+    public void setUp() { //FINISHED
         allImages = new ArrayList<>();
-        allImages.add(new DockerImage(imageId,imageName,imageTag));
+        allImages.add(new DockerImage(imageName,imageTag,imageId));
+        allImages.add(new DockerImage("Gregory", "Latest", "123456"));
     }
     @Test
-    public void testGetImageName() {
-        Assert.assertEquals("Failure - wrong Name" , allImages.get(0).getImageName(), "nginx");
+    public void testGetImageRep() {
+        Assert.assertEquals("Failure - wrong Name" , allImages.get(0).getImageRep(), "nginx");
     }
     @Test
     public void testGetImageTag() {
@@ -38,16 +39,26 @@ public class TestDockerImage {
     @Test
     public void testToString() {
         Assert.assertEquals("Failure wrong to String", allImages.get(0).toString(),dockerImage.toString());
-        final DockerImage dockerImage1 = new DockerImage("123456789", "Grigoris","Latest");
-        allImages.add(dockerImage1);
-        Assert.assertEquals("Failure wrong toString", allImages.get(0).toString() + ", " + allImages.get(1).toString(),
-                (dockerImage.toString() + ", " + dockerImage1.toString()));
     }
     @Test
     public void testConstructor() {
-            Assert.assertEquals("Failure wrong size", allImages.size(), 1);
+        Assert.assertEquals("Failure wrong size", allImages.size(), 2);
+        Assert.assertEquals("Failure wrong First", allImages.get(0).getImageId(), imageId);
     }
-    @After
+    @Test
+    public void testListAllImages() { //FINISHED
+        String actual = "1) REPOSITORY: nginx  TAG: Latest  IMAGE ID: 593aee2afb64" +
+                "\n2) REPOSITORY: Gregory  TAG: Latest  IMAGE ID: 123456";
+        String expected = "1) " + allImages.get(0).toString() + "\n2) "
+                + allImages.get(1).toString();
+        Assert.assertEquals("Fail wrong output", expected,actual);
+    }
+    @Test
+    public void testChooseAnImage() {
+
+    }
+    //testImplementAnImage
+    @After //FINISHED
     public void tearDown() {
         allImages = null;
     }
