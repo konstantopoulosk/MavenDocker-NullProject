@@ -19,7 +19,7 @@ public class DockerMonitor extends Thread {
             }
         }
     }
-    private void writeCsv() { //Write/update the csv file
+    public void writeCsv() { //Write/update the csv file
         final String csvFilePath = "containers.csv";
         try(CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFilePath, false))){
             csvWriter.writeNext(new String[]{"Container ID","Name", "Image", "Status", "Command", "Created"}); // CSVFile header
@@ -37,7 +37,7 @@ public class DockerMonitor extends Thread {
             e.printStackTrace();
         }
     }
-    private boolean hasNewData(){ // Check if there is any change inside the cluster
+    public boolean hasNewData(){ // Check if there is any change inside the cluster
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
         currentData = new ArrayList<>();
         for (Container c : containers) {
@@ -58,7 +58,7 @@ public class DockerMonitor extends Thread {
             return false;
         }
     }
-    private boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
+    public boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
         // Check for null references
         if (list1 == null && list2 == null) {
             return true;
