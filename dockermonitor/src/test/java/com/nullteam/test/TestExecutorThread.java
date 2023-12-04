@@ -143,6 +143,10 @@ public class TestExecutorThread {
     }
     @Test
     public void testImplementImage() {
+        /*TODO*/
+    }
+    @After
+    public void tearDown() {
 
     }
 }

@@ -15,12 +15,13 @@ public class TestDockerImage {
     private final String imageName = "nginx";
     private final String imageTag = "Latest";
     private final DockerImage dockerImage = new DockerImage(imageName,imageTag,imageId);
+    private final DockerImage di = new DockerImage("Gregory", "Latest", "123456");
 
     @Before
     public void setUp() { //FINISHED
         allImages = new ArrayList<>();
-        allImages.add(new DockerImage(imageName,imageTag,imageId));
-        allImages.add(new DockerImage("Gregory", "Latest", "123456"));
+        allImages.add(dockerImage);
+        allImages.add(di);
     }
     @Test
     public void testGetImageRep() {
@@ -55,9 +56,16 @@ public class TestDockerImage {
     }
     @Test
     public void testChooseAnImage() {
-
+        Assert.assertTrue("Fail", allImages.contains(dockerImage));
+        Assert.assertTrue("Fail", allImages.contains(di));
+        DockerImage dockerImage1 = new DockerImage("REP",
+                "TAG", "ID");
+        Assert.assertFalse("Fail", allImages.contains(dockerImage1));
     }
-    //testImplementAnImage
+    @Test
+    public void testImplementAnImage() {
+        /* TODO */
+    }
     @After //FINISHED
     public void tearDown() {
         allImages = null;

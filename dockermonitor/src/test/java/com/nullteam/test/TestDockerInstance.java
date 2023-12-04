@@ -26,11 +26,7 @@ public class TestDockerInstance {
     @Before
     public void setUp() {
         allContainers = new ArrayList<>();
-        DockerInstance container1 = new DockerInstance(name, containerId,
-                imageContainer, status);
         allContainers.add(container1);
-        DockerInstance container2 = new DockerInstance("NewContainer", "af1214c44590",
-                "mongo", "Up");
         allContainers.add(container2);
     }
 
@@ -187,8 +183,8 @@ public class TestDockerInstance {
     }
     @Test
     public void testChooseAContainer() {
-        Assert.assertFalse("Fail", allContainers.contains(container2));
-        Assert.assertFalse("Fail", allContainers.contains(container1));
+        Assert.assertTrue("Fail", allContainers.contains(container2));
+        Assert.assertTrue("Fail", allContainers.contains(container1));
         DockerInstance container3 = new DockerInstance("NAME",
                 "ID", "IMAGE", "STATUS");
         Assert.assertFalse("Fail", allContainers.contains(container3));
