@@ -216,7 +216,7 @@ public class Main {
                                                         }
                                                         break;
                                                     case "..": //going back to container menu...
-                                                        System.out.println("You chose: 0) Go back to Container Menu\n");
+                                                        System.out.println("You chose: ..) Go back to Container Menu\n");
                                                         System.out.println("Transferring you to the Container Menu ...");
                                                         break flagTools;
                                                     case "*": //Exiting the app
@@ -231,7 +231,7 @@ public class Main {
                                         }
                                         break;
                                     case "..": //going back to main menu...
-                                        System.out.println("You chose: 4) Go Back(Main Menu)\n");
+                                        System.out.println("You chose: ..) Go Back(Main Menu)\n");
                                         System.out.println("Transferring you to the Main Menu ...");
                                         break flagCon;
                                     case "*": //Exiting the APP
@@ -271,7 +271,7 @@ public class Main {
                                         }
                                         break;
                                     case "..": //going back to main menu...
-                                        System.out.println("You chose: 3) Go Back(Main Menu)\n");
+                                        System.out.println("You chose: ..) Go Back(Main Menu)\n");
                                         System.out.println("Transferring you to the Main Menu ...");
                                         break flagImage;
                                     case "*": //Exiting the app
