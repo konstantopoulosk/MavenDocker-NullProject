@@ -30,6 +30,7 @@ public class Main {
                 switch (menu) {
                     case "1":
                         //Containers Menu
+                        System.out.println("\nTransferring you to the Container Menu ...");
                         flagCon: //Creating a loop to stay in the containers menu untill user chooses to leave
                         while (true) {
                             Messages.containersMenu();
@@ -246,6 +247,7 @@ public class Main {
                         }
                         break; //end of case 1
                     case "2": // Image menu
+                        System.out.println("\nTransferring you to the Image Menu ...");
                         flagImage: //loop to stay in Image Menu until user chooses to exit
                         while (true) {
                             Messages.imagesMenu();
