@@ -13,7 +13,6 @@ public class ExecutorThread extends Thread {
         UNPAUSE,
         REMOVE,
         KILL,
-        INSPECT,
         IMPLEMENT
     }
 
@@ -53,9 +52,6 @@ public class ExecutorThread extends Thread {
                 break;
             case KILL:
                 killContainer();
-                break;
-            case INSPECT:
-                inspectContainer();
                 break;
             case IMPLEMENT:
                 implementImage();
@@ -107,9 +103,6 @@ public class ExecutorThread extends Thread {
     }
     private void killContainer() {
         findContainerInClient().killContainer();
-    }
-    private void inspectContainer() {
-        findContainerInClient().inspectContainer();
     }
     private void implementImage() {
         findImageInClient().implementImage();

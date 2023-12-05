@@ -127,9 +127,9 @@ public class DockerInstance {
         System.out.println("Listing active containers...\n.\n.\n.");
         int i = 0; //Numbers to make the output more User Friendly
         for (DockerInstance c : containerslist) {
+            c.setContainerStatus(ClientUpdater.getUpdatedStatus(c.getContainerId()));
             if(c.getContainerStatus().startsWith("Up")) { //Starts with because the status can be Up a second ago
                 i++;
-                c.setContainerStatus(ClientUpdater.getUpdatedStatus(c.getContainerId()));
                 System.out.println(i + ") " + c); //Ennoeitai c.toString()
             }
         }
@@ -140,9 +140,9 @@ public class DockerInstance {
         List<DockerInstance> actives = new ArrayList<>();
         int i=1; //Output User Friendly
         for (DockerInstance c :containerslist) {
-            if (c.getContainerStatus().startsWith("Up")) {
-                System.out.println(i + ") " + c);
-                actives.add(c);
+            if (c.getContainerStatus().startsWith("Up")) { //if the status starts with "Up"
+                System.out.println(i + ") " + c);          //it means the container is active
+                actives.add(c);                            //so we add it to the list
                 i++;
             }
         }
@@ -153,13 +153,13 @@ public class DockerInstance {
     }
 
     //chooseAStoppedContainer is used when user wants to Start, Restart, Unpause a Stopped Container
-    public static String chooseAStoppedContainer() {
+    public static String chooseAStoppedContainer() { //returns container's id
         List<DockerInstance> stopped = new ArrayList<>();
         int i=1; //Output more friendly and easier to the user to choose a container
         for (DockerInstance c :containerslist) {
-            if (!(c.getContainerStatus().startsWith("Up"))) {
-                System.out.println(i + ") " + c);
-                stopped.add(c);
+            if (!(c.getContainerStatus().startsWith("Up"))) {  //if the status doesn't start with "Up"
+                System.out.println(i + ") " + c);              //it means it's "Exited" or stopped
+                stopped.add(c);                                //so we add it to the list
                 i++;
             }
         }
@@ -168,7 +168,40 @@ public class DockerInstance {
         int answer = in.nextInt();
         return containerslist.get(containerslist.indexOf(stopped.get(answer-1))).getContainerId();
     }
-
+    /*We need a different list of paused containers when case (7) in main is chosen (to UNPAUSE a container)
+      because there is a chance that the user chooses an already unpaused container form the active ones*/
+    public static String chooseAPausedContainer() { //returns container's id
+        List<DockerInstance> paused = new ArrayList<>();
+        int i=1; //Output User Friendly
+        for (DockerInstance c :containerslist) {
+            if (c.getContainerStatus().endsWith("(Paused)")) {
+                System.out.println(i + ") " + c);
+                paused.add(c);
+                i++;
+            }
+        }
+        Scanner in = new Scanner(System.in);
+        System.out.print("YOUR CHOICE---> ");
+        int answer = in.nextInt();
+        return containerslist.get(containerslist.indexOf(paused.get(answer-1))).getContainerId();
+    }
+    /*We need a different list of unpaused containers when case (6) in main is chosen (to PAUSE a container)
+      because there is a chance that the user chooses an already paused container form the active ones*/
+    public static String chooseAnUnpausedContainer() { //returns container's id
+        List<DockerInstance> unpaused = new ArrayList<>();
+        int i=1; //Output User Friendly
+        for (DockerInstance c :containerslist) {
+            if (c.getContainerStatus().startsWith("Up") && !(c.getContainerStatus().endsWith("(Paused)"))) {
+                System.out.println(i + ") " + c);
+                unpaused.add(c);
+                i++;
+            }
+        }
+        Scanner in = new Scanner(System.in);
+        System.out.print("YOUR CHOICE---> ");
+        int answer = in.nextInt();
+        return containerslist.get(containerslist.indexOf(unpaused.get(answer-1))).getContainerId();
+    }
     //chooseAContainer when user wants to choose a container from all the containers
     //for example he wants to rename
     public static String chooseAContainer() {
@@ -179,8 +212,7 @@ public class DockerInstance {
         return containerslist.get(choice - 1).getContainerId();
     }
     //this method is used to check in main if there are any active containers
-    //giati otan epelega STOP a container kai den eixa kanena active to menu ebgaze na epilejw apo to tipota
-    //User presses STOP and there are no Active Containers, He can't choose from nothing --> Exception
+    //User presses STOP and there are no Active Containers, he can't choose from nothing --> Exception
     public static boolean noActiveContainers() {
         boolean flag = true;
         for (DockerInstance c :containerslist) {
@@ -191,10 +223,35 @@ public class DockerInstance {
         }
         return flag;
     }
-
-    /* den einai swsto alla nystaza opote avrio pali
-    !! TO AVOID REPETITIONS OF CODE BECAUSE WE ALSE NEED chooseAnUnpausedContainer() and chooseAPausedContainer() !!
-        public static String chooseBasedOnCondition(String condition) {
+    //this method is used to check in main if there are any paused containers
+    //User presses UNPAUSE and there are no Paused Containers, he can't choose from nothing --> Exception
+    public static boolean noPausedContainers() {
+        boolean flag = true;
+        for (DockerInstance c :containerslist) {
+            if (c.getContainerStatus().endsWith("(Paused)")) { //It means there is at least one paused container
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+    //this method is used to check in main if there are any unpaused containers
+    //User presses PAUSE and there are no active unpaused Containers, he can't choose from nothing --> Exception
+    public static boolean noUnpausedContainers() {
+        boolean flag = true;
+        for (DockerInstance c :containerslist) {
+            if (c.getContainerStatus().startsWith("Up") && c.getContainerStatus().endsWith("(Paused)")) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+    /* !! TO AVOID REPETITIONS OF CODE
+    public static String chooseAStoppedContainer() {
+        return chooseBasedOnCondition("!(c.getContainerStatus().startsWith("+"\"\\"+"Up"+"\"\\"+"))");
+    }
+    public static String chooseBasedOnCondition(String condition) {
         List<DockerInstance> mylist = new ArrayList<>();
         int i=1;
         for (DockerInstance c :containerslist) {
@@ -210,5 +267,5 @@ public class DockerInstance {
         int answer = in.nextInt();
         return containerslist.get(containerslist.indexOf(mylist.get(answer-1))).getContainerId();
     }
-     */
+    */
 }

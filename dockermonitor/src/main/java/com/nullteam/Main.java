@@ -58,7 +58,7 @@ public class Main {
                                                         System.out.println("You chose: 1) Stop a container\n");
                                                         if (DockerInstance.noActiveContainers()) { //there is no reason to continue without active containers
                                                             System.out.println("There are no active containers.");
-                                                            Thread.sleep(3000); //to show the message before the app goes back to the ~Container Tools~
+                                                            Thread.sleep(2000); //to show the message before the app goes back to the ~Container Tools~
                                                         } else {
                                                             System.out.println("Choose one of the active containers bellow " +
                                                                     "to STOP it.");
@@ -125,7 +125,7 @@ public class Main {
                                                         System.out.println("You chose: 5) Restart a container\n");
                                                         if (DockerInstance.noActiveContainers()) {
                                                             System.out.println("There are no active containers.");
-                                                            Thread.sleep(3000);
+                                                            Thread.sleep(2000);
                                                         } else {
                                                             System.out.println("Choose one of the active containers bellow " +
                                                                     "to RESTART it.");
@@ -143,13 +143,13 @@ public class Main {
                                                         break;
                                                     case "6": //PAUSE a container
                                                         System.out.println("You chose: 6) Pause a container\n");
-                                                        if (DockerInstance.noActiveContainers()) {
-                                                            System.out.println("There are no active containers.");
-                                                            Thread.sleep(3000);
+                                                        if (DockerInstance.noUnpausedContainers()) {
+                                                            System.out.println("There are no active unpaused containers.");
+                                                            Thread.sleep(2000);
                                                         } else {
                                                             System.out.println("Choose one of the active containers bellow " +
                                                                     "to PAUSE it.");
-                                                            String containerIdPause = DockerInstance.chooseAnActiveContainer();
+                                                            String containerIdPause = DockerInstance.chooseAnUnpausedContainer();
                                                             ExecutorThread executor_pause = new ExecutorThread
                                                                     (containerIdPause, ExecutorThread.TaskType.PAUSE);
                                                             executor_pause.start();
@@ -163,13 +163,13 @@ public class Main {
                                                         break;
                                                     case "7": //UNPAUSE a container
                                                         System.out.println("You chose: 7) Unpause a container\n");
-                                                        if (DockerInstance.noActiveContainers()) {
-                                                            System.out.println("There are no active containers.");
-                                                            Thread.sleep(3000);
+                                                        if (DockerInstance.noPausedContainers()) {
+                                                            System.out.println("There are no paused containers.");
+                                                            Thread.sleep(2000);
                                                         } else {
-                                                            System.out.println("Choose one of the active containers bellow " +
+                                                            System.out.println("Choose one of the paused containers bellow " +
                                                                     "to UNPAUSE it.");
-                                                            String containerIdUnpause = DockerInstance.chooseAnActiveContainer();
+                                                            String containerIdUnpause = DockerInstance.chooseAPausedContainer();
                                                             ExecutorThread executor_unpause = new ExecutorThread
                                                                     (containerIdUnpause, ExecutorThread.TaskType.UNPAUSE);
                                                             executor_unpause.start();
@@ -185,7 +185,7 @@ public class Main {
                                                         System.out.println("You chose: 8) Kill a container\n");
                                                         if (DockerInstance.noActiveContainers()) {
                                                             System.out.println("There are no active containers.");
-                                                            Thread.sleep(3000);
+                                                            Thread.sleep(2000);
                                                         } else {
                                                             System.out.println("Choose one of the active containers bellow " +
                                                                     "to KILL it.");
@@ -199,21 +199,6 @@ public class Main {
                                                             } catch (InterruptedException e) {
                                                                 e.printStackTrace();
                                                             }
-                                                        }
-                                                        break;
-                                                    case "9": //inspect a container
-                                                        System.out.println("You chose: 9) Inspect a container\n");
-                                                        System.out.println("Choose one of the containers bellow " +
-                                                                "to RENAME it.");
-                                                        String containerIdInspect = DockerInstance.chooseAContainer();
-                                                        ExecutorThread executor_inspect = new ExecutorThread
-                                                                (containerIdInspect, ExecutorThread.TaskType.INSPECT);
-                                                        executor_inspect.start();
-                                                        System.out.println("Inspecting the container...");
-                                                        try {
-                                                            executor_inspect.join();
-                                                        } catch (InterruptedException e) {
-                                                            e.printStackTrace();
                                                         }
                                                         break;
                                                     case "..": //going back to container menu...
