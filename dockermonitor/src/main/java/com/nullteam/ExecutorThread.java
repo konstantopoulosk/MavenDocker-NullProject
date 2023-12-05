@@ -89,9 +89,7 @@ public class ExecutorThread extends Thread {
     private void renameContainer() {
         findContainerInClient().renameContainer(this.name2Rename);
     }
-    private void removeContainer() {
-        findContainerInClient().removeContainer();
-    }
+    private void removeContainer() { findContainerInClient().removeContainer(); }
     private void restartContainer() {
         findContainerInClient().restartContainer();
     }

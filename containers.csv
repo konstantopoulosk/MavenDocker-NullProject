@@ -1,17 +1,4 @@
 "Container ID","Name","Image","Status","Command","Created"
-<<<<<<< HEAD
-"628e8008923df286201a453c031eaedcecae66fd0ad1ac4b2137d49be1e21f24","/funny_mcnulty","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1701722916"
-"d297ef942f9ad19089d444d9d7cc75d9d6ea4961400db4d64ba6d70125409131","/newNAMEtest","mongo","running","docker-entrypoint.sh mongod","1701633232"
-"94694de6a5b73f50371b9ec663914f7be25aa35410dfa9002dd1408b34b218d1","/vigorous_mayer","nginx:1.25","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1701632946"
-"ea7bdc0a88aeecfbd4805b2527f58ec604cc9eb2c0fdd0f97ddd954303bf89f3","/nice_burnell","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1701534253"
-"a220b2adfe5aaddee8c8f636059350ea2a30c1efc75d49cc6d2ec55f7dc9f7fd","/I_Love_Anastasia","mongo","running","docker-entrypoint.sh mongod","1700323104"
-"8f28b29276d742db7f61c8b4a13f76f17e716bf3c76298ac9a9e60fcc76105ed","/vibrant_panini","nginx","exited","/docker-entrypoint.sh --name 'I Love Anastasia'","1700322864"
-"0dcc7a0bca3f12e8e962b32e9094120e12685fb78836473c93e5fe16c141d286","/130","nginx","exited","/docker-entrypoint.sh --name 'I love Anastasia'","1700322824"
-"eec065ffaf69674cc49f117ec4257197b4681fb57cb09a93eb1857f522327794","/gallant_chatelet","nginx","exited","/docker-entrypoint.sh --name ='I love Anastasia'","1700322770"
-"af1214c4459089003afdff033e3e02d0a14282edc6303b3c9f85f88902420916","/elated_feynman","nginx","exited","/docker-entrypoint.sh -name ='I love Anastasia'","1700322728"
-"ad37182ee11679264f7beaa02ac1db6caa27042153b3857179aaf51452d43e92","/GG","nginx:latest","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1700309317"
-"6cfa7f0707e0bc7c6ef0f189d84e8f53484c3988fbf0415f4a4b36d2dcc0a3bc","/GUSTAVO_FRING123","maven:latest","exited","/usr/local/bin/mvn-entrypoint.sh mvn","1700309275"
-=======
 "d6450d6bf2a65d923849987996671703f7cb0f2c8db377cb81d75bb8ce39246e","/happy_carver","maven","exited","/usr/local/bin/mvn-entrypoint.sh mvn","1701779471"
 "7cec2de8fd717068e71e04cb12f3763a5528065b10801aa81a8860ea07596dc2","/amazing_grothendieck","maven","exited","/usr/local/bin/mvn-entrypoint.sh mvn","1701530906"
 "1ef74c70ec91d305e3e91357dbb63c8c0398f033aae344804492db51e7c8667f","/EimaiGamatos","9c7a54a9a43c","exited","/hello","1701523950"
@@ -20,4 +7,3 @@
 "794c0e2c2d980e5fb3d693354237daed14bdd5ba9a95693209a05e2068c8f34d","/my-boyfriend-knows-programming","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1701383217"
 "8cdfcfa8a160693c8fbffb68d05a958d7ed35411d39b47524e2ceddf9493b40f","/admiring_birds","hello-world","exited","/hello","1701383202"
 "15aaae4c6c4c01f2ea51e5d4d40feacedc8e10e49d0a07263105246ff7f25c6d","/testt-mongo","mongo:latest","exited","docker-entrypoint.sh mongod","1700073212"
->>>>>>> 673abdc48e2601f28cf58a862348d2834500d41e
