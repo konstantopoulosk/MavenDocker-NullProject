@@ -7,7 +7,9 @@ import com.github.dockerjava.core.DockerClientBuilder;
 import java.io.IOException;
 import java.util.List;
 
-public class ClientUpdater {
+final class ClientUpdater {
+    private ClientUpdater() {
+    }
     /**
      * This method gets a list of updated containers from
      * the updated Docker Client in order to always have
@@ -63,7 +65,7 @@ public class ClientUpdater {
      * @param containerId String
      * @return String
      */
-    public static String getUpdatedStatus(String containerId) {
+    public static String getUpdatedStatus(final String containerId) {
         String status = null;
         List<Container> containers
                 = getUpdatedContainersFromClient(); //updated containers
