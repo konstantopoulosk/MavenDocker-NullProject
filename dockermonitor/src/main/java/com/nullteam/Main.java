@@ -31,7 +31,7 @@ public class Main {
                     case "1":
                         //Containers Menu
                         System.out.println("\nTransferring you to the Container Menu ...");
-                        flagCon: //Creating a loop to stay in the containers menu untill user chooses to leave
+                        flagCon: //Creating a loop to stay in the containers menu until user chooses to leave
                         while (true) {
                             Messages.containersMenu();
                             String ansC = in.nextLine();
@@ -60,7 +60,7 @@ public class Main {
                                                             System.out.println("There are no active containers.");
                                                             Thread.sleep(2000); //to show the message before the app goes back to the ~Container Tools~
                                                         } else {
-                                                            System.out.println("Choose one of the active containers bellow " +
+                                                            System.out.println("Choose one of the active containers below " +
                                                                     "to STOP it.");
                                                             String containerIdStop = DockerInstance.chooseAnActiveContainer();
                                                             ExecutorThread executor_stop = new ExecutorThread
@@ -76,7 +76,7 @@ public class Main {
                                                         break;
                                                     case "2": //START a container
                                                         System.out.println("You chose: 2) Start a container\n");
-                                                        System.out.println("Choose one of the exited containers bellow " +
+                                                        System.out.println("Choose one of the exited containers below " +
                                                                 "to START it.");
                                                         String containerIdStart = DockerInstance.chooseAStoppedContainer();
                                                         ExecutorThread executor_start = new ExecutorThread
@@ -91,7 +91,7 @@ public class Main {
                                                         break;
                                                     case "3": //RENAME a container
                                                         System.out.println("You chose: 3) Rename a container\n");
-                                                        System.out.println("Choose one of the containers bellow " +
+                                                        System.out.println("Choose one of the containers below " +
                                                                 "to RENAME it.");
                                                         String containerIdRename = DockerInstance.chooseAContainer();
                                                         System.out.print("New name: ");
@@ -108,7 +108,7 @@ public class Main {
                                                         break;
                                                     case "4": //REMOVE a container
                                                         System.out.println("You chose: 4) Remove a container\n");
-                                                        System.out.println("Choose one of the containers bellow " +
+                                                        System.out.println("Choose one of the containers below " +
                                                                 "to REMOVE it.");
                                                         String containerIdRemove = DockerInstance.chooseAContainer();
                                                         ExecutorThread executor_remove = new ExecutorThread
@@ -127,7 +127,7 @@ public class Main {
                                                             System.out.println("There are no active containers.");
                                                             Thread.sleep(2000);
                                                         } else {
-                                                            System.out.println("Choose one of the active containers bellow " +
+                                                            System.out.println("Choose one of the active containers below " +
                                                                     "to RESTART it.");
                                                             String containerIdRestart = DockerInstance.chooseAnActiveContainer();
                                                             ExecutorThread executor_restart = new ExecutorThread
@@ -147,7 +147,7 @@ public class Main {
                                                             System.out.println("There are no active unpaused containers.");
                                                             Thread.sleep(2000);
                                                         } else {
-                                                            System.out.println("Choose one of the active containers bellow " +
+                                                            System.out.println("Choose one of the active containers below " +
                                                                     "to PAUSE it.");
                                                             String containerIdPause = DockerInstance.chooseAnUnpausedContainer();
                                                             ExecutorThread executor_pause = new ExecutorThread
@@ -167,7 +167,7 @@ public class Main {
                                                             System.out.println("There are no paused containers.");
                                                             Thread.sleep(2000);
                                                         } else {
-                                                            System.out.println("Choose one of the paused containers bellow " +
+                                                            System.out.println("Choose one of the paused containers below " +
                                                                     "to UNPAUSE it.");
                                                             String containerIdUnpause = DockerInstance.chooseAPausedContainer();
                                                             ExecutorThread executor_unpause = new ExecutorThread
@@ -187,7 +187,7 @@ public class Main {
                                                             System.out.println("There are no active containers.");
                                                             Thread.sleep(2000);
                                                         } else {
-                                                            System.out.println("Choose one of the active containers bellow " +
+                                                            System.out.println("Choose one of the active containers below " +
                                                                     "to KILL it.");
                                                             String containerIdKill = DockerInstance.chooseAnActiveContainer();
                                                             ExecutorThread executor_kill = new ExecutorThread
@@ -245,7 +245,7 @@ public class Main {
                                         break;
                                     case "2":
                                         System.out.println("You chose: 2) Implement an image(start a new container)\n");
-                                        System.out.println("Choose one of the images bellow to IMPLEMENT it.");
+                                        System.out.println("Choose one of the images below to IMPLEMENT it.");
                                         String imageIdImplement = DockerImage.chooseAnImage();
                                         ExecutorThread executor_implementImage = new ExecutorThread
                                                 (imageIdImplement, ExecutorThread.TaskType.IMPLEMENT);
