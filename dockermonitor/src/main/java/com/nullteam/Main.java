@@ -116,7 +116,7 @@ final class Main { //Utility classes should not be defined public
                                         GetHelp.imageCase1();
                                         break;
                                     case "2": //Implements an image
-                                        GetHelp.case2Implement();
+                                        GetHelp.case2Impl();
                                         break;
                                     case "..": //going back to main menu...
                                         GetHelp.goToMainMenu();
