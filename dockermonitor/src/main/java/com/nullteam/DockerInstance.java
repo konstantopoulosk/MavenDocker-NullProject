@@ -75,7 +75,7 @@ public class DockerInstance {
         RenameContainerCmd renameContainerCmd = ClientUpdater.getUpdatedClient().renameContainerCmd
                 (containerId).withName(newName);
         renameContainerCmd.exec(); //Renames in the Cluster
-        System.out.println("Container with id: " + this.getContainerId() + "has been renamed to: " + newName + "\n\n");
+        System.out.println("Container with id: " + this.getContainerId() + " has been renamed to: " + newName + "\n\n");
         this.name = newName; //Renames the object
     }
     public void removeContainer() {
@@ -108,19 +108,6 @@ public class DockerInstance {
         killContainerCmd.exec(); //Kills container in cluster
         System.out.println("Container killed: " + containerId + "\n\n");
         this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId)); //Changes the status
-    }
-    public void inspectContainer() { //this is wrong I will fix it
-        InspectContainerCmd inspectContainerCmd = ClientUpdater.getUpdatedClient().inspectContainerCmd(containerId);
-        inspectContainerCmd.exec();
-        /* kai auto einai polu lathos alla ypo epejergasia
-        String message = inspectContainerCmd.exec().toString();
-        String[] parts = message.split("(?<=\\]),\\s");
-        StringBuilder formattedMessage = new StringBuilder();
-        for (String part : parts) {
-            formattedMessage.append(part.replaceAll(",","\n")).append("/n");
-        }
-        System.out.println(formattedMessage.toString());
-         */
     }
 
     //aid methods
@@ -187,6 +174,7 @@ public class DockerInstance {
     public static String chooseAContainer() {
         DockerInstance.listAllContainers();
         Scanner in = new Scanner(System.in);
+        System.out.print("YOUR CHOICE---> ");
         int choice = in.nextInt();
         return containerslist.get(choice - 1).getContainerId();
     }
