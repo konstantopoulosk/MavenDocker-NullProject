@@ -2,25 +2,51 @@ package com.nullteam;
 
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.exception.NotModifiedException;
-import org.glassfish.jersey.internal.util.collection.StringIgnoreCaseKeyComparator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
-
 public class DockerInstance {
+    /**
+     * List of all the DockerInstance objects,
+     * all the containers in the DockerDesktop.
+     */
     public static List<DockerInstance> containerslist = new ArrayList<>();
-    //fields
+    /* Fields 'containerId' and 'image' are final
+       because they never change in the program.
+       On the contrary, fields 'status' and 'name'
+       can change if the user chooses to
+     */
+    /**
+     * A field for the container ID.
+     */
     private final String containerId;
-    // enas container afora mia mono eikona, h idia eikona mporei na xrisimopoietai se pollous diaforetikous containers
-
-    private final String image; //An Image runs inside the container
-    private String status; //Up or Exited.
-    private String name; //Name of the container.
-    //constructor
-    public DockerInstance(String name, String containerId, String image, String status) {
+    /**
+     * Every container is an instance of an image.
+     * The name of this image is described by this field.
+     */
+    private final String image;
+    /**
+     * A field for the status of the container.
+     * 'Up' if it's running and 'Exited' otherwise.
+     */
+    private String status;
+    /**
+     * A field for the container's name.
+     */
+    private String name;
+    /**
+     * Constructor for Class DockerInstance.
+     * It creates a new DockerInstance object
+     * and adds it to the containerslist.
+     * @param name String
+     * @param containerId String
+     * @param image String
+     * @param status String
+     */
+    public DockerInstance(String name, final String containerId,
+                          final String image, String status) {
         this.name = name;
         this.containerId = containerId;
         this.image = image;
