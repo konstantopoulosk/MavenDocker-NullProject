@@ -8,7 +8,7 @@ import java.util.Scanner;
 final class GetHelp {
     private GetHelp() {
     }
-    public static void startImage() {
+    public static void listImage() {
         //Creating instances of DockerInstance and
         //DockerImage using info from the DockerClient
         List<Image> images =
@@ -20,7 +20,7 @@ final class GetHelp {
                     "Latest", i.getId());
         }
     }
-    public static void startContainers() {
+    public static void listContainers() {
         List<Container> containers =
                 ClientUpdater.getUpdatedContainersFromClient();
         //updated list with containers

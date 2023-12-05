@@ -8,8 +8,8 @@ final class Main { //Utility classes should not be defined public
     }
     public static void main(final String[] args) throws InterruptedException {
         Scanner in = new Scanner(System.in);
-        GetHelp.startImage();
-        GetHelp.startContainers();
+        GetHelp.listImage();
+        GetHelp.listContainers();
         //Initialized the monitor thread
         DockerMonitor monitor = new DockerMonitor();
         monitor.start();
