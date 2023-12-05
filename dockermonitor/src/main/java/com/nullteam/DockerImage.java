@@ -37,15 +37,15 @@ public class DockerImage {
      * Constructor for Class DockerImage.
      * It creates a new DockerImage object
      * and adds it to the imageslist.
-     * @param imageRep String
-     * @param imageTag String
-     * @param imageId String
+     * @param iRep String
+     * @param iTag String
+     * @param iId String
      */
-    public DockerImage(final String imageRep, final String imageTag,
-                       final String imageId) {
-        this.imageRep = imageRep;
-        this.imageTag = imageTag;
-        this.imageId = imageId;
+    public DockerImage(final String iRep, final String iTag,
+                       final String iId) {
+        this.imageRep = iRep;
+        this.imageTag = iTag;
+        this.imageId = iId;
         imageslist.add(this); //Adding to the list a DockerImage Object
     }
     //getters
