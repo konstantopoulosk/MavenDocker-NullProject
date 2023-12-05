@@ -130,7 +130,7 @@ public class DockerInstance {
             c.setContainerStatus(ClientUpdater.getUpdatedStatus(c.getContainerId()));
             if(c.getContainerStatus().startsWith("Up")) { //Starts with because the status can be Up a second ago
                 i++;
-                System.out.println(i + ") " + c); //Ennoeitai c.toString()
+                System.out.println(i + ") " + c); //ennoeitai c.toString()
             }
         }
     }
