@@ -1,3 +1,6 @@
+/**
+ * Package for our .java files
+ */
 package com.nullteam;
 
 import com.github.dockerjava.api.model.Container;
@@ -31,7 +34,7 @@ public class Main {
                     case "1":
                         //Containers Menu
                         System.out.println("\nTransferring you to the Container Menu ...");
-                        flagCon: //Creating a loop to stay in the containers menu untill user chooses to leave
+                        flagCon: //Creating a loop to stay in the containers menu until  user chooses to leave
                         while (true) {
                             Messages.containersMenu();
                             String ansC = in.nextLine();

@@ -16,7 +16,7 @@ public class ExecutorThread extends Thread {
         IMPLEMENT
     }
 
-    public ExecutorThread(String id, TaskType task, String name2Rename) {
+    public ExecutorThread(String id, TaskType task, String name2Rename) { //Constructor for RENAME
         this.id = id;
         this.task = task;
         this.name2Rename = name2Rename;
