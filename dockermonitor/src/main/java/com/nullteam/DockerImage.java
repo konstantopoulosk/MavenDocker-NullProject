@@ -1,3 +1,6 @@
+/**
+ * Package for our .java files
+ */
 package com.nullteam;
 
 import com.github.dockerjava.api.command.CreateContainerCmd;
@@ -9,26 +12,46 @@ import java.util.Scanner;
 
 public class DockerImage {
     /**
-     * List with all the Images
-     * That's why they're final
+     * List of all the DockerImage objects,
+     * all the images in the DockerDesktop.
      */
-    public static List<DockerImage> all_images = new ArrayList<>();
+    public static List<DockerImage> imageslist = new ArrayList<>();
     // These fields won't ever change
-    private final String imageRep; //mage Rep = Image Name
-    private final String imageTag; //Tag = Version
-    private final String imageId; //Image ID
+    // That's why they are final
+    /**
+     * A field for the Repository where the image is located.
+     * Also known as the name of the image.
+     */
+    private final String imageRep;
+    /**
+     * A field for the Tag (=version) of the image.
+     * Usually it's "latest".
+     */
+    private final String imageTag;
+    /**
+     * A field for the Image ID.
+     */
+    private final String imageId;
 
+    /**
+     * Constructor for Class DockerImage.
+     * It creates a new DockerImage object
+     * and adds it to the imageslist.
+     * @param imageRep String
+     * @param imageTag String
+     * @param imageId String
+     */
     public DockerImage(final String imageRep, final String imageTag,
                        final String imageId) {
         this.imageRep = imageRep;
         this.imageTag = imageTag;
         this.imageId = imageId;
-        all_images.add(this); //Adding to the list a DockerImage Object
+        imageslist.add(this); //Adding to the list a DockerImage Object
     }
     //getters
     /**
      * Gets the Repository of the image.
-     * @return the Repository.
+     * @return String
      */
     public String getImageRep() {
         String[] parts = this.imageRep.split("@");
@@ -36,19 +59,26 @@ public class DockerImage {
     }
     /**
      * Gets the Tag / version of the image.
-     * @return "latest"
+     * @return String
      */
     public String getImageTag() {
         return imageTag;
     }
     /**
      * Gets the ID of the image.
-     * @return ID
+     * @return String
      */
     public String getImageId() {
         return imageId;
     }
     //Classic toString for one DockerImage at the time
+
+    /**
+     * A classic toString method.
+     * We use it to show every image's information
+     * (repository, tag, id)
+     * @return String
+     */
     @Override
     public String toString() {
         return "REPOSITORY: " + this.getImageRep() +  "  TAG: "
@@ -63,22 +93,28 @@ public class DockerImage {
     public static void listAllImages() {
         System.out.println("Listing all the images...\n.\n.\n.");
         int num = 0; //Numbers to make the output more User Friendly
-        for (DockerImage img : all_images) {
+        for (DockerImage img : imageslist) {
             num++;
             System.out.println(num + ") "
                     + img.toString()); //toString inside a for loop
         }
     }
-    /*this method helps to match the numbers
-      form the printed images with their id */
+    /**
+     * This method helps to match the numbers from
+     * the printed images with their ID.
+     * @return String
+     */
     public static String chooseAnImage() {
         DockerImage.listAllImages(); //User sees his images with numbers
         Scanner in = new Scanner(System.in);  //chooses the image by typing the
         System.out.print("YOUR CHOICE---> "); //number next to the one they want
         int choice = in.nextInt(); //We find out the id of this specific image
-        return all_images.get(choice - 1).getImageId();
+        return imageslist.get(choice - 1).getImageId();
     }
-    //this method creates and starts a container
+    /**
+     * This method creates and starts an instance of the selected image
+     * (creates a new container of the image).
+     */
     public void implementImage() {
         CreateContainerCmd createContainerCmd =
                 ClientUpdater.getUpdatedClient().createContainerCmd(
@@ -95,11 +131,11 @@ public class DockerImage {
         DockerInstance newContainer = new DockerInstance(
                 c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
         String containerIdStart = newContainer.getContainerId();
-        ExecutorThread executor_start = new ExecutorThread(
+        ExecutorThread executorStart = new ExecutorThread(
                 containerIdStart, ExecutorThread.TaskType.START);
-        executor_start.start(); //we start the container
+        executorStart.start(); //we start the container
         try {
-            executor_start.join(); // waiting for the thread to finish
+            executorStart.join(); // waiting for the thread to finish
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

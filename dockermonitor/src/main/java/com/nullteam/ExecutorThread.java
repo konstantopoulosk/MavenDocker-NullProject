@@ -72,7 +72,7 @@ public class ExecutorThread extends Thread {
     }
     private DockerImage findImageInClient() {
         DockerImage image = null;
-        for (DockerImage i : DockerImage.all_images) {
+        for (DockerImage i : DockerImage.imageslist) {
             if (i.getImageId().equals(this.id)) {
                 image = i;
             }
