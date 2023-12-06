@@ -2,6 +2,7 @@ package com.nullteam;
 
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.exception.NotModifiedException;
+import java.util.InputMismatchException;
 import org.glassfish.jersey.internal.util.collection.StringIgnoreCaseKeyComparator;
 
 import java.util.ArrayList;
@@ -91,12 +92,26 @@ public class DockerInstance {
         this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId)); //changes the status of the object
     }
     public void pauseContainer() {
+        // Check if the container is already paused
+        if (this.getContainerStatus().equalsIgnoreCase("paused")) {
+            System.out.println("Container is already paused: " + containerId + "\n\n");
+            return;
+        }
+
+        // If not paused, pause the container
         PauseContainerCmd pauseContainerCmd = ClientUpdater.getUpdatedClient().pauseContainerCmd(containerId);
         pauseContainerCmd.exec(); //Pauses the container in Docker Cluster
         System.out.println("Container paused: " + containerId + "\n\n");
         this.setContainerStatus(ClientUpdater.getUpdatedStatus(containerId)); //changes the status of the object
     }
     public void unpauseContainer() {
+        // Check if the container is already unpaused
+        if (this.getContainerStatus().equalsIgnoreCase("running")) {
+            System.out.println("Container is already unpaused: " + containerId + "\n\n");
+            return;
+        }
+
+        // If not unpaused, unpause the container
         UnpauseContainerCmd unpauseContainerCmd = ClientUpdater.getUpdatedClient().unpauseContainerCmd(containerId);
         unpauseContainerCmd.exec(); //Unpauses container in cluster
         System.out.println("Container unpaused: " + containerId + "\n\n");
@@ -151,8 +166,8 @@ public class DockerInstance {
     //This method is used when user wants to Stop, Pause, Kill an Active Container
     public static String chooseAnActiveContainer() { //returns container's id
         List<DockerInstance> actives = new ArrayList<>();
-        int i=1; //Output User Friendly
-        for (DockerInstance c :containerslist) {
+        int i = 1; //Output User Friendly
+        for (DockerInstance c : containerslist) {
             if (c.getContainerStatus().startsWith("Up")) {
                 System.out.println(i + ") " + c);
                 actives.add(c);
@@ -161,8 +176,18 @@ public class DockerInstance {
         }
         Scanner in = new Scanner(System.in);
         System.out.print("YOUR CHOICE---> ");
-        int answer = in.nextInt();
-        return containerslist.get(containerslist.indexOf(actives.get(answer-1))).getContainerId();
+        try { //checking if the input is out of bounds
+            int answer = in.nextInt();
+            if (answer < 1 || answer > actives.size()) {
+                System.out.println("Invalid choice. Please choose on of the containers below.");
+                return chooseAnActiveContainer(); // Showing active containers again
+            }
+            return containerslist.get(containerslist.indexOf(actives.get(answer - 1))).getContainerId();
+        }  catch (InputMismatchException e) {
+        System.out.println("Invalid input. Please choose on of the containers below.");
+        in.nextLine(); // Consume the invalid input
+        return chooseAnActiveContainer(); // Showing active containers again
+    }
     }
 
     //chooseAStoppedContainer is used when user wants to Start, Restart, Unpause a Stopped Container
@@ -178,8 +203,18 @@ public class DockerInstance {
         }
         Scanner in = new Scanner(System.in);
         System.out.print("YOUR CHOICE---> ");
+        try { //checking if the input is out of bounds
         int answer = in.nextInt();
-        return containerslist.get(containerslist.indexOf(stopped.get(answer-1))).getContainerId();
+        if (answer < 1 || answer > stopped.size()) {
+            System.out.println("Invalid choice. Please choose on of the containers below.");
+            return chooseAStoppedContainer(); // Showing available containers again
+        }
+            return containerslist.get(containerslist.indexOf(stopped.get(answer-1))).getContainerId();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please choose on of the containers below.");
+            in.nextLine(); // Consume the invalid input
+            return chooseAStoppedContainer(); // Showing available containers again
+        }
     }
 
     //chooseAContainer when user wants to choose a container from all the containers
@@ -187,9 +222,19 @@ public class DockerInstance {
     public static String chooseAContainer() {
         DockerInstance.listAllContainers();
         Scanner in = new Scanner(System.in);
+        try { //checking if the input is out of bounds
         int choice = in.nextInt();
-        return containerslist.get(choice - 1).getContainerId();
-    }
+        if (choice < 1 || choice > containerslist.size()) {
+            System.out.println("Invalid choice.  Please choose on of the containers below.");
+            return chooseAContainer(); // Showing available containers again
+        }
+            return containerslist.get(choice - 1).getContainerId();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input.  Please choose on of the containers below.");
+            in.nextLine(); // Consume the invalid input
+            return chooseAContainer(); // Showing available containers again
+        }
+}
     //this method is used to check in main if there are any active containers
     //giati otan epelega STOP a container kai den eixa kanena active to menu ebgaze na epilejw apo to tipota
     //User presses STOP and there are no Active Containers, He can't choose from nothing --> Exception

@@ -2,6 +2,7 @@ package com.nullteam.test;
 
 import com.nullteam.DockerInstance;
 import com.nullteam.DockerMonitor;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

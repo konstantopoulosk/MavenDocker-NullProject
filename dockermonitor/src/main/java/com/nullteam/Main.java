@@ -2,6 +2,7 @@ package com.nullteam;
 
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class Main {
             new DockerImage(i.getRepoDigests()[0], "latest", i.getId());
         }
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient(); //updated list with containers
-        for (Container c : containers) { //for every one object in the containers list -> create an object DockerINstance
+        for (Container c : containers) { //for every one object in the containers list -> create an object DockerInstance
             new DockerInstance(c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
         }
         //Initialized the monitor thread
@@ -30,7 +31,7 @@ public class Main {
                 switch (menu) {
                     case "1":
                         //Containers Menu
-                        flagCon: //Creating a loop to stay in the containers menu untill user chooses to leave
+                        flagCon: //Creating a loop to stay in the containers menu until user chooses to leave
                         while (true) {
                             Messages.containersMenu();
                             String ansC = in.nextLine();
@@ -166,18 +167,18 @@ public class Main {
                                                             System.out.println("There are no active containers.");
                                                             Thread.sleep(3000);
                                                         } else {
-                                                            System.out.println("Choose one of the active containers bellow " +
-                                                                    "to UNPAUSE it.");
-                                                            String containerIdUnpause = DockerInstance.chooseAnActiveContainer();
-                                                            ExecutorThread executor_unpause = new ExecutorThread
-                                                                    (containerIdUnpause, ExecutorThread.TaskType.UNPAUSE);
-                                                            executor_unpause.start();
-                                                            System.out.println("Unpausing the container...");
-                                                            try {
-                                                                executor_unpause.join(); // waiting for the thread to finish
-                                                            } catch (InterruptedException e) {
-                                                                e.printStackTrace();
-                                                            }
+                                                                System.out.println("Choose one of the paused containers below " +
+                                                                        "to UNPAUSE it.");
+                                                                String containerIdUnpause = DockerInstance.chooseAnActiveContainer();
+                                                                ExecutorThread executor_unpause = new ExecutorThread
+                                                                        (containerIdUnpause, ExecutorThread.TaskType.UNPAUSE);
+                                                                executor_unpause.start();
+                                                                System.out.println("Unpausing the container...");
+                                                                try {
+                                                                    executor_unpause.join(); // waiting for the thread to finish
+                                                                } catch (InterruptedException e) {
+                                                                    e.printStackTrace();
+                                                                }
                                                         }
                                                         break;
                                                     case "8": //KILL a container

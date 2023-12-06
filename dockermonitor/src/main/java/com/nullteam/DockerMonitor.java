@@ -58,7 +58,7 @@ public class DockerMonitor extends Thread {
             return false;
         }
     }
-    private boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
+    public boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
         // Check for null references
         if (list1 == null && list2 == null) {
             return true;

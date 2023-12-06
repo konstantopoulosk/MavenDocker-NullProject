@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.model.Container;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -53,8 +54,19 @@ public class DockerImage {
         DockerImage.listAllImages(); //Users sees his images with numbers
         Scanner in = new Scanner(System.in); //chooses the image by typing the number next to the image
         System.out.print("YOUR CHOICE---> ");
+        try {
         int choice = in.nextInt(); //We find out the id of this specific image with this method.
-        return all_images.get(choice - 1).getImageId();
+        if (choice < 1 || choice > all_images.size()) {
+            System.out.println("Invalid choice.  Please choose on of the images below.");
+            return chooseAnImage(); }// Showing available images again
+
+            return all_images.get(choice - 1).getImageId();
+
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input.  Please choose on of the images below.");
+            in.nextLine(); // Consume the invalid input
+            return chooseAnImage(); // Showing available images again
+        }
     }
 
     public void implementImage() {  //this method creates and starts a container
