@@ -338,7 +338,7 @@ public class DockerInstance {
         int i = 1; //Output User Friendly
         for (DockerInstance c :containerslist) {
             if (c.getContainerStatus().startsWith("Up")
-                    && !(c.getContainerStatus().endsWith("(Paused)"))) {
+                    && !(c.getContainerStatus().endsWith("(Paused)"))){
                 System.out.println(i + ") " + c);
                 unpaused.add(c);
                 i++;
@@ -415,7 +415,7 @@ public class DockerInstance {
         boolean flag = true;
         for (DockerInstance c :containerslist) {
             if (c.getContainerStatus().startsWith("Up")
-                    && c.getContainerStatus().endsWith("(Paused)")) {
+                    && (!c.getContainerStatus().endsWith("(Paused)"))){
                 flag = false;
                 break;
             }
