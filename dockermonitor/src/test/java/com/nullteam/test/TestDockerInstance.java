@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TestDockerInstance {
     private static List<DockerInstance> allContainers;
-    private final String containerId = "89938596d8d0";
+    private final String containerId = "6cfa7f0707e0";
     //private final DockerImage image = new DockerImage("mongo", "Latest", "123456789");
     private String status = "Exited";
     private String name = "GREGORY";
@@ -26,11 +26,7 @@ public class TestDockerInstance {
     @Before
     public void setUp() {
         allContainers = new ArrayList<>();
-        DockerInstance container1 = new DockerInstance(name, containerId,
-                imageContainer, status);
         allContainers.add(container1);
-        DockerInstance container2 = new DockerInstance("NewContainer", "af1214c44590",
-                "mongo", "Up");
         allContainers.add(container2);
     }
 
@@ -84,12 +80,12 @@ public class TestDockerInstance {
 
     @Test
     public void testRenameContainer() { //TO EVALA META SE SXOLIO GIATI PETAEI EXCEPTION OTI DEN GINETAI
-        allContainers.get(0).renameContainer("GUSTAVO_FRING12"); //NA RENAME WITH THE OLD NAME
-        Assert.assertEquals("Failure to rename", allContainers.get(0).getContainerName(), "GUSTAVO_FRING12");
+        allContainers.get(0).renameContainer("GUSTAVO_FRING123"); //NA RENAME WITH THE OLD NAME
+        Assert.assertEquals("Failure to rename", allContainers.get(0).getContainerName(), "GUSTAVO_FRING123");
     }
     @Test
     public void testRemoveContainer() {
-        DockerInstance container3 = new DockerInstance("NAME", "45ef205eca4e", "image1","Up");
+        DockerInstance container3 = new DockerInstance("NAME", "7696e2ff9c91", "image1","Up");
         allContainers.add(container3);
         Assert.assertEquals("Failure wrong size", allContainers.size(), 3);
         allContainers.get(2).removeContainer();
@@ -107,7 +103,7 @@ public class TestDockerInstance {
     }
     @Test
     public void testPauseContainer() {
-        DockerInstance dockerInstance = new DockerInstance("GG", "ad37182ee116","nginx","Up");
+        DockerInstance dockerInstance = new DockerInstance("GG", "7696e2ff9c91","nginx","Up");
         allContainers.add(dockerInstance);
         // allContainers.get(2).startContainer();
         allContainers.get(2).pauseContainer();
@@ -116,15 +112,15 @@ public class TestDockerInstance {
     }
     @Test
     public void testUnpauseContainer() {
-        allContainers.add(new DockerInstance("G","ad37182ee116","mongo","Up"));
-        allContainers.get(2).pauseContainer();
+        allContainers.add(new DockerInstance("G","7696e2ff9c91","mongo","Up"));
+        //allContainers.get(2).pauseContainer();
         allContainers.get(2).unpauseContainer();
         allContainers.get(2).setContainerStatus("Up");
         Assert.assertEquals("Fail to Unpause", allContainers.get(2).getContainerStatus(), "Up");
     }
     @Test
     public void testKillContainer() {
-        DockerInstance dockerInstance = new DockerInstance("GG", "ad37182ee116","nginx","Up");
+        DockerInstance dockerInstance = new DockerInstance("GG", "7696e2ff9c91","nginx","Up");
         allContainers.add(dockerInstance);
         allContainers.get(2).killContainer();
         allContainers.get(2).setContainerStatus("Exited");
@@ -132,7 +128,7 @@ public class TestDockerInstance {
     }
     @Test
     public void testInspectContainer() {
-
+        //Waiting to be completed
     }
     @Test
     public void testListAllContainers() {
@@ -187,11 +183,22 @@ public class TestDockerInstance {
     }
     @Test
     public void testChooseAContainer() {
-
+        Assert.assertTrue("Fail", allContainers.contains(container2));
+        Assert.assertTrue("Fail", allContainers.contains(container1));
+        DockerInstance container3 = new DockerInstance("NAME",
+                "ID", "IMAGE", "STATUS");
+        Assert.assertFalse("Fail", allContainers.contains(container3));
     }
     @Test
     public void testNoActiveContainers() {
-
+        boolean flag = true;
+        for (DockerInstance c : allContainers) {
+            if (c.getContainerStatus().startsWith("Up")) {
+                flag = false;
+                break;
+            }
+        }
+        Assert.assertFalse("No actives", flag);
     }
     @Test
     public void testChooseBasedOnCondition() {

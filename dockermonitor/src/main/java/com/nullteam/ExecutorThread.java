@@ -1,31 +1,109 @@
 package com.nullteam;
 
 public class ExecutorThread extends Thread {
-    String id; //container id
-    TaskType task; // taskType
-    String name2Rename = null; //gia to rename
+    /**
+     * id represents container's id.
+     */
+    private String id; //container id
+    /**
+     * task field is used in order to,
+     * switch between cases in run.
+     */
+    private TaskType task; // taskType
+    /**
+     * name2Rename field represents,
+     * new Name to rename a container.
+     */
+    private String name2Rename = null; //gia to rename
     public enum TaskType {
+        /**
+         * START TaskType is used,
+         * to execute the action to start,
+         * the container.
+         */
         START,
+        /**
+         * STOP TaskType is used,
+         * to execute the action to stop,
+         * the container.
+         */
         STOP,
+        /**
+         * RENAME TaskType is used,
+         * to execute the action to rename,
+         * the container.
+         */
         RENAME,
+        /**
+         * RESTART TaskType is used,
+         * to execute the action to restart,
+         * the container.
+         */
         RESTART,
+        /**
+         * PAUSE TaskType is used,
+         * to execute the action to pause,
+         * the container.
+         */
         PAUSE,
+        /**
+         * UNPAUSE TaskType is used,
+         * to execute the action to unpause,
+         * the container.
+         */
         UNPAUSE,
+        /**
+         * REMOVE TaskType is used,
+         * to execute the action to remove,
+         * the container.
+         */
         REMOVE,
+        /**
+         * KILL TaskType is used,
+         * to execute the action to kill,
+         * the container.
+         */
         KILL,
-        INSPECT,
+        /**
+         * IMPLEMENT TaskType is used,
+         * to execute the action to implement,
+         * the container.
+         */
         IMPLEMENT
     }
+    //Constructor for RENAME
 
-    public ExecutorThread(String id, TaskType task, String name2Rename) {
-        this.id = id;
-        this.task = task;
-        this.name2Rename = name2Rename;
+    /**
+     * Constructor is used only when user,
+     * wants to rename a container.
+     * @param iD
+     * @param task1
+     * @param nameToRename
+     */
+    public ExecutorThread(final String iD,
+                          final TaskType task1,
+                          final String nameToRename) {
+        this.id = iD;
+        this.task = task1;
+        this.name2Rename = nameToRename;
     }
-    public ExecutorThread(String id, TaskType task) {
-        this.id = id;
-        this.task = task;
+
+    /**
+     * Constructor is used always except,
+     * for rename.
+     * @param iD
+     * @param task1
+     */
+    public ExecutorThread(final String iD, final TaskType task1) {
+        this.id = iD;
+        this.task = task1;
     }
+
+    /**
+     * Method run is used to execute,
+     * the thread based on a specific,
+     * task.
+     */
 
     @Override
     public void run() {
@@ -54,9 +132,6 @@ public class ExecutorThread extends Thread {
             case KILL:
                 killContainer();
                 break;
-            case INSPECT:
-                inspectContainer();
-                break;
             case IMPLEMENT:
                 implementImage();
                 break;
@@ -76,7 +151,7 @@ public class ExecutorThread extends Thread {
     }
     private DockerImage findImageInClient() {
         DockerImage image = null;
-        for (DockerImage i : DockerImage.all_images) {
+        for (DockerImage i : DockerImage.imageslist) {
             if (i.getImageId().equals(this.id)) {
                 image = i;
             }
@@ -107,9 +182,6 @@ public class ExecutorThread extends Thread {
     }
     private void killContainer() {
         findContainerInClient().killContainer();
-    }
-    private void inspectContainer() {
-        findContainerInClient().inspectContainer();
     }
     private void implementImage() {
         findImageInClient().implementImage();

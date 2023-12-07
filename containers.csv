@@ -1,0 +1,6 @@
+"Container ID","Name","Image","Status","Command","Created"
+"fd917da5b36e2be2a371e55b3e3c9f7f4f500198c88eb120b5fd65373df829ea","/whatisthis","docker/welcome-to-docker","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1701686692"
+"89bd388ee2931aeccda1620f185060d2b5d69b1d3c61f275537a988a31adc673","/container1","nginx","exited","/docker-entrypoint.sh --name olga","1699620895"
+"92cf3bcf71b77af90a6c5616c06b423d9e4e8bd8cfc066ca5e4a91781e9fb815","/container2","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1699620788"
+"5912e63ee11721f7e528c8b1da3a57005a6f019e6699af4e1523ae92a1199bcd","/container3","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1699620772"
+"5237458d8d7571eb4205b7d6f0a533b39dcb05f8832ed7ff8515ee9b7a093ffe","/container4","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1699620301"
