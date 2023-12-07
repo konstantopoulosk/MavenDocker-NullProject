@@ -3,6 +3,8 @@ package com.nullteam;
 import com.github.dockerjava.api.model.Container;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import com.github.dockerjava.api.model.Image;
 import com.opencsv.CSVWriter;
 import java.util.List;
 import java.util.Arrays;
@@ -19,12 +21,17 @@ public class DockerMonitor extends Thread {
      * currently.
      */
     private List<String[]> currentData = null;
+    private List<String[]> lastStateImages = null;
+    private List<String[]> currentDataImages = null;
 
     /**
      * Method run to execute Monitor Thread.
      */
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
+            if (hasNewDataImage()) {
+                writeImageCsv();
+            }
             if (hasNewData()) {
                 writeCsv();
             }
@@ -57,7 +64,25 @@ public class DockerMonitor extends Thread {
             e.printStackTrace();
         }
     }
-
+    public void writeImageCsv() {
+        final String csvFilePath = "images.csv";
+        try (CSVWriter csvWriter = new CSVWriter(
+                new FileWriter(csvFilePath, false))) {
+            csvWriter.writeNext(new String[] {"Image ID", "Repository Name",
+            "Image Tag", "Times Used"}); //HEADER
+            for (String[] csvData : currentDataImages) {
+                csvWriter.writeNext(csvData);
+            }
+            try {
+                csvWriter.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            lastStateImages = new ArrayList<>(currentDataImages);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Method hasNewData checks if,
      * container info has changed.
@@ -84,6 +109,25 @@ public class DockerMonitor extends Thread {
             return true;
         } else {
             return false;
+        }
+    }
+    public boolean hasNewDataImage() {
+        List<Image> images = ClientUpdater.getUpdatedImagesFromClient();
+        currentDataImages = new ArrayList<>();
+        for (Image image : images) {
+            String[] csvData1 = new String[] {
+                    image.getId(),
+                    image.getRepoDigests()[0].split("@")[0],
+                    image.getRepoTags()[0].split(":")[1],
+                    image.getContainers().toString() //This is wrong!
+            };
+            currentDataImages.add(csvData1);
+        }
+        if (!listsAreEqual(currentDataImages, lastStateImages)) {
+            lastStateImages = new ArrayList<>(currentDataImages);
+            return  true;
+        } else {
+            return  false;
         }
     }
     public boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
