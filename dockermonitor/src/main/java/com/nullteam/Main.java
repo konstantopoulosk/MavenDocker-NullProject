@@ -11,17 +11,8 @@ import java.util.Scanner;
 final class Main { //Utility classes should not be defined public
     private Main() { //Just Doing what CheckStyle says
     }
-    public static void main(final String[] args) throws InterruptedException {
+    public static void main(final String[] args) {
         Scanner in = new Scanner(System.in);
-        //Creating instances of DockerInstance and DockerImage using info from the DockerClient
-        List<Image> images = ClientUpdater.getUpdatedImagesFromClient(); //Updated Client from ClientUpdater
-        for (Image i : images) { //For every one object in the images list -> creating an object DockerImage
-            new DockerImage(i.getRepoDigests()[0], "latest", i.getId());
-        }
-        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient(); //updated list with containers
-        for (Container c : containers) { //for every one object in the containers list -> create an object DockerInstance
-            new DockerInstance(c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
-        }
         GetHelp.listImage();
         GetHelp.listContainers();
         //Initialized the monitor thread
