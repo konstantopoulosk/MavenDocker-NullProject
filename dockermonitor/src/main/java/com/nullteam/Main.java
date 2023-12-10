@@ -26,7 +26,7 @@ final class Main { //Utility classes should not be defined public
             try {
                 switch (menu) {
                     case "1"://Containers Menu
-                        System.out.println("\nTransferring you" + "to the Container Menu ...");
+                        System.out.println("\nTransferring you" + " to the Container Menu ...");
                         flagCon: //Creating a loop to stay in the containers menu until  user chooses to leave
                         while (true) {
                             Messages.containersMenu();
