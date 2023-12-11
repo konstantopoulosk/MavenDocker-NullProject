@@ -1,5 +1,5 @@
 package com.nullteam.Models;
-
+/*
 import javax.persistence.*;
 
 @Entity
@@ -48,3 +48,6 @@ public class Container {
     }
 
 }
+
+
+ */

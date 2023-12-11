@@ -29,11 +29,11 @@ public class DockerMonitor extends Thread {
      */
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
-            if (hasNewDataImage()) {
-                writeImageCsv();
-            }
             if (hasNewData()) {
                 writeCsv();
+            }
+            if (hasNewDataImage()) {
+                writeImageCsv();
             }
         }
     }
@@ -119,7 +119,7 @@ public class DockerMonitor extends Thread {
                     image.getId(),
                     image.getRepoDigests()[0].split("@")[0],
                     image.getRepoTags()[0].split(":")[1],
-                    image.getContainers().toString() //This is wrong!
+                    timesUsed(image)
             };
             currentDataImages.add(csvData1);
         }
@@ -157,5 +157,15 @@ public class DockerMonitor extends Thread {
             }
         }
         return true;
+    }
+    public String timesUsed(Image image) {
+        int times= 0;
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        for (Container container : containers) {
+            if (image.getId().equals(container.getImageId())) {
+                times++;
+            }
+        }
+        return String.valueOf(times);
     }
 }

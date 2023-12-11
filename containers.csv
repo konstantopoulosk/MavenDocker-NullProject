@@ -1,4 +1,8 @@
 "Container ID","Name","Image","Status","Command","Created"
+"12272acd5264be2b79999da82d2fe32684d4af5a0f1cdd78b5b5f50dcba27727","/great_khorana","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1702323548"
+"9de51bf3d968a587bf50e30d6dbcfeba147c2964f83ca56798c33a69fe22e44a","/reverent_hypatia","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1702323510"
+"5e4396c4993752c93cd3ad89691228546a60342a8ae5f47b92567963195f46eb","/intelligent_darwin","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1702321798"
+"22bdbbd39dd0882263eb22d67706b8596c531417cac5e567102d8542b3c0673b","/distracted_curie","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1702320858"
 "054f35edea63473e4bb3617283380fd29bf65eb25a6a095a9d087565acf46069","/asdqwe","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702055687"
 "f7e236a367e3d5bea8bf822ad321dd6418835d7e108827205dd42dca51ca4b57","/NEWNAME","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1701811383"
 "4639eb37a178f313f49903332414861b487dd96903aa4ae37189baa537631ec2","/sharp_robinson","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1701784254"
