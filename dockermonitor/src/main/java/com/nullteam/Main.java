@@ -120,6 +120,9 @@ final class Main { //Utility classes should not be defined public
                                     case "2": //Implements an image
                                         GetHelp.case2Impl();
                                         break;
+                                    case "3": //Remove an Image
+                                        GetHelp.case3RmvImg();
+                                        break;
                                     case "..": //going back to main menu...
                                         GetHelp.goToMainMenu();
                                         break flagImage;

@@ -69,7 +69,8 @@ public class ExecutorThread extends Thread {
          * to execute the action to implement,
          * the container.
          */
-        IMPLEMENT
+        IMPLEMENT,
+        REMOVEIMAGE
     }
     //Constructor for RENAME
 
@@ -135,6 +136,9 @@ public class ExecutorThread extends Thread {
             case IMPLEMENT:
                 implementImage();
                 break;
+            case REMOVEIMAGE:
+                removeImage();
+                break;
             default:
                 System.out.println("Invalid action type");
         }
@@ -185,5 +189,8 @@ public class ExecutorThread extends Thread {
     }
     private void implementImage() {
         findImageInClient().implementImage();
+    }
+    private void removeImage() {
+        findImageInClient().removeImage();
     }
 }

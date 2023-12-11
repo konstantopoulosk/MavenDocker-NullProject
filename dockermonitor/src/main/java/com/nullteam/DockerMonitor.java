@@ -49,7 +49,7 @@ public class DockerMonitor extends Thread {
         try (CSVWriter csvWriter = new CSVWriter(
                 new FileWriter(csvFilePath, false))) {
             csvWriter.writeNext(new String[]{"Container ID", "Name",
-                   "Image", "Status", "Command", "Created"}); // CSVFile header
+                   "Image", "Status", "Command", "Created", "Ports", "State"}); // CSVFile header
             for (String[] csvData : currentData) {
                 csvWriter.writeNext(csvData);
             }
@@ -69,7 +69,7 @@ public class DockerMonitor extends Thread {
         try (CSVWriter csvWriter = new CSVWriter(
                 new FileWriter(csvFilePath, false))) {
             csvWriter.writeNext(new String[] {"Image ID", "Repository Name",
-            "Image Tag", "Times Used"}); //HEADER
+            "Image Tag", "Times Used", "Size"}); //HEADER
             for (String[] csvData : currentDataImages) {
                 csvWriter.writeNext(csvData);
             }
@@ -100,7 +100,10 @@ public class DockerMonitor extends Thread {
                     c.getImage(),
                     c.getState(),
                     c.getCommand(),
-                    c.getCreated().toString()
+                    c.getCreated().toString(),
+                    c.getPorts().toString().split("@")[1].toString(),
+                    c.getState(),
+
             };
             currentData.add(csvData);
         }
@@ -119,7 +122,8 @@ public class DockerMonitor extends Thread {
                     image.getId(),
                     image.getRepoDigests()[0].split("@")[0],
                     image.getRepoTags()[0].split(":")[1],
-                    timesUsed(image)
+                    timesUsed(image),
+                    image.getSize().toString()
             };
             currentDataImages.add(csvData1);
         }

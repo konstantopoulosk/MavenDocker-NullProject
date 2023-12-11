@@ -223,7 +223,7 @@ final class GetHelp {
     public static void case2Impl() {
         System.out.println("You chose: 2) Implement "
                + "an image(start a new container)\n");
-        System.out.println("Choose one of the images bellow to IMPLEMENT it.");
+        System.out.println("Choose one of the images below to IMPLEMENT it.");
         String imageIdImplement = DockerImage.chooseAnImage();
         ExecutorThread executorImplementImage = new ExecutorThread(
                 imageIdImplement, ExecutorThread.TaskType.IMPLEMENT);
@@ -235,6 +235,19 @@ final class GetHelp {
             e.printStackTrace();
         }
     } //end Image menu case 2: Implement an image
+    public static void case3RmvImg() {
+        System.out.println("You chose: 3) Remove "
+                + "an image\n");
+        System.out.println("Choose one of the images below to REMOVE it.");
+        String imageIdRemove = DockerImage.chooseAnImage();
+        ExecutorThread executorRemoveImage = new ExecutorThread(imageIdRemove, ExecutorThread.TaskType.REMOVEIMAGE);
+        executorRemoveImage.start();
+        try {
+            executorRemoveImage.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    } //end case 3 Image Menu: Remove an Image.
     public static void goToContTools() {
         System.out.println("You chose: "
                + "3) Container Tools\n");

@@ -4,6 +4,7 @@
 package com.nullteam;
 
 import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Container;
 
 import java.util.ArrayList;
@@ -153,5 +154,11 @@ public class DockerImage {
         }
         System.out.println("The new container has been created and is running"
                 + "\n");
+    }
+    public void removeImage() {
+        RemoveImageCmd removeImageCmd = ClientUpdater.getUpdatedClient().removeImageCmd(imageId);
+        removeImageCmd.exec();
+        System.out.println("Image Removed: " + imageId +"\n");
+        imageslist.remove(this);
     }
 }
