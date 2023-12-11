@@ -49,7 +49,7 @@ public class DockerMonitor extends Thread {
         try (CSVWriter csvWriter = new CSVWriter(
                 new FileWriter(csvFilePath, false))) {
             csvWriter.writeNext(new String[]{"Container ID", "Name",
-                   "Image", "Status", "Command", "Created", "Ports", "State"}); // CSVFile header
+                   "Image", "State", "Command", "Created", "Ports", "Status"}); // CSVFile header
             for (String[] csvData : currentData) {
                 csvWriter.writeNext(csvData);
             }
@@ -102,8 +102,7 @@ public class DockerMonitor extends Thread {
                     c.getCommand(),
                     c.getCreated().toString(),
                     c.getPorts().toString().split("@")[1].toString(),
-                    c.getState(),
-
+                    c.getStatus()
             };
             currentData.add(csvData);
         }
