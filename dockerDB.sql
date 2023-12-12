@@ -9,11 +9,11 @@ id int not null auto_increment primary key,
 date date not null
 );
 create table DockerInstance(
-id varchar(12) not null primary key,
-image varchar(100) not null,
-command varchar(100),
-timestamp varchar(100)not null,
-status varchar(100) not null,
-port varchar(100),
-name varchar(100) not null
+id varchar(64) not null primary key,
+name varchar(100) not null,
+image varchar(100),
+state varchar(10)not null,
+command varchar(100) not null,
+created varchar(10),
+ports varchar(8) not null
 );
