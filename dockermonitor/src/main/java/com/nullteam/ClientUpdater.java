@@ -6,16 +6,49 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import java.io.IOException;
 import java.util.List;
+import javax.ws.rs.ProcessingException;
+import java.io.File;
+import java.awt.Desktop;
 
 final class ClientUpdater {
-    private ClientUpdater() {
+
+    /**
+     * Checks if the connection with the Docker Client was Accomplished
+     * else an exception is thrown so that the program can handle it and
+     * open the Docker Desktop App
+     */
+    public static void connectionAccomplished() {
+        boolean connected = true;
+        try {
+            getUpdatedClient();
+        } catch(ProcessingException e) {
+            System.out.println("ERROR!: Couldn't connect to the client...");
+            System.out.println("\n.\n.\n.WAITING FOR DOCKER DESKTOP.EXE");
+            File file = new File("C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe");
+            try {
+                Desktop.getDesktop().open(file); // opening the docker.exe
+                Process process = Runtime.getRuntime().exec("cmd /c start \"\" \"" +
+                        "C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe");
+                int exitCode = process.waitFor();
+                Thread.sleep(30000);
+                if (exitCode == 0) {
+                    System.out.println("File or application opened successfully.");
+                } else {
+                    System.out.println("Failed to open file or application.");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
+
     /**
      * This method gets a list of updated containers from
      * the updated Docker Client in order to always have
      * the correct list after any change made by the user.
      * @return List&lt;Container&gt;
      */
+
     public static List<Container> getUpdatedContainersFromClient() {
         DockerClient dockerClient = getUpdatedClient(); //Method Below
         List<Container> containers; // instances
