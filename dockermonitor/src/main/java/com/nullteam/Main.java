@@ -3,10 +3,9 @@
  */
 package com.nullteam;
 
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.api.exception.InternalServerErrorException;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
 final class Main { //Utility classes should not be defined public
     private Main() { //Just Doing what CheckStyle says
@@ -18,6 +17,8 @@ final class Main { //Utility classes should not be defined public
         //Initialized the monitor thread
         DockerMonitor monitor = new DockerMonitor();
         monitor.start();
+        DatabaseThread databaseThread = new DatabaseThread();
+        databaseThread.run();
         //Initialized menu//
         System.out.println("Welcome!");
         for (;;) {

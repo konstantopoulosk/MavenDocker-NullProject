@@ -3,7 +3,7 @@ use dockerDB;
 
 /*drop table Measurements
   drop table DockerInstance
-  drom table DockerImage*/
+  drop table DockerImage*/
   
 create table Measurements(
 id int not null auto_increment primary key,
