@@ -1,3 +1,6 @@
 "Image ID","Repository Name","Image Tag","Times Used","Size"
-"sha256:c1f619b6477e36a0b6a2531a972e918ef32bbf0217ee9b536409361261db6df0","docker/welcome-to-docker","latest","5","18554368"
-"sha256:c20060033e06f882b0fbe2db7d974d72e0887a3be5e554efdb0dcf8d53512647","nginx","latest","7","186779301"
+"sha256:f8c20f8bbcb684055b4fea470fdd169c86e87786940b3262335b12ec3adef418","alpine","latest","0","7377066"
+"sha256:021b676f1558d3c0000ae5bc21b1193f2de7fe3b16919b97cff760d9373ade82","mongo","latest","1","757124905"
+"sha256:c20060033e06f882b0fbe2db7d974d72e0887a3be5e554efdb0dcf8d53512647","nginx","latest","2","186779301"
+"sha256:6f90e67c6517ddbfbd701490443ca2645964d5a4da0382e9c144ecfaaa972d4b","maven","latest","3","508655066"
+"sha256:9c7a54a9a43cca047013b82af109fe963fde787f63f9e016fdc3384500c2823d","hello-world","latest","2","13256"

@@ -4,8 +4,11 @@
 package com.nullteam;
 
 import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.PullResponseItem;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -144,7 +147,6 @@ public class DockerImage {
             // Check if a container was found
             if (c != null) {
                 String[] names = c.getNames();
-
                 // Check if names is not null before accessing its elements
                 if (names != null && names.length > 0) {
                     // Create a new DockerInstance object with the created container
@@ -164,14 +166,17 @@ public class DockerImage {
                 } else {
                     System.out.println("Error: Container names are null or empty.\n");
                 }
-                } else {
+            } else {
                 System.out.println("Error: No created container found.\n");
             }
-
-    } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    /**
+     * This method removes an image from the DockerCluster
+     * and from the image list
+     */
     public void removeImage() {
         try (RemoveImageCmd removeImageCmd = ClientUpdater.getUpdatedClient().removeImageCmd(imageId)) {
             removeImageCmd.exec();

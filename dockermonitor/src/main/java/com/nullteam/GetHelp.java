@@ -1,9 +1,14 @@
 package com.nullteam;
 
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.api.model.PullResponseItem;
+
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.Executor;
 
 final class GetHelp {
     private GetHelp() {
@@ -220,8 +225,29 @@ final class GetHelp {
         System.out.println("Transferring you "
                + "to the Main Menu ...");
     }
-    public static void case2Impl() {
-        System.out.println("You chose: 2) Implement "
+    public static void case2Pull() {
+        System.out.println("You chose: 2) Pull an image "
+                + "from DockerHub\n");
+        System.out.println("Type the name of the image you want to pull");
+        Scanner in = new Scanner(System.in);
+        String imageToPull = in.nextLine();
+        try{
+            PullImageCmd pullImageCmd = ClientUpdater.getUpdatedClient()
+                    .pullImageCmd(imageToPull).withTag("latest");
+            pullImageCmd.exec(new PullImageResultCallback() {
+                @Override
+                public void onNext(PullResponseItem item) {
+                    super.onNext(item);
+                }
+            }).awaitStarted();
+            System.out.println("Image pulled");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void case3Impl() {
+        System.out.println("You chose: 3) Implement "
                + "an image(start a new container)\n");
         System.out.println("Choose one of the images below to IMPLEMENT it.");
         String imageIdImplement = DockerImage.chooseAnImage();
@@ -235,8 +261,8 @@ final class GetHelp {
             e.printStackTrace();
         }
     } //end Image menu case 2: Implement an image
-    public static void case3RmvImg() {
-        System.out.println("You chose: 3) Remove "
+    public static void case4RmvImg() {
+        System.out.println("You chose: 4) Remove "
                 + "an image\n");
         System.out.println("Choose one of the images below to REMOVE it.");
         String imageIdRemove = DockerImage.chooseAnImage();

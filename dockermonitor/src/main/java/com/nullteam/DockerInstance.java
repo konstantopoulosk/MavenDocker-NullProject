@@ -65,7 +65,6 @@ public class DockerInstance {
         containerslist.add(this);
     }
     //getters
-
     /**
      * Returns the container's ID.
      * @return String
@@ -105,7 +104,6 @@ public class DockerInstance {
     public void setContainerStatus(String status) {
         this.status = status;
     }
-
     /**
      * A classic toString method.
      * We use it to show some of every container's information

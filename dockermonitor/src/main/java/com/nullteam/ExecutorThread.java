@@ -1,5 +1,9 @@
 package com.nullteam;
 
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PullImageResultCallback;
+import com.github.dockerjava.api.model.PullResponseItem;
+
 public class ExecutorThread extends Thread {
     /**
      * id represents container's id.
@@ -193,4 +197,21 @@ public class ExecutorThread extends Thread {
     private void removeImage() {
         findImageInClient().removeImage();
     }
+    /*
+    public void pullImage(String imageRep) {
+        try{
+            PullImageCmd pullImageCmd = ClientUpdater.getUpdatedClient()
+                    .pullImageCmd(imageRep).withTag("latest");
+            pullImageCmd.exec(new PullImageResultCallback() {
+                @Override
+                public void onNext(PullResponseItem item) {
+                    super.onNext(item);
+                }
+            }).awaitStarted();
+            System.out.println("Image pulled");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    */
 }

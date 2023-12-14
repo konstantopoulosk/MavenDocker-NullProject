@@ -3,12 +3,9 @@
  */
 package com.nullteam;
 
-<<<<<<< HEAD
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-=======
->>>>>>> c253cfbb9f04ca5045d60e29384e1cfa0c25eba5
 import java.util.Scanner;
 final class Main { //Utility classes should not be defined public
     private Main() { //Just Doing what CheckStyle says
@@ -123,11 +120,14 @@ final class Main { //Utility classes should not be defined public
                                     case "1": //Listing All Images
                                         GetHelp.imageCase1();
                                         break;
-                                    case "2": //Implements an image
-                                        GetHelp.case2Impl();
+                                    case "2": //Pulls an Image
+                                        GetHelp.case2Pull();
                                         break;
-                                    case "3": //Remove an Image
-                                        GetHelp.case3RmvImg();
+                                    case "3": //Implements an Image
+                                        GetHelp.case3Impl();
+                                        break;
+                                    case "4": //Remove an Image
+                                        GetHelp.case4RmvImg();
                                         break;
                                     case "..": //going back to main menu...
                                         GetHelp.goToMainMenu();
