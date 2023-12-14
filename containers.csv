@@ -1,4 +1,5 @@
 "Container ID","Name","Image","State","Command","Created","Ports","Status"
+<<<<<<< HEAD
 "12272acd5264be2b79999da82d2fe32684d4af5a0f1cdd78b5b5f50dcba27727","/great_khorana","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702323548","707c24a7","Exited (0) 25 hours ago"
 "9de51bf3d968a587bf50e30d6dbcfeba147c2964f83ca56798c33a69fe22e44a","/reverent_hypatia","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702323510","3eaeb675","Exited (0) 25 hours ago"
 "5e4396c4993752c93cd3ad89691228546a60342a8ae5f47b92567963195f46eb","/intelligent_darwin","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702321798","81f2317","Exited (0) 47 hours ago"
@@ -17,3 +18,17 @@
 "af1214c4459089003afdff033e3e02d0a14282edc6303b3c9f85f88902420916","/elated_feynman","nginx","exited","/docker-entrypoint.sh -name ='I love Anastasia'","1700322728","5dde996f","Exited (127) 8 days ago"
 "ad37182ee11679264f7beaa02ac1db6caa27042153b3857179aaf51452d43e92","/GG","nginx:latest","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1700309317","67592efb","Exited (0) 8 days ago"
 "6cfa7f0707e0bc7c6ef0f189d84e8f53484c3988fbf0415f4a4b36d2dcc0a3bc","/GUSTAVO_FRING123","maven:latest","exited","/usr/local/bin/mvn-entrypoint.sh mvn","1700309275","cc09b79","Exited (1) 8 days ago"
+=======
+"0cdee8b4b8cb34ddf58e54707de496c5d69f59c6e2e6f4b282fe0026d917be04","/sharp_hamilton","nginx","running","/docker-entrypoint.sh nginx -g 'daemon off;'","1702557099","20ada7e5","Up 17 minutes"
+"acdb6c379a967f99e39583aa1fc51e2a353edb270c195b830577dcc3939b04b8","/boring_darwin","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702554380","199d6cd5","Exited (0) About an hour ago"
+"0d4b4f47d1aa450d0804c57564595cda051ae05ef0fc948a24ec475e9f81628f","/laughing_meninsky","docker/welcome-to-docker","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702486471","3e95342f","Exited (255) About an hour ago"
+"a14f892d6bcef78c9cc8710cdbe9f800929b2e274605fce1c358af71d5c7c068","/gifted_chatelet","docker/welcome-to-docker","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702486365","13b726e6","Exited (255) About an hour ago"
+"c5808ef44d90c241bc6691944b6d644a2657788feb8e2146760c50a01c89ee7c","/intelligent_mcclintock","docker/welcome-to-docker","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702399634","5ee839fa","Exited (255) 20 hours ago"
+"f591bb4d6ab23fa0c15d2a3b470a12a591231bd8db57015a5350bbb1662bd4e1","/romantic_elion","docker/welcome-to-docker","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702398792","2c611d36","Exited (0) 44 hours ago"
+"e852a377bcc6cf716f59bacd6cee17a1747aa697534f30075c44db993b0e5fac","/elegant_swirles","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702392145","3bc270d9","Exited (0) 43 hours ago"
+"fd917da5b36e2be2a371e55b3e3c9f7f4f500198c88eb120b5fd65373df829ea","/whatisthis","docker/welcome-to-docker","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1701686692","11e8e151","Exited (255) 5 days ago"
+"89bd388ee2931aeccda1620f185060d2b5d69b1d3c61f275537a988a31adc673","/container1","nginx","exited","/docker-entrypoint.sh --name olga","1699620895","e503d7f","Exited (127) 43 hours ago"
+"92cf3bcf71b77af90a6c5616c06b423d9e4e8bd8cfc066ca5e4a91781e9fb815","/container2","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1699620788","2a7c192e","Exited (0) 43 hours ago"
+"5912e63ee11721f7e528c8b1da3a57005a6f019e6699af4e1523ae92a1199bcd","/container3","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1699620772","210f000","Exited (0) 12 days ago"
+"5237458d8d7571eb4205b7d6f0a533b39dcb05f8832ed7ff8515ee9b7a093ffe","/container4","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1699620301","54246b7a","Exited (255) 20 hours ago"
+>>>>>>> c253cfbb9f04ca5045d60e29384e1cfa0c25eba5

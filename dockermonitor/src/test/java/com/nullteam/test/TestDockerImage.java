@@ -34,7 +34,7 @@ public class TestDockerImage {
     @Test
     public void testGetImageId() throws NullPointerException {
         Assert.assertEquals("Failure - wrong Id",
-                allImages.get(0).getImageId().toString(),
+                allImages.get(0).getImageId(),
                 "593aee2afb64");
     }
     @Test
