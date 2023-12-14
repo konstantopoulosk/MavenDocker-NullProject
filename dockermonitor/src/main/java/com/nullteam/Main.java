@@ -2,13 +2,10 @@
  * Package for our .java files
  */
 package com.nullteam;
-
-<<<<<<< HEAD
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-=======
->>>>>>> c253cfbb9f04ca5045d60e29384e1cfa0c25eba5
+
 import java.util.Scanner;
 final class Main { //Utility classes should not be defined public
     private Main() { //Just Doing what CheckStyle says
