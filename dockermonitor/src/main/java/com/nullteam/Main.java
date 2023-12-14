@@ -120,11 +120,14 @@ final class Main { //Utility classes should not be defined public
                                     case "1": //Listing All Images
                                         GetHelp.imageCase1();
                                         break;
-                                    case "2": //Implements an image
-                                        GetHelp.case2Impl();
+                                    case "2": //pull an image
+                                        GetHelp.case2Pull();
                                         break;
                                     case "3": //Remove an Image
-                                        GetHelp.case3RmvImg();
+                                        GetHelp.case3Impl();
+                                        break;
+                                    case "4":
+                                        GetHelp.case4RmvImg();
                                         break;
                                     case "..": //going back to main menu...
                                         GetHelp.goToMainMenu();
