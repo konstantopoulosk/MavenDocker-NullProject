@@ -3,15 +3,12 @@
  */
 package com.nullteam;
 
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.api.exception.InternalServerErrorException;
-import java.util.List;
 import java.util.Scanner;
 final class Main { //Utility classes should not be defined public
     private Main() { //Just Doing what CheckStyle says
     }
     public static void main(final String[] args) {
+        ClientUpdater.connectionAccomplished(); //
         Scanner in = new Scanner(System.in);
         GetHelp.listImage();
         GetHelp.listContainers();
