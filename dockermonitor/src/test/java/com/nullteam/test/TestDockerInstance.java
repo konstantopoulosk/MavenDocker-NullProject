@@ -16,8 +16,8 @@ public class TestDockerInstance {
     private final String containerId = "6cfa7f0707e0";
     //private final DockerImage image = new DockerImage("mongo", "Latest", "123456789");
     private String status = "Exited";
-    private String name = "GREGORY";
-    private String imageContainer = "mongo1";
+    private final String name = "GREGORY";
+    private final String imageContainer = "mongo1";
     DockerInstance container1 = new DockerInstance(name, containerId,
             imageContainer, status);
     DockerInstance container2 = new DockerInstance("NewContainer", "af1214c44590",
@@ -179,7 +179,7 @@ public class TestDockerInstance {
         Assert.assertFalse("Failure contains Up container", stopped.contains(container1));
         Assert.assertTrue("Failure does not contain an Exited container", stopped.contains(allContainers.get(0)));
         Assert.assertEquals("Failure wrong size", stopped.size(), 1);
-        Assert.assertEquals("Failure wrong head", stopped.get(0), (DockerInstance) allContainers.get(0));
+        Assert.assertEquals("Failure wrong head", stopped.get(0), allContainers.get(0));
     }
     @Test
     public void testChooseAContainer() {
@@ -202,7 +202,7 @@ public class TestDockerInstance {
     }
     @Test
     public void testChooseBasedOnCondition() {
-        Assert.assertEquals("Fail", DockerInstance.noActiveContainers(), false);
+        Assert.assertFalse("Fail", DockerInstance.noActiveContainers());
     }
     @After
     public void tearDown() {

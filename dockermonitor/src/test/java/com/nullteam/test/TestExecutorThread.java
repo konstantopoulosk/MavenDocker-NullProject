@@ -9,15 +9,15 @@ import java.util.List;
 
 public class TestExecutorThread {
     private List<DockerInstance> c;
-    private String name = "Gregory";
-    private String id = "6cfa7f0707e0";
-    private String image = "mongo";
+    private final String name = "Gregory";
+    private final String id = "6cfa7f0707e0";
+    private final String image = "mongo";
     private String status = "Up";
     DockerInstance c1 = new DockerInstance(name,id,image,status);
-    private String name2 = "GUS";
-    private String id2 = "af1214c44590";
-    private String image2 = "nginx";
-    private String status2 = "Exited";
+    private final String name2 = "GUS";
+    private final String id2 = "af1214c44590";
+    private final String image2 = "nginx";
+    private final String status2 = "Exited";
     DockerInstance c2 = new DockerInstance(name2, id2, image2, status2);
     @Before
     public void setUp() {
@@ -64,7 +64,7 @@ public class TestExecutorThread {
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
-        Assert.assertEquals("Fail", c.get(0).getContainerName().toString(), "TTT");
+        Assert.assertEquals("Fail", c.get(0).getContainerName(), "TTT");
     }
     @Test
     public void testRemoveContainer() {
@@ -136,7 +136,7 @@ public class TestExecutorThread {
     public void testConstructor() {
         DockerInstance c3 = new DockerInstance("name","id","image","status");
         Assert.assertEquals("Failure wrong size", c.size(), 2);
-        Assert.assertEquals("Fail wrong head", c.get(0).getContainerId().toString(), id);
+        Assert.assertEquals("Fail wrong head", c.get(0).getContainerId(), id);
         Assert.assertTrue("Fail list does not contain First", c.contains(c1));
         Assert.assertTrue("Fail list does not contain Second", c.contains(c2));
         Assert.assertFalse("Fail list contains unwanted", c.contains(c3));

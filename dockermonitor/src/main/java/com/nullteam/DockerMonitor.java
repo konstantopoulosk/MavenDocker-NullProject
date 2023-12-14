@@ -28,13 +28,18 @@ public class DockerMonitor extends Thread {
      * Method run to execute Monitor Thread.
      */
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            if (hasNewData()) {
-                writeCsv();
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                if (hasNewData()) {
+                    writeCsv();
+                }
+                if (hasNewDataImage()) {
+                    writeImageCsv();
+                }
             }
-            if (hasNewDataImage()) {
-                writeImageCsv();
-            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            // Handle other runtime exceptions
         }
     }
 
@@ -66,10 +71,12 @@ public class DockerMonitor extends Thread {
     }
     public void writeImageCsv() {
         final String csvFilePath = "images.csv";
-        try (CSVWriter csvWriter = new CSVWriter(
-                new FileWriter(csvFilePath, false))) {
-            csvWriter.writeNext(new String[] {"Image ID", "Repository Name",
-            "Image Tag", "Times Used", "Size"}); //HEADER
+        CSVWriter csvWriter = null;
+        try {
+             csvWriter = new CSVWriter(
+                    new FileWriter(csvFilePath, false));
+            csvWriter.writeNext(new String[]{"Image ID", "Repository Name",
+                    "Image Tag", "Times Used", "Size"}); //HEADER
             for (String[] csvData : currentDataImages) {
                 csvWriter.writeNext(csvData);
             }
@@ -81,6 +88,14 @@ public class DockerMonitor extends Thread {
             lastStateImages = new ArrayList<>(currentDataImages);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (csvWriter != null) {
+                try {
+                    csvWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     /**
@@ -101,7 +116,7 @@ public class DockerMonitor extends Thread {
                     c.getState(),
                     c.getCommand(),
                     c.getCreated().toString(),
-                    c.getPorts().toString().split("@")[1].toString(),
+                    c.getPorts().toString().split("@")[1],
                     c.getStatus()
             };
             currentData.add(csvData);
@@ -133,16 +148,16 @@ public class DockerMonitor extends Thread {
             return  false;
         }
     }
-    public boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
 
     /**
      * Method listsAreEqual checks if,
      * two lists are equal.
      * Current Data and Last State.
-     * @param list1
-     * @param list2
-     * @return boolean
+     * @param list1 The Current Data-list.
+     * @param list2 The Last State-list.
+     * @return boolean (true if the lists are equal, false otherwise).
      */
+    public boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
 
         // Check for null references
         if (list1 == null && list2 == null) {

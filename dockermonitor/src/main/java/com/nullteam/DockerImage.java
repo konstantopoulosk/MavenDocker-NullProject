@@ -129,36 +129,56 @@ public class DockerImage {
      * (creates a new container of the image).
      */
     public void implementImage() {
-        CreateContainerCmd createContainerCmd =
-                ClientUpdater.getUpdatedClient().createContainerCmd(
-                        getImageRep());
+        try (CreateContainerCmd createContainerCmd =
+                     ClientUpdater.getUpdatedClient().createContainerCmd(
+                             getImageRep())) {
         createContainerCmd.exec(); //new container has been created
         List<Container> containers =  //We get the updated container list
                 ClientUpdater.getUpdatedContainersFromClient();
         Container c = null;
         for (Container container : containers) {
-            if (container.getStatus().startsWith("Created")) {
+            if (container.getStatus() != null && container.getStatus().startsWith("Created")) {
                 c = container;
             }
         } //we create a new DockerInstance object with the created container
-        DockerInstance newContainer = new DockerInstance(
-                c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
-        String containerIdStart = newContainer.getContainerId();
-        ExecutorThread executorStart = new ExecutorThread(
-                containerIdStart, ExecutorThread.TaskType.START);
-        executorStart.start(); //we start the container
-        try {
-            executorStart.join(); // waiting for the thread to finish
-        } catch (InterruptedException e) {
+            // Check if a container was found
+            if (c != null) {
+                String[] names = c.getNames();
+
+                // Check if names is not null before accessing its elements
+                if (names != null && names.length > 0) {
+                    // Create a new DockerInstance object with the created container
+                    DockerInstance newContainer = new DockerInstance(
+                            c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
+                    String containerIdStart = newContainer.getContainerId();
+                    ExecutorThread executorStart = new ExecutorThread(
+                            containerIdStart, ExecutorThread.TaskType.START);
+                    executorStart.start(); //we start the container
+                    try {
+                        executorStart.join(); // waiting for the thread to finish
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("The new container has been created and is running"
+                            + "\n");
+                } else {
+                    System.out.println("Error: Container names are null or empty.\n");
+                }
+                } else {
+                System.out.println("Error: No created container found.\n");
+            }
+
+    } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("The new container has been created and is running"
-                + "\n");
     }
     public void removeImage() {
-        RemoveImageCmd removeImageCmd = ClientUpdater.getUpdatedClient().removeImageCmd(imageId);
-        removeImageCmd.exec();
-        System.out.println("Image Removed: " + imageId +"\n");
-        imageslist.remove(this);
+        try (RemoveImageCmd removeImageCmd = ClientUpdater.getUpdatedClient().removeImageCmd(imageId)) {
+            removeImageCmd.exec();
+            System.out.println("Image Removed: " + imageId + "\n");
+            imageslist.remove(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

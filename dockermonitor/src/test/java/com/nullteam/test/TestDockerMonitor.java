@@ -15,10 +15,10 @@ import java.util.List;
 public class TestDockerMonitor {
     private List<String[]> containers1 = new ArrayList<>();
     private List<String[]> containers2 = new ArrayList<>();
-    private String name = "Name";
-    private String id = "Id";
-    private String image = "image";
-    private String status = "status";
+    private final String name = "Name";
+    private final String id = "Id";
+    private final String image = "image";
+    private final String status = "status";
     String[] array1 = { name , id , image , status };
     String[] array2 = {"Name1" , "Id", "image", "status"};
     DockerMonitor obj = new DockerMonitor();
@@ -26,13 +26,13 @@ public class TestDockerMonitor {
     public void setUp() {
         containers1.add(array1);
         containers2.add(array2);
-        //obj.start();
+        obj.start();
     }
     @Test
     public void testWriteCsv() {
         DockerMonitor dockerMonitor = new DockerMonitor();
         File file = new File("containers.csv");
-        //dockerMonitor.writeCsv();
+        dockerMonitor.writeCsv();
         final String csvFilePath = "containers.csv";
         try(CSVWriter c = new CSVWriter(new FileWriter(csvFilePath,false))){
             c.writeNext(new String[]{"Name", "ID", "Image", "Status"});

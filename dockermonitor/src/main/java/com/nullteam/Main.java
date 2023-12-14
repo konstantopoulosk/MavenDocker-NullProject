@@ -106,6 +106,7 @@ final class Main { //Utility classes should not be defined public
                             }
                         }
                         break; //end of case 1
+
                     case "2": // Image menu
                         GetHelp.goToImMenu(); //Loop to stay
                         flagImage: //until user NotTo

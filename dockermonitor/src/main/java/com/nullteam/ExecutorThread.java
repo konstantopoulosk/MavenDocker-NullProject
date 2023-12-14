@@ -4,12 +4,12 @@ public class ExecutorThread extends Thread {
     /**
      * id represents container's id.
      */
-    private String id; //container id
+    private final String id; //container id
     /**
      * task field is used in order to,
      * switch between cases in run.
      */
-    private TaskType task; // taskType
+    private final TaskType task; // taskType
     /**
      * name2Rename field represents,
      * new Name to rename a container.
@@ -77,9 +77,9 @@ public class ExecutorThread extends Thread {
     /**
      * Constructor is used only when user,
      * wants to rename a container.
-     * @param iD
-     * @param task1
-     * @param nameToRename
+     * @param iD the id of the container
+     * @param task1 the task is to rename
+     * @param nameToRename the new name
      */
     public ExecutorThread(final String iD,
                           final TaskType task1,
@@ -92,8 +92,8 @@ public class ExecutorThread extends Thread {
     /**
      * Constructor is used always except,
      * for rename.
-     * @param iD
-     * @param task1
+     * @param iD the id of the container
+     * @param task1 everything else but rename
      */
     public ExecutorThread(final String iD, final TaskType task1) {
         this.id = iD;
