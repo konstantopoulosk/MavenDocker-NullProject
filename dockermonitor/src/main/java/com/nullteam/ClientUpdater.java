@@ -5,6 +5,9 @@ import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 import javax.ws.rs.ProcessingException;
 import java.io.File;
@@ -108,5 +111,20 @@ final class ClientUpdater {
             }
         }
         return status;
+    }
+    public static Connection connectToDatabase() {
+        Connection connection;
+        String imageId, repository, tag, timesUsed, size;
+        String url = "jdbc:mysql://localhost:3306/DockerDB";
+        String user = "root";
+        String password = "nullteamtsipouroVolos123456789";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(url,user,password);
+            System.out.println("Successful Connection to Database!");
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return connection; //Connected to Database.
     }
 }

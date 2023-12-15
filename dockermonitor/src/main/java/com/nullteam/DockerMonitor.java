@@ -54,7 +54,7 @@ public class DockerMonitor extends Thread {
         try (CSVWriter csvWriter = new CSVWriter(
                 new FileWriter(csvFilePath, false))) {
             csvWriter.writeNext(new String[]{"Container ID", "Name",
-                   "Image", "State", "Command", "Created", "Ports", "Status"}); // CSVFile header
+                   "Image", "State", "Command", "Created", "Ports"}); // CSVFile header
             for (String[] csvData : currentData) {
                 csvWriter.writeNext(csvData);
             }
@@ -116,8 +116,7 @@ public class DockerMonitor extends Thread {
                     c.getState(),
                     c.getCommand(),
                     c.getCreated().toString(),
-                    c.getPorts().toString().split("@")[1],
-                    c.getStatus()
+                    c.getPorts().toString().split("@")[1]
             };
             currentData.add(csvData);
         }
@@ -157,7 +156,7 @@ public class DockerMonitor extends Thread {
      * @param list2 The Last State-list.
      * @return boolean (true if the lists are equal, false otherwise).
      */
-    public boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
+    public static boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
 
         // Check for null references
         if (list1 == null && list2 == null) {

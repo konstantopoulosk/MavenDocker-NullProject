@@ -2,6 +2,7 @@
  * Package for our .java files
  */
 package com.nullteam;
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,11 +16,15 @@ final class Main { //Utility classes should not be defined public
         Scanner in = new Scanner(System.in);
         GetHelp.listImage();
         GetHelp.listContainers();
-        //Initialized the monitor thread
+        //Initialized Monitor Thread.
         DockerMonitor monitor = new DockerMonitor();
         monitor.start();
-        DatabaseThread databaseThread = new DatabaseThread();
-        databaseThread.run();
+        //Initialized Database Thread.
+        DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
+        databaseThread.start();
+
+
+
         //Initialized menu//
         System.out.println("Welcome!");
         for (;;) {
