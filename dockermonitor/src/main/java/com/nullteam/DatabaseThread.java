@@ -14,7 +14,7 @@ public class DatabaseThread extends  Thread {
     List<String[]> currentStateImage = null;
     Connection connection;
     public DatabaseThread(Connection connection) { //Moved the connectToDatabase to ClientUpdater
-        this.connection = connection; //Because connectivity method.
+        this.connection = connection; //Because connectivity methods
     }
     @Override
     public void run() {
