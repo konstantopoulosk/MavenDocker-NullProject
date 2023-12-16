@@ -24,25 +24,31 @@ public class DatabaseThread extends Thread {
     public void run() {
         try {
             //Those are temporary.
+
             deleteAllRowsFromTable(connection, "dockerimage");
             deleteAllRowsFromTable(connection,"dockerinstance");
             deleteAllRowsFromTable(connection, "measurementsofcontainers");
             deleteAllRowsFromTable(connection,"measurementsofimages");
+            if (checkTableEmpty(connection, "dockerimage")) {
+                readImagesFromCsv(connection); //No duplicate primary keys
+            }
+            if (checkTableEmpty(connection, "dockerinstance")) {
+                readContainersFromCsv(connection);
+            }
             while (!Thread.currentThread().isInterrupted()) { //Runs until interrupted
-                if (checkTableEmpty(connection, "dockerimage")) {
-                    readImagesFromCsv(connection); //No duplicate primary keys
-                } else { //Table not empty we should update the rows. not insert something
-                    if (hasNewDataImages()) { //if new data -> do sth, else do nth
-                        updateImages(connection);
-                    }
+                 //Table not empty we should update the rows. not insert something
+                if (hasNewDataImages()) { //if new data -> do sth, else do nth
+                    // updateImages(connection);
+                    deleteAllRowsFromTable(connection, "dockerimage");
+                    readImagesFromCsv(connection);
                 }
-                if (checkTableEmpty(connection, "dockerinstance")) {
+                    //Table not empty -> Update not insert
+                if (hasNewDataContainers()) { //New data -> do sth
+                    //updateContainers(connection);
+                    deleteAllRowsFromTable(connection, "dockerinstance");
                     readContainersFromCsv(connection);
-                } else { //Table not empty -> Update not insert
-                    if (hasNewDataContainers()) { //New data -> do sth
-                        updateContainers(connection);
-                    }
                 }
+
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -181,6 +187,7 @@ public class DatabaseThread extends Thread {
             throw new RuntimeException(e);
         }
     }
+    /*
     //In order for this method to be called, 2 Lists are not equal!
     public void updateImages(Connection connection) {
         try {
@@ -212,16 +219,19 @@ public class DatabaseThread extends Thread {
             throw new RuntimeException(e);
         }
     }
+
+     */
+    /*
     public void updateContainers(Connection connection) {
         try {
             FileReader fr = new FileReader("containers.csv");
             CSVReader csvReader = new CSVReader(fr);
             String[] container;
-            int row = -1;
+            int row = 1;
             while ((container = csvReader.readNext()) != null) {
-                row++;
                 List<Integer> positions;
                 positions = findDifferentValue(currentStateContainer, lastStateContainer, row);
+                row++;
                 for (int i : positions) { //Multiple Changes
                     String queryContainer = null;
                     if (i == 1) { //Change to Name of a Container
@@ -246,6 +256,9 @@ public class DatabaseThread extends Thread {
             throw new RuntimeException(e);
         }
     }
+
+     */
+    /*
     public static List<Integer> findDifferentValue(List<String[]> current, List<String[]> last, int row) {
         String[] array1 = current.get(row);
         String[] array2 = last.get(row);
@@ -257,6 +270,8 @@ public class DatabaseThread extends Thread {
         }
         return positions;
     }
+
+     */
 }
 
 
