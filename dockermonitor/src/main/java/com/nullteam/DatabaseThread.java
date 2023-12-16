@@ -174,6 +174,7 @@ public class DatabaseThread extends Thread {
         }
     }
     //In order for this method to be called, 2 Lists are not equal!
+    /*
     public void updateImages(Connection connection) {
         try {
             FileReader fr = new FileReader("images.csv");
@@ -203,6 +204,53 @@ public class DatabaseThread extends Thread {
             }
             csvReader.close();
         } catch (SQLException | IOException | CsvValidationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+     */
+    public void updateImages(Connection connection) {
+        try {
+            FileReader fr = new FileReader("images.csv");
+            CSVReader csvReader = new CSVReader(fr);
+            String[] image;
+            int i = 0;
+            while ((image = csvReader.readNext()) != null) {
+                if (i < lastStateImage.size()) {
+                    String[] last = lastStateImage.get(i);
+                    int y = -1;
+                    for (String s : last) {
+                        y++;
+                        if (!last[y].equals(image[y])) {
+                            String queryImage = null;
+                            if (y == 3) { //Change to Times Used of an Image
+                                queryImage = String.format("UPDATE dockerimage SET timesUsed = ? WHERE id = ?");
+                                PreparedStatement preparedStatement = connection.prepareStatement(queryImage);
+                                preparedStatement.setString(1, image[3]);
+                                preparedStatement.setString(2, image[0]);
+                                preparedStatement.executeUpdate();
+                            } else if (y == 4) { //Change to Size of an Image
+                                queryImage = String.format("UPDATE dockerimage SET size = ? WHERE id = ?");
+                                PreparedStatement preparedStatement = connection.prepareStatement(queryImage);
+                                preparedStatement.setString(1, image[4]);
+                                preparedStatement.setString(2, image[0]);
+                                preparedStatement.executeUpdate();
+                            }
+                            if (queryImage != null) {
+                                Statement statement = connection.createStatement();
+                                //statement.executeUpdate(queryImage);
+                                images++;
+                                addToMeasurementsOf(connection, "measurementsofimages", "idmi", images);
+                                queryImage = String.format("UPDATE dockerimage SET idmi = '%s' where id = '%s'", images, image[0]);
+                                statement.executeUpdate(queryImage);
+                            }
+                        }
+                    }
+                }
+                i++;
+            }
+            csvReader.close();
+        } catch (IOException | CsvValidationException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -248,19 +296,60 @@ public class DatabaseThread extends Thread {
             FileReader fr = new FileReader("containers.csv");
             CSVReader csvReader = new CSVReader(fr);
             String[] container;
-            int i = 0;
+            int i = 1;
             while ((container = csvReader.readNext()) != null) {
-                String[] last = lastStateContainer.get(i);
-                for (String s : last) {
-                    if (!last[Integer.parseInt(s)].equals(container[Integer.parseInt(s)])) {
+                if (i < lastStateContainer.size()) {
+                    String[] last = lastStateContainer.get(i);
+                    int y = -1;
+                    for (String s : last) {
+                        y++;
+                        if (!last[y].equals(container[y])) {
+                            String queryContainer = null;
+                            if (y == 1) { //Change Name
+                                queryContainer = String.format("UPDATE dockerinstance SET name = ? WHERE id = ?");
+                                PreparedStatement preparedStatement = connection.prepareStatement(queryContainer);
+                                preparedStatement.setString(1, container[1]);
+                                preparedStatement.setString(2, container[0]);
+                                preparedStatement.executeUpdate();
+                            } else if (y == 3) { //Change to State of a Container
+                                queryContainer = String.format("UPDATE dockerinstance SET state = ? WHERE id = ?");
+                                PreparedStatement preparedStatement = connection.prepareStatement(queryContainer);
+                                preparedStatement.setString(1, container[3]);
+                                preparedStatement.setString(2, container[0]);
+                                preparedStatement.executeUpdate();
+                            } else if (y == 4) { //Change to Command ?
+                                queryContainer = String.format("UPDATE dockerinstance SET command = ? WHERE id = ?");
+                                PreparedStatement preparedStatement = connection.prepareStatement(queryContainer);
+                                preparedStatement.setString(1, container[4]);
+                                preparedStatement.setString(2, container[0]);
+                                preparedStatement.executeUpdate();
+                            } else if (y == 6) { //Change to Ports ?
+                                queryContainer = String.format("UPDATE dockerinstance SET ports = ? WHERE id = ?");
+                                PreparedStatement preparedStatement = connection.prepareStatement(queryContainer);
+                                preparedStatement.setString(1, container[6]);
+                                preparedStatement.setString(2, container[0]);
+                                preparedStatement.executeUpdate();
+                            }
 
+                            if (queryContainer != null) {
+                                Statement statement = connection.createStatement();
+                                //statement.executeUpdate(queryContainer);
+                                containers++;
+                                addToMeasurementsOf(connection, "measurementsofcontainers", "idmc", containers);
+                                queryContainer = String.format("UPDATE dockerinstance SET idmc = '%s' where id = '%s'", containers, container[0]);
+                                statement.executeUpdate(queryContainer);
+                            }
+                        }
                     }
                 }
+                i++;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            csvReader.close();
+        } catch (CsvValidationException | IOException | SQLException ex) {
+            throw new RuntimeException(ex);
         }
     }
+    /*
     public static List<Integer> findDifferentValue(List<String[]> current, List<String[]> last, int row) {
         List<Integer> positions = new ArrayList<>();
 
@@ -275,6 +364,8 @@ public class DatabaseThread extends Thread {
 
         return positions;
     }
+
+     */
 }
 
 
