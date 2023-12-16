@@ -183,6 +183,7 @@ public class DatabaseThread extends Thread {
             while ((image = csvReader.readNext()) != null) {
                 row++;
                 List<Integer> positions;
+                //Problem: positions is empty!!!
                 positions = findDifferentValue(currentStateImage, lastStateImage, row);
                 for (int i : positions) { //Multiple Changes
                     String queryImage = null;
@@ -205,6 +206,7 @@ public class DatabaseThread extends Thread {
             throw new RuntimeException(e);
         }
     }
+    /*
     public void updateContainers(Connection connection) {
         try {
             FileReader fr = new FileReader("containers.csv");
@@ -239,17 +241,38 @@ public class DatabaseThread extends Thread {
             throw new RuntimeException(e);
         }
     }
+
+     */
+    public void updateContainers(Connection connection) {
+        try {
+            FileReader fr = new FileReader("containers.csv");
+            CSVReader csvReader = new CSVReader(fr);
+            String[] container;
+            int i = 0;
+            while ((container = csvReader.readNext()) != null) {
+                String[] last = lastStateContainer.get(i);
+                for (String s : last) {
+                    if (!last[Integer.parseInt(s)].equals(container[Integer.parseInt(s)])) {
+
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public static List<Integer> findDifferentValue(List<String[]> current, List<String[]> last, int row) {
         List<Integer> positions = new ArrayList<>();
-         if (current.size() > row) {
+
             String[] array1 = current.get(row);
             String[] array2 = last.get(row);
             for (int i = 0; i < array1.length; i++) {
                 if (!array1[i].equals(array2[i])) {
                     positions.add(i);
+                    System.out.println(i);
                 }
             }
-        }
+
         return positions;
     }
 }

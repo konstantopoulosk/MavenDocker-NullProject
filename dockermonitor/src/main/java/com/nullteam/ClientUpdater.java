@@ -115,7 +115,7 @@ final class ClientUpdater {
     public static Connection connectToDatabase() {
         Connection connection;
         String imageId, repository, tag, timesUsed, size;
-        String url = "jdbc:mysql://localhost:3306/DockerDB";
+        String url = "jdbc:mysql://localhost:3306/dockerdb";
         String user = "root";
         String password = "nullteamtsipouroVolos123456789";
         try {
