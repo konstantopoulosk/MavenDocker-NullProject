@@ -20,8 +20,8 @@ final class Main { //Utility classes should not be defined public
         DockerMonitor monitor = new DockerMonitor();
         monitor.start();
         //Initialized Database Thread.
-        //DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
-        //databaseThread.start();
+        DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
+        databaseThread.start();
         //Initialized menu//
         System.out.println("Welcome!");
         for (;;) {
