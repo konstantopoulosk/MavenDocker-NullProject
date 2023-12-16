@@ -22,9 +22,6 @@ final class Main { //Utility classes should not be defined public
         //Initialized Database Thread.
         DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
         databaseThread.start();
-
-
-
         //Initialized menu//
         System.out.println("Welcome!");
         for (;;) {
