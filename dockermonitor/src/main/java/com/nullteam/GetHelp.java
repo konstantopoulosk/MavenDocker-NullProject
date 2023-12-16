@@ -22,7 +22,7 @@ final class GetHelp {
         for (Image i : images) { //For every one object in the images list ->
                                  // creating an object DockerImage
             new DockerImage(i.getRepoDigests()[0],
-                    "Latest", i.getId());
+                    "latest", i.getId());
         }
     }
     public static void listContainers() {
@@ -228,22 +228,39 @@ final class GetHelp {
     public static void case2Pull() {
         System.out.println("You chose: 2) Pull an image "
                 + "from DockerHub\n");
-        System.out.println("Type the name of the image you want to pull");
+        System.out.print("Type the name of the image you want to pull: ");
         Scanner in = new Scanner(System.in);
         String imageToPull = in.nextLine();
         try{
             PullImageCmd pullImageCmd = ClientUpdater.getUpdatedClient()
                     .pullImageCmd(imageToPull).withTag("latest");
+            System.out.println("\nPulling image...");
+            System.out.println("This may take a while...");
             pullImageCmd.exec(new PullImageResultCallback() {
                 @Override
                 public void onNext(PullResponseItem item) {
                     super.onNext(item);
                 }
             }).awaitStarted();
-            System.out.println("Image pulled");
-
+            Thread.sleep(60000); //giati pairnei ligo xrono sto docker desktop na fortwsei to neo image
+            //Now we have to create a new DockerImage object
+            List<Image> images =
+                    ClientUpdater.getUpdatedImagesFromClient();
+            for (Image i : images) {
+                String[] parts = i.getRepoDigests()[0].split("@");
+                if (parts[0].equals(imageToPull)) {
+                    new DockerImage(i.getRepoDigests()[0],
+                            "latest", i.getId());
+                }
+            }
+            System.out.println("Image pulled successfully");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("""
+                    Exception due to one of these factors:
+                    -No Internet
+                    -Not signed in DockerHub
+                    -Image does not exist
+                    -Image already in your DockerCluster"""); //could be more reasons
         }
     }
     public static void case3Impl() {
