@@ -242,7 +242,7 @@ final class GetHelp {
                     super.onNext(item);
                 }
             }).awaitStarted();
-            Thread.sleep(60000); //giati pairnei ligo xrono sto docker desktop na fortwsei to neo image
+            Thread.sleep(120000); //giati pairnei ligo xrono sto docker desktop na fortwsei to neo image
             //Now we have to create a new DockerImage object
             List<Image> images =
                     ClientUpdater.getUpdatedImagesFromClient();
