@@ -101,7 +101,8 @@ final class GetHelp {
         System.out.println("You chose: 4) Remove a container\n");
         System.out.println("Choose one of the containers bellow "
                + "to REMOVE it.");
-        String containerIdRemove = DockerInstance.chooseAContainer();
+        String containerIdRemove = DockerInstance.chooseAStoppedContainer();
+        //only from exited because we can't remove an active container
         ExecutorThread executorRemove = new ExecutorThread(
                 containerIdRemove, ExecutorThread.TaskType.REMOVE);
         executorRemove.start();
@@ -293,7 +294,7 @@ final class GetHelp {
         System.out.print("\nAnswer: ");
         Scanner in = new Scanner(System.in);
         String ans = in.nextLine();
-        if (ans == "Y") {
+        if (ans.equals("Y")) {
             ExecutorThread executorRemoveImage = new ExecutorThread(imageIdRemove, ExecutorThread.TaskType.REMOVEIMAGE);
             executorRemoveImage.start();
             System.out.println("Removing image and image's instances...");
