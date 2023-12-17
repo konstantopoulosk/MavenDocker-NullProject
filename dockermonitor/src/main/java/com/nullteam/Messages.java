@@ -38,9 +38,10 @@ final class Messages {
         System.out.println("\n            ~Image Menu~"
                 + "\n         ------------------");
         System.out.println("(1) View available images\n"
-                + "(2) Pull an image\n"
-                + "(3) Implement an image(start a new container)\n"
-                + "(4) Remove an image"
+                + "(2) View images in use\n"
+                + "(3) Pull an image\n"
+                + "(4) Implement an image(start a new container)\n"
+                + "(5) Remove an image"
                 + "\nPress (..) to go Back(Main Menu)\n"
                 + "Press (*) to EXIT THE APP");
         System.out.print("YOUR CHOICE ---> ");

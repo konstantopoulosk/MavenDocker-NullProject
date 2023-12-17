@@ -230,8 +230,8 @@ final class GetHelp {
      * This method pulls an image from DockerHub
      * and adds it to the imagelist
      */
-    public static void case2Pull() {
-        System.out.println("You chose: 2) Pull an image "
+    public static void case3Pull() {
+        System.out.println("You chose: 3) Pull an image "
                 + "from DockerHub\n");
         System.out.print("Type the name of the image you want to pull: ");
         Scanner in = new Scanner(System.in);
@@ -247,7 +247,7 @@ final class GetHelp {
                     super.onNext(item);
                 }
             }).awaitStarted();
-            Thread.sleep(120000); //giati pairnei ligo xrono sto docker desktop na fortwsei to neo image
+            Thread.sleep(60000); //giati pairnei ligo xrono sto docker desktop na fortwsei to neo image
             //Now we have to create a new DockerImage object
             List<Image> images =
                     ClientUpdater.getUpdatedImagesFromClient();
@@ -268,8 +268,8 @@ final class GetHelp {
                     -Image already in your DockerCluster"""); //could be more reasons
         }
     }
-    public static void case3Impl() {
-        System.out.println("You chose: 3) Implement "
+    public static void case4Impl() {
+        System.out.println("You chose: 4) Implement "
                + "an image(start a new container)\n");
         System.out.println("Choose one of the images below to IMPLEMENT it.");
         String imageIdImplement = DockerImage.chooseAnImage();
@@ -283,8 +283,8 @@ final class GetHelp {
             e.printStackTrace();
         }
     } //end Image menu case 2: Implement an image
-    public static void case4RmvImg() {
-        System.out.println("You chose: 4) Remove "
+    public static void case5RmvImg() {
+        System.out.println("You chose: 5) Remove "
                 + "an image\n");
         System.out.println("Choose one of the images below to REMOVE it.");
         String imageIdRemove = DockerImage.chooseAnImage();
@@ -322,5 +322,9 @@ final class GetHelp {
     public static void imageCase1() {
         System.out.println("You chose: 1) View available images\n");
         DockerImage.listAllImages();
+    }
+    public static void imageCase2() {
+        System.out.println("You chose: 2) View images in use\n");
+        DockerImage.listUsedImages();
     }
 }
