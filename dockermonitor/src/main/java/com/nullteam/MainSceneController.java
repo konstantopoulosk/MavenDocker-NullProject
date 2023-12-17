@@ -1,5 +1,4 @@
 package com.nullteam;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
