@@ -21,8 +21,8 @@ final class Main { //Utility classes should not be defined public
         monitor.start();
         //Initialized Database Thread.
 
-        DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
-        databaseThread.start();
+        //DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
+        //databaseThread.start();
 
 
         //Initialized menu//
@@ -125,14 +125,17 @@ final class Main { //Utility classes should not be defined public
                                     case "1": //Listing All Images
                                         GetHelp.imageCase1();
                                         break;
-                                    case "2": //pull an image
-                                        GetHelp.case2Pull();
+                                    case "2": //Listing Images in use
+                                        GetHelp.imageCase2();
                                         break;
-                                    case "3": //Remove an Image
-                                        GetHelp.case3Impl();
+                                    case "3": //pull an image
+                                        GetHelp.case3Pull();
                                         break;
-                                    case "4":
-                                        GetHelp.case4RmvImg();
+                                    case "4":  //implement an image
+                                        GetHelp.case4Impl();
+                                        break;
+                                    case "5": //Remove an Image
+                                        GetHelp.case5RmvImg();
                                         break;
                                     case "..": //going back to main menu...
                                         GetHelp.goToMainMenu();
