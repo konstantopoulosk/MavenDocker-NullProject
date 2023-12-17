@@ -88,9 +88,8 @@ public class DatabaseThread extends Thread {
             csvReader.close();
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
-        } catch (CsvValidationException e) {
-            // This block will be executed if the CSV file contains a malformed line.
-            System.out.println("CSV file contains a malformed line. The line number is: " + e.getLineNumber());
+        } catch (CsvValidationException _) {
+
         }
     }
     //Checks if CSV has any new data since last checked
