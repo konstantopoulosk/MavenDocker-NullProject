@@ -11,6 +11,10 @@ import com.github.dockerjava.api.command.KillContainerCmd;
 
 
 import com.github.dockerjava.api.exception.NotModifiedException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.InputMismatchException;
 import org.glassfish.jersey.internal.util.collection.StringIgnoreCaseKeyComparator;
 
@@ -439,6 +443,7 @@ public class DockerInstance {
     public static String chooseAContainer() {
         DockerInstance.listAllContainers();
         Scanner in = new Scanner(System.in);
+        System.out.print("YOUR CHOICE---> ");
         try { //checking if the input is out of bounds
         int choice = in.nextInt();
         if (choice < 1 || choice > containerslist.size()) {
@@ -533,4 +538,30 @@ public class DockerInstance {
                 .indexOf(mylist.get(answer-1))).getContainerId();
     }
     */
+    public static List<String> getDockerVolumes(String containerId) throws IOException, InterruptedException {
+        List<String> command = new ArrayList<>();
+        command.add("docker");
+        command.add("inspect");
+        command.add("--format='{{json .Mounts}}'");
+        command.add(containerId);
+
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        Process process = processBuilder.start();
+
+        StringBuilder output = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            output.append(line).append("\n");
+        }
+
+        process.waitFor();
+
+        if (process.exitValue() != 0) {
+            throw new RuntimeException("Command execution failed. " + output.toString());
+        }
+
+        List<String> volumes = new ArrayList<>();
+        return volumes;
+    }
 }

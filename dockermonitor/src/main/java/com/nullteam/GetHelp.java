@@ -6,6 +6,7 @@ import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
@@ -311,6 +312,19 @@ final class GetHelp {
         System.out.println("Transferring you to the "
                + "Container Tools Menu ...");
     }
+
+    public static void goToInspectContainer() {
+        System.out.println("You chose: "
+                + "4) Inspect a Container\n");
+        System.out.println("Transferring you to the "
+                + "Inspect Container Menu ...");
+    }
+    public static void showVolumes() throws IOException, InterruptedException {
+        String containerId = DockerInstance.chooseAContainer();
+        List<String> volumes = DockerInstance.getDockerVolumes(containerId);
+        System.out.println("Disk volumes: " + volumes);
+    }
+
     public static void repChoice() {
         System.out.println("Please choose one of the valid options below.\n");
     }
@@ -328,4 +342,5 @@ final class GetHelp {
         System.out.println("You chose: 2) View images in use\n");
         DockerImage.listUsedImages();
     }
+
 }

@@ -6,8 +6,8 @@ final class Messages {
 
     public static void mainMenu() {
         System.out.println("        ~Main Menu~     \n");
-        System.out.println("(1) Inspect Containers\n"
-                + "(2) Inspect Images"
+        System.out.println("(1) Open Container menu\n"
+                + "(2) Open Image menu"
                 + "\n(*) Exit"); //more functionality to be added
         System.out.print("YOUR CHOICE ---> ");
     }
@@ -16,9 +16,11 @@ final class Messages {
         System.out.println("\n          ~Container Menu~"
                 + "\n         ------------------");
         System.out.println("(1) View ALL the containers\n"
-                + "(2) View ACTIVE containers only"
-                + "\n(3) Container Tools\nPress (..) "
-                + "to go Back(Main Menu)\nPress (*) to EXIT THE APP");
+                + "(2) View ACTIVE containers only\n"
+                + "(3) Container Tools\n"
+                + "(4) Inspect a Container\n"
+                + "Press (..) to go Back(Main Menu)\n"
+                + "Press (*) to EXIT THE APP");
         System.out.print("YOUR CHOICE ---> ");
     }
 
@@ -34,6 +36,15 @@ final class Messages {
         System.out.print("YOUR CHOICE---> ");
     }
 
+    public static void inspectContainer() {
+        System.out.println("\n          ~Inspect a Container~"
+                + "\n         ---------------------");
+        System.out.println("(1) Disk volumes\n(2) Subnets\n(3) Logs\n"
+                    + "Press (..) to go back(Container Menu)\n"
+                    + "Press (*) to EXIT THE APP");
+        System.out.print("YOUR CHOICE---> ");
+    }
+
     public static void imagesMenu() {
         System.out.println("\n            ~Image Menu~"
                 + "\n         ------------------");
@@ -41,8 +52,8 @@ final class Messages {
                 + "(2) View images in use\n"
                 + "(3) Pull an image\n"
                 + "(4) Implement an image(start a new container)\n"
-                + "(5) Remove an image"
-                + "\nPress (..) to go Back(Main Menu)\n"
+                + "(5) Remove an image\n"
+                + "Press (..) to go Back(Main Menu)\n"
                 + "Press (*) to EXIT THE APP");
         System.out.print("YOUR CHOICE ---> ");
     }
