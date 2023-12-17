@@ -320,6 +320,7 @@ final class GetHelp {
                 + "Inspect Container Menu ...");
     }
     public static void showVolumes() throws IOException, InterruptedException {
+        System.out.println("\nWhich container's disk volumes would you like to see?");
         String containerId = DockerInstance.chooseAContainer();
         List<String> volumes = DockerInstance.getDockerVolumes(containerId);
         System.out.println("Disk volumes: " + volumes);

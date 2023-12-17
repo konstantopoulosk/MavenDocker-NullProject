@@ -3,6 +3,7 @@
  */
 package com.nullteam;
 import javax.xml.crypto.Data;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,8 +18,8 @@ final class Main { //Utility classes should not be defined public
         GetHelp.listContainers();
         DockerMonitor monitor = new DockerMonitor();
         monitor.start(); //Initialized Monitor Thread.
-        DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
-        databaseThread.start(); //Initialized Database Thread.
+        //DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
+        //databaseThread.start(); //Initialized Database Thread.
         System.out.println("Welcome!");
         for (;;) { //Initialized menu//
             Messages.mainMenu();
@@ -27,7 +28,7 @@ final class Main { //Utility classes should not be defined public
                 switch (menu) {
                     case "1"://Containers Menu
                         System.out.println("\nTransferring you" + " to the Container Menu ...");
-                        flagCon: //Creating a loop to stay in the containers menu until  user chooses to leave
+                        flagCon: //Creating a loop to stay in the containers menu until user chooses to leave
                         while (true) {
                             Messages.containersMenu();
                             String ansC = in.nextLine();
@@ -37,13 +38,13 @@ final class Main { //Utility classes should not be defined public
                                         //printing ALL containers
                                         System.out.println("You chose:"
                                                 + "1) View ALL the "
-                                               + "containers\n");
+                                                + "containers\n");
                                         DockerInstance.listAllContainers();
                                         break;
                                     case "2": //printing ACTIVE containers-only
                                         System.out.println("You chose: "
                                                 + "2) View ACTIVE "
-                                               + "containers only\n");
+                                                + "containers only\n");
                                         DockerInstance.listActiveContainers();
                                         break;
                                     case "3":
@@ -89,6 +90,39 @@ final class Main { //Utility classes should not be defined public
                                                 }
                                             } catch (IllegalStateException e) {
                                                 GetHelp.repChoice();
+                                            }
+                                        }
+                                        break;
+                                    case "4": //Inspect a container (volumes-subnets-logs)
+                                        GetHelp.goToInspectContainer();
+                                        flagInspect: //stay in Inspect Container menu
+                                        while (true) {
+                                            Messages.inspectContainer();
+                                            String ansI = in.nextLine();
+                                            try {
+                                                switch (ansI) {
+                                                    case "1":
+                                                        GetHelp.showVolumes();
+                                                        break;
+                                                    case "2":
+                                                        //show subnets to be done
+                                                        break;
+                                                    case "3":
+                                                        //show logs to be done
+                                                        break;
+                                                    case ".."://GO BACK
+                                                        GetHelp.goToContMenu();
+                                                        break flagInspect;
+                                                    case "*": //Exiting the app
+                                                        Messages.exitApp();
+                                                        break;
+                                                    default:
+                                                        GetHelp.thr(ansI);
+                                                }
+                                            } catch (IllegalStateException e) {
+                                                GetHelp.repChoice();
+                                            } catch (IOException | InterruptedException e) {
+                                                throw new RuntimeException(e);
                                             }
                                         }
                                         break;
