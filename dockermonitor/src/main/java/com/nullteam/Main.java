@@ -21,8 +21,8 @@ final class Main { //Utility classes should not be defined public
         monitor.start();
         //Initialized Database Thread.
 
-        DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
-        databaseThread.start();
+        //DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
+        //databaseThread.start();
 
 
         //Initialized menu//

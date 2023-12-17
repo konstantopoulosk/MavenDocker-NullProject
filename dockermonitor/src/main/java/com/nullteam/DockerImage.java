@@ -74,7 +74,8 @@ public class DockerImage {
      * @return String
      */
     public String getImageId() {
-        return imageId;
+        String[] parts = this.imageId.split(":");
+        return parts[1]; //to keep only the id without the 'sha256'
     }
     //Classic toString for one DockerImage at the time
 
@@ -178,6 +179,26 @@ public class DockerImage {
      * and from the image list
      */
     public void removeImage() {
+
+        //first we need to remove the instances of this image
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        for (Container c : containers) {
+            
+            if (c.getImage().equals(getImageRep()) //e.g. 'mongo'
+                    || c.getImage().equals(getImageId().substring(0, 12)) //e.g. '76506809a39f'
+                    || c.getImage().startsWith(getImageRep())) { //e.g. 'mongo:latest'
+                //we remove the container if its image is the chosen one
+                ExecutorThread executorRemove = new ExecutorThread(
+                        c.getId(), ExecutorThread.TaskType.REMOVE);
+                executorRemove.start();
+                try {
+                    executorRemove.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         try (RemoveImageCmd removeImageCmd = ClientUpdater.getUpdatedClient().removeImageCmd(imageId)) {
             removeImageCmd.exec();
             System.out.println("Image Removed: " + imageId + "\n");

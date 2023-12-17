@@ -225,6 +225,11 @@ final class GetHelp {
         System.out.println("Transferring you "
                + "to the Main Menu ...");
     }
+
+    /**
+     * This method pulls an image from DockerHub
+     * and adds it to the imagelist
+     */
     public static void case2Pull() {
         System.out.println("You chose: 2) Pull an image "
                 + "from DockerHub\n");
@@ -283,12 +288,20 @@ final class GetHelp {
                 + "an image\n");
         System.out.println("Choose one of the images below to REMOVE it.");
         String imageIdRemove = DockerImage.chooseAnImage();
-        ExecutorThread executorRemoveImage = new ExecutorThread(imageIdRemove, ExecutorThread.TaskType.REMOVEIMAGE);
-        executorRemoveImage.start();
-        try {
-            executorRemoveImage.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        System.out.println("If you remove this image, its instances will be removed with it" +
+                "\nAre you sure you want to remove it? Answer Y or N (Yes/No)");
+        System.out.print("\nAnswer: ");
+        Scanner in = new Scanner(System.in);
+        String ans = in.nextLine();
+        if (ans == "Y") {
+            ExecutorThread executorRemoveImage = new ExecutorThread(imageIdRemove, ExecutorThread.TaskType.REMOVEIMAGE);
+            executorRemoveImage.start();
+            System.out.println("Removing image and image's instances...");
+            try {
+                executorRemoveImage.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     } //end case 3 Image Menu: Remove an Image.
     public static void goToContTools() {
