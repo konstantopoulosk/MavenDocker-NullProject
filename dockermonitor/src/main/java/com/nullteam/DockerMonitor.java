@@ -114,7 +114,7 @@ public class DockerMonitor extends Thread {
                     c.getNames()[0],
                     c.getImage(),
                     c.getState(),
-                    c.getCommand(),
+                    c.getCommand().toString(),
                     c.getCreated().toString(),
                     c.getPorts().toString().split("@")[1].toString()
             };

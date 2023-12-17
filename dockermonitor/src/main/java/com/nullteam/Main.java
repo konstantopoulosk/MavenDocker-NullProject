@@ -2,40 +2,31 @@
  * Package for our .java files
  */
 package com.nullteam;
-import org.apache.commons.collections4.Get;
-
 import javax.xml.crypto.Data;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 import java.util.Scanner;
 final class Main { //Utility classes should not be defined public
     private Main() { //Just Doing what CheckStyle says
     }
     public static void main(final String[] args) {
-        ClientUpdater.connectionAccomplished(); //
+        ClientUpdater.connectionAccomplished();
         Scanner in = new Scanner(System.in);
         GetHelp.listImage();
         GetHelp.listContainers();
-        //Initialized Monitor Thread.
         DockerMonitor monitor = new DockerMonitor();
-        monitor.start();
-        
-        //Initialized Database Thread.
+        monitor.start(); //Initialized Monitor Thread.
         DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
-        databaseThread.start();
-
-        //Initialized menu//
+        databaseThread.start(); //Initialized Database Thread.
         System.out.println("Welcome!");
-        for (;;) {
+        for (;;) { //Initialized menu//
             Messages.mainMenu();
             String menu = in.nextLine(); //Which menu to show
             try {
                 switch (menu) {
                     case "1"://Containers Menu
-                        System.out.println("\nTransferring you to the Container Menu ...");
+                        System.out.println("\nTransferring you" + " to the Container Menu ...");
                         flagCon: //Creating a loop to stay in the containers menu until  user chooses to leave
                         while (true) {
                             Messages.containersMenu();
@@ -46,13 +37,13 @@ final class Main { //Utility classes should not be defined public
                                         //printing ALL containers
                                         System.out.println("You chose:"
                                                 + "1) View ALL the "
-                                                + "containers\n");
+                                               + "containers\n");
                                         DockerInstance.listAllContainers();
                                         break;
                                     case "2": //printing ACTIVE containers-only
                                         System.out.println("You chose: "
                                                 + "2) View ACTIVE "
-                                                + "containers only\n");
+                                               + "containers only\n");
                                         DockerInstance.listActiveContainers();
                                         break;
                                     case "3":
@@ -101,41 +92,6 @@ final class Main { //Utility classes should not be defined public
                                             }
                                         }
                                         break;
-                                    case "4": //inspect a container (volumes-subnets-logs)
-                                        GetHelp.goToInspectContainer();
-                                        flagInspect: //stay in the Inspect Container menu
-                                        while (true) {
-                                            Messages.inspectContainer();
-                                            String ansI = in.nextLine();
-                                            try{
-                                                switch (ansI) {
-                                                    case "1":
-                                                        GetHelp.showVolumes();
-                                                        break;
-                                                    case "2":
-                                                        //show subnets to be done
-                                                        break;
-                                                    case "3":
-                                                        //show logs to be done
-                                                        break;
-                                                    case ".."://GO BACK
-                                                        GetHelp.goToContMenu();
-                                                        break flagInspect;
-                                                    case "*": //Exiting the app
-                                                        Messages.exitApp();
-                                                        break;
-                                                    default:
-                                                        GetHelp.thr(ansI);
-                                                }
-                                            } catch (IllegalStateException e) {
-                                                GetHelp.repChoice();
-                                            } catch (IOException e) {
-                                                throw new RuntimeException(e);
-                                            } catch (InterruptedException e) {
-                                                throw new RuntimeException(e);
-                                            }
-                                        }
-                                        break;
                                     case "..": //going back to main menu...
                                         GetHelp.goToMainMenu();
                                         break flagCon;
@@ -150,7 +106,6 @@ final class Main { //Utility classes should not be defined public
                             }
                         }
                         break; //end of case 1
-
                     case "2": // Image menu
                         GetHelp.goToImMenu(); //Loop to stay
                         flagImage: //until user NotTo

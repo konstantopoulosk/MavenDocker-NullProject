@@ -1,13 +1,15 @@
 package com.nullteam;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
+
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvMalformedLineException;
 import com.opencsv.exceptions.CsvValidationException;
-import java.io.*;
+
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class DatabaseThread extends Thread {
@@ -24,8 +26,6 @@ public class DatabaseThread extends Thread {
     @Override
     public void run() {
         try {
-            //Those are temporary.
-
             deleteAllRowsFromTable(connection, "dockerimage");
             deleteAllRowsFromTable(connection,"dockerinstance");
             deleteAllRowsFromTable(connection, "measurementsofcontainers");
@@ -38,11 +38,11 @@ public class DatabaseThread extends Thread {
             }
             while (!Thread.currentThread().isInterrupted()) { //Runs until interrupted
                  //Table not empty we should update the rows. not insert something
-                if (hasNewDataImages()) { //if new data -> do sth, else do nth
+                if (hasNewData("images.csv", currentStateImage, lastStateImage)) { //if new data -> do sth, else do nth
                     updateImages(connection);
                 }
                     //Table not empty -> Update not insert
-                if (hasNewDataContainers()) { //New data -> do sth
+                if (hasNewData("containers.csv", currentStateContainer, lastStateContainer)) { //New data -> do sth
                     updateContainers(connection);
                 }
             }
@@ -57,11 +57,13 @@ public class DatabaseThread extends Thread {
             CSVReader csvReader = new CSVReader(fr);
             String[] image;
             while ((image = csvReader.readNext()) != null) {
-                images++;
-                addToMeasurementsOf(connection, "measurementsofimages", "idmi",images);
-                String queryImage = String.format("INSERT INTO dockerimage (id, repository, tag, timesUsed, size, idmi) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", image[0], image[1], image[2], image[3], image[4], images);
-                Statement statement = connection.createStatement();
-                statement.executeUpdate(queryImage);
+                if (!image[0].equals("Image ID")) {
+                    images++;
+                    addToMeasurementsOf(connection, "measurementsofimages", "idmi", images);
+                    String queryImage = String.format("INSERT INTO dockerimage (id, repository, tag, timesUsed, size, idmi) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", image[0], image[1], image[2], image[3], image[4], images);
+                    Statement statement = connection.createStatement();
+                    statement.executeUpdate(queryImage);
+                }
             }
             csvReader.close();
         } catch (SQLException | IOException | CsvValidationException e) {
@@ -75,66 +77,41 @@ public class DatabaseThread extends Thread {
             CSVReader csvReader = new CSVReader(fr);
             String[] container;
             while ((container = csvReader.readNext()) != null) {
-                containers++;
-                addToMeasurementsOf(connection,"measurementsofcontainers", "idmc", containers);
-                String queryContainer = String.format("INSERT INTO dockerinstance (id, name, image, state, command, created, ports, idmc) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", container[0], container[1], container[2], container[3], container[4], container[5], container[6], containers);
-                Statement statement = connection.createStatement();
-                statement.executeUpdate(queryContainer);
+                if (!container[0].equals("Container ID")) {
+                    containers++;
+                    addToMeasurementsOf(connection, "measurementsofcontainers", "idmc", containers);
+                    String queryContainer = String.format("INSERT INTO dockerinstance (id, name, image, state, command, created, ports, idmc) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", container[0], container[1], container[2], container[3], container[4], container[5], container[6], containers);
+                    Statement statement = connection.createStatement();
+                    statement.executeUpdate(queryContainer);
+                }
             }
             csvReader.close();
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
-        } catch (CsvValidationException e) {
-            // This block will be executed if the CSV file contains a malformed line.
-            System.out.println("CSV file contains a malformed line. The line number is: " + e.getLineNumber());
-        }
-    }
-    //Checks if CSV has any new data since last checked
-    public boolean hasNewDataImages() {
-        try {
-            FileReader fileReader = new FileReader("images.csv");
-            CSVReader csvReader = new CSVReader(fileReader);
-            currentStateImage = new ArrayList<>();
-            String[] currentImage;
-            while (( currentImage = csvReader.readNext()) != null) {
-                currentStateImage.add(currentImage);
-            }
-            csvReader.close();
-            if (!DockerMonitor.listsAreEqual(currentStateImage, lastStateImage)) {
-                lastStateImage = new ArrayList<>(currentStateImage);
-                return true;
-            } else {
-                return false;
-            }
-        } catch (CsvValidationException | IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    //Checks if CSV has any new data since last checked
-    public boolean hasNewDataContainers() {
-        boolean flag = true;
-         while (flag) {
-             try {
-                 FileReader fr = new FileReader("containers.csv");
-                 CSVReader csvReader = new CSVReader(fr);
-                 currentStateContainer = new ArrayList<>();
-                 String[] currentContainer;
-                 while ((currentContainer = csvReader.readNext()) != null) {
-                     currentStateContainer.add(currentContainer);
-                 }
-                 csvReader.close();
-                 flag = false;
-                 if (!DockerMonitor.listsAreEqual(currentStateContainer, lastStateContainer)) {
-                     lastStateContainer = new ArrayList<>(currentStateContainer);
-                     return true;
-                 } else {
-                     return false;
-                 }
-             } catch (CsvValidationException | IOException e) {
+        } catch (CsvValidationException _) {
 
+        }
+    }
+    //Checks if CSV has any new data since last checked
+    public boolean hasNewData(String fileName, List<String[]> current, List<String[]> last) {
+         try {
+             FileReader fileReader = new FileReader(fileName);
+             CSVReader csvReader = new CSVReader(fileReader);
+             current = new ArrayList<>();
+             String[] currentOnFile;
+             while (( currentOnFile = csvReader.readNext()) != null) {
+                 current.add(currentOnFile);
              }
+             csvReader.close();
+             if (!DockerMonitor.listsAreEqual(current, last)) {
+                 last = new ArrayList<>(current);
+                 return true;
+             } else {
+                 return false;
+             }
+         } catch (CsvValidationException | IOException e) {
+             throw new RuntimeException(e);
          }
-         return false;
     }
     public static void deleteAllRowsFromTable(Connection connection, String tableName) {
         try {
@@ -176,13 +153,15 @@ public class DatabaseThread extends Thread {
             CSVReader csvReader = new CSVReader(fr);
             String[] image;
             while ((image = csvReader.readNext()) != null) {
-                Statement statement = connection.createStatement();
-                String queryDelete = String.format("DELETE FROM dockerimage WHERE id = '%s'", image[0]);
-                statement.executeUpdate(queryDelete);
-                images++;
-                addToMeasurementsOf(connection, "measurementsofimages", "idmi", images);
-                String query = String.format("REPLACE INTO dockerimage (id, repository, tag, timesUsed, size, idmi) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", image[0], image[1], image[2], image[3], image[4], images);
-                statement.executeUpdate(query);
+                if (!image[0].equals("Image ID")) {
+                    Statement statement = connection.createStatement();
+                    String queryDelete = String.format("DELETE FROM dockerimage WHERE id = '%s'", image[0]);
+                    statement.executeUpdate(queryDelete);
+                    images++;
+                    addToMeasurementsOf(connection, "measurementsofimages", "idmi", images);
+                    String query = String.format("REPLACE INTO dockerimage (id, repository, tag, timesUsed, size, idmi) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", image[0], image[1], image[2], image[3], image[4], images);
+                    statement.executeUpdate(query);
+                }
             }
             csvReader.close();
         } catch (IOException | CsvValidationException | SQLException e) {
@@ -200,15 +179,12 @@ public class DatabaseThread extends Thread {
                 statement.executeUpdate(queryDelete);
                 containers++;
                 addToMeasurementsOf(connection, "measurementsofcontainers", "idmc", containers);
-                String query = String.format("REPLACE INTO dockerinstance (id, name, image, state, command, created, ports, idmc) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", container[0], container[1], container[2], container[3], container[4], container[5], container[6], containers);
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
-                for (int i = 0; i < container.length; i++) {
-                    preparedStatement.setString(i + 1, container[i]);
-                }
-                preparedStatement.setInt(container.length + 1, containers);
-                preparedStatement.executeUpdate();
+                String query = String.format("REPLACE INTO dockerinstance (id, name, image, state, command, created, ports, idmc) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", container[0], container[1], container[2], container[3], container[4], container[5], container[6], containers);
+                statement.executeUpdate(query);
             }
             csvReader.close();
+        } catch (ArrayIndexOutOfBoundsException | CsvMalformedLineException _) {
+
         } catch (CsvValidationException | IOException | SQLException ex) {
             throw new RuntimeException(ex);
         }
