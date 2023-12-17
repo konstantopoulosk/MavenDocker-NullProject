@@ -6,28 +6,21 @@ import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 import java.util.Scanner;
 final class Main { //Utility classes should not be defined public
     private Main() { //Just Doing what CheckStyle says
     }
     public static void main(final String[] args) {
-        ClientUpdater.connectionAccomplished(); //
+        ClientUpdater.connectionAccomplished();
         Scanner in = new Scanner(System.in);
         GetHelp.listImage();
         GetHelp.listContainers();
-        //Initialized Monitor Thread.
         DockerMonitor monitor = new DockerMonitor();
-        monitor.start();
-        //Initialized Database Thread.
-
+        monitor.start(); //Initialized Monitor Thread.
         DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
-        databaseThread.start();
-
-
-        //Initialized menu//
+        databaseThread.start(); //Initialized Database Thread.
         System.out.println("Welcome!");
-        for (;;) {
+        for (;;) { //Initialized menu//
             Messages.mainMenu();
             String menu = in.nextLine(); //Which menu to show
             try {
@@ -113,7 +106,6 @@ final class Main { //Utility classes should not be defined public
                             }
                         }
                         break; //end of case 1
-
                     case "2": // Image menu
                         GetHelp.goToImMenu(); //Loop to stay
                         flagImage: //until user NotTo
