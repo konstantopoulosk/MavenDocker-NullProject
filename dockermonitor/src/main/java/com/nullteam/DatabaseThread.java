@@ -210,7 +210,7 @@ public class DatabaseThread extends Thread {
             }
             csvReader.close();
         } catch (CsvValidationException | IOException | SQLException ex) {
-            throw new RuntimeException(ex);
+
         }
     }
 }

@@ -1,6 +1,5 @@
 "Image ID","Repository Name","Image Tag","Times Used","Size"
 "sha256:174c8c134b2a94b5bb0b37d9a2b6ba0663d82d23ebf62bd51f74a2fd457333da","ubuntu","latest","6","77850032"
-"sha256:f8c20f8bbcb684055b4fea470fdd169c86e87786940b3262335b12ec3adef418","alpine","latest","16","7377066"
 "sha256:f5fb98afcf9f5c6e8e069557f605b15b52643166c82ac5695f49fc6b0be04ee8","busybox","latest","9","4261566"
 "sha256:593aee2afb642798b83a85306d2625fd7f089c0a1242c7e75a237846d80aa2a0","nginx","1.25","17","186779297"
 "sha256:6f90e67c6517ddbfbd701490443ca2645964d5a4da0382e9c144ecfaaa972d4b","maven","latest","1","508655066"
