@@ -1,0 +1,16 @@
+zah07keo3j2em6l1xdhr -> USERNAME
+pscale_pw_9Z0iV2tptrOXxA5ckawYYLfHpJnWAky4o6xji5kp0kr -> Password
+
+
+Those are given.
+
+
+Name of database: dockerdb
+Username: gregalexan
+password: nullteamdockerdb
+
+
+DB_HOST=gcp.connect.psdb.cloud
+DB_USERNAME=zah07keo3j2em6l1xdhr
+DB_PASSWORD=pscale_pw_9Z0iV2tptrOXxA5ckawYYLfHpJnWAky4o6xji5kp0kr
+DB_NAME=dockerdb

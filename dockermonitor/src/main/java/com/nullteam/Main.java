@@ -2,8 +2,12 @@
  * Package for our .java files
  */
 package com.nullteam;
+import org.glassfish.jersey.client.ClientAsyncExecutor;
+
+import javax.ws.rs.client.Client;
 import javax.xml.crypto.Data;
 import java.io.IOException;
+import java.lang.ref.Cleaner;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,7 +22,10 @@ final class Main { //Utility classes should not be defined public
         GetHelp.listContainers();
         DockerMonitor monitor = new DockerMonitor();
         monitor.start(); //Initialized Monitor Thread.
-        //DatabaseThread databaseThread = new DatabaseThread(ClientUpdater.connectToDatabase());
+        Connection connection = ClientUpdater.connectToDatabase();
+        //ClientUpdater.dropTables(connection);
+        //ClientUpdater.createTables(connection);
+        //DatabaseThread databaseThread = new DatabaseThread(connection);
         //databaseThread.start(); //Initialized Database Thread.
         System.out.println("Welcome!");
         for (;;) { //Initialized menu//
