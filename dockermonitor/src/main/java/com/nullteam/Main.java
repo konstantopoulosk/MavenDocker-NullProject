@@ -23,6 +23,7 @@ final class Main { //Utility classes should not be defined public
         DockerMonitor monitor = new DockerMonitor();
         monitor.start(); //Initialized Monitor Thread.
         Connection connection = ClientUpdater.connectToDatabase();
+        assert connection != null;
         ClientUpdater.dropTables(connection);
         ClientUpdater.createTables(connection);
         DatabaseThread databaseThread = new DatabaseThread(connection);
@@ -90,7 +91,6 @@ final class Main { //Utility classes should not be defined public
                                                         GetHelp.goToContMenu();
                                                         break flagTools;
                                                     case "*": //Exiting the app
-                                                        ClientUpdater.closeConnection(connection);
                                                         Messages.exitApp();
                                                         break;
                                                     default:
@@ -122,7 +122,6 @@ final class Main { //Utility classes should not be defined public
                                                         GetHelp.goToContMenu();
                                                         break flagInspect;
                                                     case "*": //Exiting the app
-                                                        ClientUpdater.closeConnection(connection);
                                                         Messages.exitApp();
                                                         break;
                                                     default:
@@ -139,7 +138,6 @@ final class Main { //Utility classes should not be defined public
                                         GetHelp.goToMainMenu();
                                         break flagCon;
                                     case "*": //Exiting the APP
-                                        ClientUpdater.closeConnection(connection);
                                         Messages.exitApp();
                                         break;
                                     default:
@@ -177,7 +175,6 @@ final class Main { //Utility classes should not be defined public
                                         GetHelp.goToMainMenu();
                                         break flagImage;
                                     case "*": //Exiting the app
-                                        ClientUpdater.closeConnection(connection);
                                         Messages.exitApp();
                                         break;
                                     default:
@@ -189,7 +186,6 @@ final class Main { //Utility classes should not be defined public
                         }
                         break; //end of case 2
                     case "*"://exiting APP!!!
-                        ClientUpdater.closeConnection(connection);
                         Messages.exitApp();
                         break;
                     default:

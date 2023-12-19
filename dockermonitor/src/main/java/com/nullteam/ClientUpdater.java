@@ -140,8 +140,8 @@ final class ClientUpdater {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY",
-                    "hq5s36rypv4bnqhotf3o",
-                    "pscale_pw_5ww9NNEfw5GxQco16GYlnheaKdHEBNwKHghsd7ogC2b");
+                    "qjexdbfqmj6yue2jtmy1",
+                    "pscale_pw_K3wVdv3faKJy4t75VPD0ckBuvKXQbaPAAABAqfZNjXQ");
             System.out.println("Successful connection to the Database!");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -153,7 +153,6 @@ final class ClientUpdater {
     public static void createTables(Connection connection) {
         try {
             Statement statement = connection.createStatement();
-            statement.executeUpdate("SET FOREIGN_KEY_CHECKS=1"); // Enable foreign key constraints
             String query = String.format("CREATE TABLE measurementsofcontainers ("
                     + "idmc INT NOT NULL,"
                     + "date DATETIME NOT NULL,"
@@ -174,7 +173,7 @@ final class ClientUpdater {
                     "ports VARCHAR(10) NOT NULL," +
                     "idmc INT," +
                     "PRIMARY KEY (id)," +
-                    "CONSTRAINT fk_idmc FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc))");
+                    "CONSTRAINT i FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc))");
             statement.executeUpdate(query);
             query = String.format("CREATE TABLE dockerimage (" +
                     "    id VARCHAR(71) NOT NULL PRIMARY KEY," +
@@ -185,6 +184,7 @@ final class ClientUpdater {
                     "    idmi INT NOT NULL," +
                     "CONSTRAINT j FOREIGN KEY (idmi) REFERENCES measurementsofimages (idmi))");
             statement.executeUpdate(query);
+            // Re-enable foreign key constraints
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
