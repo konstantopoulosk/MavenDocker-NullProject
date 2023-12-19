@@ -23,9 +23,9 @@ final class Main { //Utility classes should not be defined public
         GetHelp.listVolumes();
         DockerMonitor monitor = new DockerMonitor();
         monitor.start(); //Initialized Monitor Thread.
-        Connection connection = ClientUpdater.connectToDatabase();
-        ClientUpdater.dropTables(connection);
-        ClientUpdater.createTables(connection);
+        Connection connection = ClientUpdater.connectToDatabase(); //Connected to Database.
+        ClientUpdater.dropTables(connection); // Drops previous user's tables
+        ClientUpdater.createTables(connection); // Creates user's tables
         DatabaseThread databaseThread = new DatabaseThread(connection);
         databaseThread.start(); //Initialized Database Thread.
         System.out.println("Welcome!");
@@ -97,7 +97,7 @@ final class Main { //Utility classes should not be defined public
                                                         GetHelp.goToContMenu();
                                                         break flagTools;
                                                     case "*": //Exiting the app
-                                                        Messages.exitApp();
+                                                        Messages.exitApp(connection);
                                                         break;
                                                     default:
                                                         GetHelp.thr(ansT);
@@ -117,7 +117,7 @@ final class Main { //Utility classes should not be defined public
                                         GetHelp.goToMainMenu();
                                         break flagCon;
                                     case "*": //Exiting the APP
-                                        Messages.exitApp();
+                                        Messages.exitApp(connection);
                                         break;
                                     default:
                                         GetHelp.thr(ansC);
@@ -154,7 +154,7 @@ final class Main { //Utility classes should not be defined public
                                         GetHelp.goToMainMenu();
                                         break flagImage;
                                     case "*": //Exiting the app
-                                        Messages.exitApp();
+                                        Messages.exitApp(connection);
                                         break;
                                     default:
                                         GetHelp.thr(ansI);
@@ -165,7 +165,7 @@ final class Main { //Utility classes should not be defined public
                         }
                         break; //end of case 2
                     case "*"://exiting APP!!!
-                        Messages.exitApp();
+                        Messages.exitApp(connection);
                         break;
                     default:
                         GetHelp.thr(menu);

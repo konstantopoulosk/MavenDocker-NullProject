@@ -53,30 +53,26 @@ final class Messages {
 
     public static void exitApp(Connection connection) {
         Scanner in = new Scanner(System.in);
-        while (true) {
-            System.out.println("\nAre you sure you want to "
+        System.out.println("\nAre you sure you want to "
                     + "exit? Answer Y or N (Yes/No)\n");
-            System.out.print("Answer: ");
-            String finalAnswer = in.nextLine();
-            try {
-                switch (finalAnswer) {
-                    case "Y":
-                        ClientUpdater.closeConnection(connection);
-                        System.out.println("\nBye..."
+        System.out.print("Answer: ");
+        String finalAnswer = in.nextLine();
+        try {
+            switch (finalAnswer) {
+                case "Y":
+                    ClientUpdater.closeConnection(connection);
+                    System.out.println("\nBye..."
                                 + "\n*******EXITING APP*******");
-                        System.exit(0);
-                        break;
-                    case "N":
-                        System.out.println("Going Back to Main Menu ...");
-                        Messages.mainMenu();
-                        break;
-                    default:
-                        GetHelp.thr(finalAnswer);
-                }
-            } catch (IllegalStateException e) {
-                GetHelp.repChoice();
+                    System.exit(0);
+                    break;
+                case "N":
+                    System.out.println("Going Back ... ");
+                    break;
+                default:
+                    GetHelp.thr(finalAnswer);
             }
-
+        } catch (IllegalStateException e) {
+                GetHelp.repChoice();
         }
     }
 }
