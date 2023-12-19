@@ -2,9 +2,9 @@
  * Package for our .java files
  */
 package com.nullteam;
+
 import org.glassfish.jersey.client.ClientAsyncExecutor;
 
-import javax.ws.rs.client.Client;
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.lang.ref.Cleaner;
@@ -20,13 +20,14 @@ final class Main { //Utility classes should not be defined public
         Scanner in = new Scanner(System.in);
         GetHelp.listImage();
         GetHelp.listContainers();
+        GetHelp.listVolumes();
         DockerMonitor monitor = new DockerMonitor();
         monitor.start(); //Initialized Monitor Thread.
         Connection connection = ClientUpdater.connectToDatabase();
-        //ClientUpdater.dropTables(connection);
-        //ClientUpdater.createTables(connection);
-        //DatabaseThread databaseThread = new DatabaseThread(connection);
-        //databaseThread.start(); //Initialized Database Thread.
+        ClientUpdater.dropTables(connection);
+        ClientUpdater.createTables(connection);
+        DatabaseThread databaseThread = new DatabaseThread(connection);
+        databaseThread.start(); //Initialized Database Thread.
         System.out.println("Welcome!");
         for (;;) { //Initialized menu//
             Messages.mainMenu();
@@ -86,6 +87,12 @@ final class Main { //Utility classes should not be defined public
                                                     case "8"://KILL Container
                                                         GetHelp.case8Kill();
                                                         break;
+                                                    case "9": //LOGS of a Container
+                                                        //to be done
+                                                        break;
+                                                    case "0": //SUBNET of a Container
+                                                        //to be done
+                                                        break;
                                                     case ".."://GO BACK
                                                         GetHelp.goToContMenu();
                                                         break flagTools;
@@ -100,38 +107,11 @@ final class Main { //Utility classes should not be defined public
                                             }
                                         }
                                         break;
-                                    case "4": //Inspect a container (volumes-subnets-logs)
-                                        GetHelp.goToInspectContainer();
-                                        flagInspect: //stay in Inspect Container menu
-                                        while (true) {
-                                            Messages.inspectContainer();
-                                            String ansI = in.nextLine();
-                                            try {
-                                                switch (ansI) {
-                                                    case "1":
-                                                        GetHelp.showVolumes();
-                                                        break;
-                                                    case "2":
-                                                        //show subnets to be done
-                                                        break;
-                                                    case "3":
-                                                        //show logs to be done
-                                                        break;
-                                                    case ".."://GO BACK
-                                                        GetHelp.goToContMenu();
-                                                        break flagInspect;
-                                                    case "*": //Exiting the app
-                                                        Messages.exitApp();
-                                                        break;
-                                                    default:
-                                                        GetHelp.thr(ansI);
-                                                }
-                                            } catch (IllegalStateException e) {
-                                                GetHelp.repChoice();
-                                            } catch (IOException | InterruptedException e) {
-                                                throw new RuntimeException(e);
-                                            }
-                                        }
+                                    case "4": //Show volumes
+                                        System.out.println("You chose: "
+                                                + "4) Show container "
+                                                + "volumes\n");
+                                        DockerVolume.showVolumes();
                                         break;
                                     case "..": //going back to main menu...
                                         GetHelp.goToMainMenu();
