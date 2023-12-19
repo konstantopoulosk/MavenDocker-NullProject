@@ -17,7 +17,12 @@ import javax.ws.rs.ProcessingException;
 import java.io.File;
 import java.awt.Desktop;
 import java.util.Properties;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
 final class ClientUpdater {
 
     /**
@@ -129,46 +134,35 @@ final class ClientUpdater {
         return status;
     }
     public static Connection connectToDatabase() {
-     /*
-        Connection connection;
-        String url = "jdbc:mysql://localhost:3306/dockerdb";
-        String user = "root";
-        String password = "nullteamtsipouroVolos123456789";
-
-      */
-        Connection conn;
-        //Load environment variables.
+        Connection connection = null;
+        // Load environment variables
+        /*
         String dbHost = System.getenv("DATABASE_HOST");
         String dbUsername = System.getenv("DATABASE_USERNAME");
         String dbPassword = System.getenv("DATABASE_PASSWORD");
         String dbName = System.getenv("DATABASE");
-        //JDBC connection properties
-        Properties properties = new Properties();
-        /*
-        properties.setProperty("user", dbUsername);
-        properties.setProperty("password", dbPassword);
-        properties.setProperty("useSSL", "true"); //Enable SSL.
+
+        // JDBC connection properties
+        Properties props = new Properties();
+        props.setProperty("user", dbUsername);
+        props.setProperty("password", dbPassword);
+        props.setProperty("useSSL", "true"); // Enable SSL
         */
-
-        /*
-        String DB_HOST= "gcp.connect.psdb.cloud";
-        String DB_USERNAME="zah07keo3j2em6l1xdhr";
-        String DB_PASSWORD="pscale_pw_9Z0iV2tptrOXxA5ckawYYLfHpJnWAky4o6xji5kp0kr";
-        String DB_NAME="dockerdb";
-
-         */
-        String url = "jdbc:mysql://" + dbHost + "/" + dbName;
         try {
+            // Connect to the database
+           // String url = "jdbc:mysql://" + dbHost + "/" + dbName;
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(
+            connection = DriverManager.getConnection(
                     "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY",
-                    "zah07keo3j2em6l1xdhr",
-                    "pscale_pw_9Z0iV2tptrOXxA5ckawYYLfHpJnWAky4o6xji5kp0kr");
-            System.out.println("Successful Connection to Database!");
-        } catch (ClassNotFoundException | SQLException e) {
+                    "qjexdbfqmj6yue2jtmy1",
+                    "pscale_pw_K3wVdv3faKJy4t75VPD0ckBuvKXQbaPAAABAqfZNjXQ");
+            System.out.println("Successful connection to the Database!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return conn; //Connected to Database.
+        return connection;
     }
     public static void createTables(Connection connection) {
         try {
@@ -193,7 +187,7 @@ final class ClientUpdater {
                     "ports VARCHAR(10) NOT NULL," +
                     "idmc INT," +
                     "PRIMARY KEY (id)," +
-                    "CONSTRAINT fk_idmc FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc))");
+                    "CONSTRAINT i FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc))");
             statement.executeUpdate(query);
             query = String.format("CREATE TABLE dockerimage (" +
                     "    id VARCHAR(71) NOT NULL PRIMARY KEY," +
@@ -204,6 +198,7 @@ final class ClientUpdater {
                     "    idmi INT NOT NULL," +
                     "CONSTRAINT j FOREIGN KEY (idmi) REFERENCES measurementsofimages (idmi))");
             statement.executeUpdate(query);
+            // Re-enable foreign key constraints
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -215,6 +210,14 @@ final class ClientUpdater {
             statement.executeUpdate(query);
             query = String.format("DROP TABLE measurementsofimages");
             statement.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void closeConnection(Connection connection) {
+        try {
+            connection.close();
+            System.out.println("Closed connection to the database!");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
