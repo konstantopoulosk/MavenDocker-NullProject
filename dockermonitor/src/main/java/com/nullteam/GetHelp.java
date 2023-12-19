@@ -1,5 +1,6 @@
 package com.nullteam;
 
+import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.Container;
@@ -15,13 +16,11 @@ final class GetHelp {
     private GetHelp() {
     }
     public static void listImage() {
-        //Creating instances of DockerInstance and
-        //DockerImage using info from the DockerClient
         List<Image> images =
                 ClientUpdater.getUpdatedImagesFromClient();
         //Updated Client from ClientUpdater
-        for (Image i : images) { //For every one object in the images list ->
-                                 // creating an object DockerImage
+        for (Image i : images) { //For every one object in the images list
+                                 //creating an object DockerImage
             new DockerImage(i.getRepoDigests()[0],
                     "latest", i.getId());
         }
@@ -31,10 +30,21 @@ final class GetHelp {
                 ClientUpdater.getUpdatedContainersFromClient();
         //updated list with containers
         for (Container c : containers) {
-            //for every one object in the containers list ->
-            // create an object DockerInstance
+            //for every one object in the containers list
+            //create an object DockerInstance
             new DockerInstance(c.getNames()[0], c.getId(),
                     c.getImage(), c.getStatus());
+        }
+    }
+    public static void listVolumes() {
+        List<InspectVolumeResponse> volumes =
+                ClientUpdater.getUpdatedVolumesFromClient();
+        //Updated Client from ClientUpdater
+        for (InspectVolumeResponse v : volumes) {
+            //creating an object DockerVolume
+            //we need to get the CreatedAt from inspect
+            new DockerVolume(v.getDriver(), v.getName(),
+                    DockerVolume.createdAt(v.getName()), v.getMountpoint());
         }
     }
     public static void case1Stop() {
@@ -312,20 +322,6 @@ final class GetHelp {
         System.out.println("Transferring you to the "
                + "Container Tools Menu ...");
     }
-
-    public static void goToInspectContainer() {
-        System.out.println("You chose: "
-                + "4) Inspect a Container\n");
-        System.out.println("Transferring you to the "
-                + "Inspect Container Menu ...");
-    }
-    public static void showVolumes() throws IOException, InterruptedException {
-        System.out.println("\nWhich container's disk volumes would you like to see?");
-        String containerId = DockerInstance.chooseAContainer();
-        List<String> volumes = DockerInstance.getDockerVolumes(containerId);
-        System.out.println("Disk volumes: " + volumes);
-    }
-
     public static void repChoice() {
         System.out.println("Please choose one of the valid options below.\n");
     }

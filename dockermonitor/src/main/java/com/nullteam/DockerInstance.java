@@ -538,36 +538,4 @@ public class DockerInstance {
                 .indexOf(mylist.get(answer-1))).getContainerId();
     }
     */
-
-    /**
-     * This method lists the disc volumes of a container.
-     * @param containerId String
-     * @return List&lt;String&gt;
-     */
-    public static List<String> getDockerVolumes(String containerId) throws IOException, InterruptedException {
-        List<String> command = new ArrayList<>();
-        command.add("docker");
-        command.add("inspect");
-        command.add("--format='{{json .Mounts}}'");
-        command.add(containerId);
-
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        Process process = processBuilder.start();
-
-        StringBuilder output = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            output.append(line).append("\n");
-        }
-
-        process.waitFor();
-
-        if (process.exitValue() != 0) {
-            throw new RuntimeException("Command execution failed. " + output.toString());
-        }
-
-        List<String> volumes = new ArrayList<>();
-        return volumes;
-    }
 }

@@ -1,7 +1,10 @@
 package com.nullteam;
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.InspectVolumeResponse;
+import com.github.dockerjava.api.command.ListVolumesResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import java.io.IOException;
@@ -87,6 +90,17 @@ final class ClientUpdater {
             System.out.println("Failed to close the client");
         }
         return images; //Updated Images
+    }
+    public static List<InspectVolumeResponse> getUpdatedVolumesFromClient() {
+        DockerClient client = getUpdatedClient(); //Method Below
+        ListVolumesResponse volumesResponse = client.listVolumesCmd().exec();
+        List<InspectVolumeResponse> volumes = volumesResponse.getVolumes();
+        try {
+            client.close();
+        } catch (IOException e) {
+            System.out.println("Failed to close the client");
+        }
+        return volumes; //Updated Volumes
     }
     /**
      * This method gets the Updated Docker Client.

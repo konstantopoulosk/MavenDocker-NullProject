@@ -7,9 +7,9 @@ final class Messages {
 
     public static void mainMenu() {
         System.out.println("        ~Main Menu~     \n");
-        System.out.println("(1) Open Container menu\n"
-                + "(2) Open Image menu"
-                + "\n(*) Exit"); //more functionality to be added
+        System.out.println("(1) Inspect Containers\n"
+                + "(2) Inspect Images\n"
+                + "(*) Exit"); //more functionality to be added
         System.out.print("YOUR CHOICE ---> ");
     }
 
@@ -19,7 +19,7 @@ final class Messages {
         System.out.println("(1) View ALL the containers\n"
                 + "(2) View ACTIVE containers only\n"
                 + "(3) Container Tools\n"
-                + "(4) Inspect a Container\n"
+                + "(4) Container Volumes\n"
                 + "Press (..) to go Back(Main Menu)\n"
                 + "Press (*) to EXIT THE APP");
         System.out.print("YOUR CHOICE ---> ");
@@ -32,17 +32,9 @@ final class Messages {
                 + "(3) RENAME a container\n(4) REMOVE a container"
                 + "\n(5) RESTART a container\n(6) PAUSE a "
                 + "container\n(7) UNPAUSE a container"
-                + "\n(8) KILL a container\nPress (..) to go Back(Container Menu)"
+                + "\n(8) KILL a container\n(9)Show LOGS of a Container"
+                + "\n(0)Show SUBNET of a Container\nPress (..) to go Back(Container Menu)"
                 + "\nPress (*) to EXIT THE APP");
-        System.out.print("YOUR CHOICE---> ");
-    }
-
-    public static void inspectContainer() {
-        System.out.println("\n          ~Inspect a Container~"
-                + "\n         ---------------------");
-        System.out.println("(1) Disk volumes\n(2) Subnets\n(3) Logs\n"
-                    + "Press (..) to go back(Container Menu)\n"
-                    + "Press (*) to EXIT THE APP");
         System.out.print("YOUR CHOICE---> ");
     }
 
