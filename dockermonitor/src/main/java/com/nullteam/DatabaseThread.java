@@ -90,6 +90,8 @@ public class DatabaseThread extends Thread {
             throw new RuntimeException(e);
         } catch (CsvValidationException _) {
 
+        } catch (ArrayIndexOutOfBoundsException e) {
+
         }
     }
     //Checks if CSV has any new data since last checked

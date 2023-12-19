@@ -121,27 +121,14 @@ final class ClientUpdater {
     }
     public static Connection connectToDatabase() {
         Connection connection = null;
-        // Load environment variables
-        /*
-        String dbHost = System.getenv("DATABASE_HOST");
-        String dbUsername = System.getenv("DATABASE_USERNAME");
-        String dbPassword = System.getenv("DATABASE_PASSWORD");
-        String dbName = System.getenv("DATABASE");
-
-        // JDBC connection properties
-        Properties props = new Properties();
-        props.setProperty("user", dbUsername);
-        props.setProperty("password", dbPassword);
-        props.setProperty("useSSL", "true"); // Enable SSL
-        */
         try {
             // Connect to the database
            // String url = "jdbc:mysql://" + dbHost + "/" + dbName;
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY",
-                    "qjexdbfqmj6yue2jtmy1",
-                    "pscale_pw_K3wVdv3faKJy4t75VPD0ckBuvKXQbaPAAABAqfZNjXQ");
+                    "2zi5nloj67hbyd2kj0v4",
+                    "pscale_pw_dFEza7bdXQNbpaaCwU328EFeSGXcSLdC6g4u0qEp6u9");
             System.out.println("Successful connection to the Database!");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -192,7 +179,11 @@ final class ClientUpdater {
     public static void dropTables(Connection connection) {
         try {
             Statement statement = connection.createStatement();
-            String query = String.format("DROP TABLE measurementsofcontainers");
+            String query = String.format("DROP TABLE dockerinstance");
+            statement.executeUpdate(query);
+            query = String.format("DROP TABLE dockerimage");
+            statement.executeUpdate(query);
+            query = String.format("DROP TABLE measurementsofcontainers");
             statement.executeUpdate(query);
             query = String.format("DROP TABLE measurementsofimages");
             statement.executeUpdate(query);

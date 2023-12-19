@@ -1,4 +1,5 @@
 package com.nullteam;
+import java.sql.Connection;
 import java.util.Scanner;
 final class Messages {
     private Messages() {
@@ -58,7 +59,7 @@ final class Messages {
         System.out.print("YOUR CHOICE ---> ");
     }
 
-    public static void exitApp() {
+    public static void exitApp(Connection connection) {
         Scanner in = new Scanner(System.in);
         while (true) {
             System.out.println("\nAre you sure you want to "
@@ -68,6 +69,7 @@ final class Messages {
             try {
                 switch (finalAnswer) {
                     case "Y":
+                        ClientUpdater.closeConnection(connection);
                         System.out.println("\nBye..."
                                 + "\n*******EXITING APP*******");
                         System.exit(0);
