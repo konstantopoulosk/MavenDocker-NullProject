@@ -133,11 +133,18 @@ final class ClientUpdater {
         }
         return status;
     }
+
+    /**
+     * This method makes a connection
+     * to a database using a given url,
+     * username and password.
+     * @return Connection
+     */
     public static Connection connectToDatabase() {
         Connection connection = null;
         try {
             // Connect to the database
-           // String url = "jdbc:mysql://" + dbHost + "/" + dbName;
+            // String url = "jdbc:mysql://" + dbHost + "/" + dbName;
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY",
@@ -151,6 +158,12 @@ final class ClientUpdater {
         }
         return connection;
     }
+
+    /**
+     * This method creates tables inside
+     * the database query.
+     * @param connection Connection
+     */
     public static void createTables(Connection connection) {
         try {
             Statement statement = connection.createStatement();
@@ -190,6 +203,12 @@ final class ClientUpdater {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * This method drops the tables that have
+     * been created inside the database query.
+     * @param connection Connection
+     */
     public static void dropTables(Connection connection) {
         try {
             Statement statement = connection.createStatement();
@@ -205,6 +224,12 @@ final class ClientUpdater {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * This method closes the connection with the database
+     * in order to reopen it once the user reopens the app.
+     * @param connection Connection
+     */
     public static void closeConnection(Connection connection) {
         try {
             connection.close();

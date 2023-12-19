@@ -96,7 +96,7 @@ public class DockerVolume {
     public String toString() {
         return "Driver: " + getDriver() + " Name: "
                 + getName() + " CreatedAt: " + getCreated()
-                + " Mountpoint: " + getMountpoint();
+                + "   Mountpoint: " + getMountpoint();
     }
 
     /**

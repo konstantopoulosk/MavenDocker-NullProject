@@ -132,22 +132,24 @@ public class DatabaseThread extends Thread {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
     }
     public boolean checkTableEmpty(Connection connection, String tableName) {
-        try {
+        boolean flag = false; //flag variable to help
+         try {
             String query = String.format("SELECT * FROM %s", tableName);
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
-                return true; // IS EMPTY
+                flag = true; // IS EMPTY
             } else {
-                return false; //NOT EMPTY
+                flag = false; //NOT EMPTY
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
+        return flag;
     }
     public void updateImages(Connection connection) {
         try {
@@ -167,7 +169,7 @@ public class DatabaseThread extends Thread {
             }
             csvReader.close();
         } catch (IOException | CsvValidationException | SQLException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
     }
     public void updateContainers(Connection connection) {
@@ -188,7 +190,7 @@ public class DatabaseThread extends Thread {
         } catch (ArrayIndexOutOfBoundsException | CsvMalformedLineException _) {
 
         } catch (CsvValidationException | IOException | SQLException ex) {
-            throw new RuntimeException(ex);
+            //throw new RuntimeException(ex);
         }
     }
 }
