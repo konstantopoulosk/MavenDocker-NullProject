@@ -14,3 +14,13 @@ DB_HOST=gcp.connect.psdb.cloud
 DB_USERNAME=zah07keo3j2em6l1xdhr
 DB_PASSWORD=pscale_pw_9Z0iV2tptrOXxA5ckawYYLfHpJnWAky4o6xji5kp0kr
 DB_NAME=dockerdb
+
+
+
+Username = 19ngi5chkrn64cuca1kb
+password = pscale_pw_ewro2owyRnOB9mRiThiMveV4V8xUmC0F0kMjWtWoUtc
+
+DB_HOST=gcp.connect.psdb.cloud
+DB_USERNAME=19ngi5chkrn64cuca1kb
+DB_PASSWORD=pscale_pw_ewro2owyRnOB9mRiThiMveV4V8xUmC0F0kMjWtWoUtc
+DB_NAME=dockerdb
