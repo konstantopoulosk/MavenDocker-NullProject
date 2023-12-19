@@ -140,8 +140,8 @@ final class ClientUpdater {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY",
-                    "19ngi5chkrn64cuca1kb",
-                    "pscale_pw_ewro2owyRnOB9mRiThiMveV4V8xUmC0F0kMjWtWoUtc");
+                    "hq5s36rypv4bnqhotf3o",
+                    "pscale_pw_5ww9NNEfw5GxQco16GYlnheaKdHEBNwKHghsd7ogC2b");
             System.out.println("Successful connection to the Database!");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -153,6 +153,7 @@ final class ClientUpdater {
     public static void createTables(Connection connection) {
         try {
             Statement statement = connection.createStatement();
+            statement.executeUpdate("SET FOREIGN_KEY_CHECKS=1"); // Enable foreign key constraints
             String query = String.format("CREATE TABLE measurementsofcontainers ("
                     + "idmc INT NOT NULL,"
                     + "date DATETIME NOT NULL,"
@@ -195,6 +196,14 @@ final class ClientUpdater {
             statement.executeUpdate(query);
             query = String.format("DROP TABLE measurementsofimages");
             statement.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void closeConnection(Connection connection) {
+        try {
+            connection.close();
+            System.out.println("Closed connection to the database!");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
