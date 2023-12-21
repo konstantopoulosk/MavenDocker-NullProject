@@ -445,11 +445,11 @@ public class DockerInstance {
         Scanner in = new Scanner(System.in);
         System.out.print("YOUR CHOICE---> ");
         try { //checking if the input is out of bounds
-        int choice = in.nextInt();
-        if (choice < 1 || choice > containerslist.size()) {
-            System.out.println("Invalid choice.  Please choose on of the containers below.");
-            return chooseAContainer(); // Showing available containers again
-        }
+            int choice = in.nextInt();
+            if (choice < 1 || choice > containerslist.size()) {
+                System.out.println("Invalid choice.  Please choose on of the containers below.");
+                return chooseAContainer(); // Showing available containers again
+            }
             return containerslist.get(choice - 1).getContainerId();
         } catch (InputMismatchException e) {
             System.out.println("Invalid input.  Please choose on of the containers below.");

@@ -21,6 +21,7 @@ final class Main { //Utility classes should not be defined public
         GetHelp.listImage();
         GetHelp.listContainers();
         GetHelp.listVolumes();
+        GetHelp.listNetworks();
         DockerMonitor monitor = new DockerMonitor();
         monitor.start(); //Initialized Monitor Thread.
         Connection connection = ClientUpdater.connectToDatabase(); //Connected to Database.
@@ -45,13 +46,13 @@ final class Main { //Utility classes should not be defined public
                                     case "1":
                                         //printing ALL containers
                                         System.out.println("You chose:"
-                                                + "1) View ALL the "
+                                                + "(1) View ALL the "
                                                 + "containers\n");
                                         DockerInstance.listAllContainers();
                                         break;
                                     case "2": //printing ACTIVE containers-only
                                         System.out.println("You chose: "
-                                                + "2) View ACTIVE "
+                                                + "(2) View ACTIVE "
                                                 + "containers only\n");
                                         DockerInstance.listActiveContainers();
                                         break;
@@ -91,7 +92,7 @@ final class Main { //Utility classes should not be defined public
                                                         //todo
                                                         break;
                                                     case "0": //SUBNET of a Container
-                                                        //todo
+                                                        GetHelp.case0Subnets();
                                                         break;
                                                     case ".."://GO BACK
                                                         GetHelp.goToContMenu();
@@ -109,9 +110,15 @@ final class Main { //Utility classes should not be defined public
                                         break;
                                     case "4": //Show volumes
                                         System.out.println("You chose: "
-                                                + "4) Show container "
+                                                + "(4) Show container "
                                                 + "volumes\n");
                                         DockerVolume.showVolumes();
+                                        break;
+                                    case "5": //Show networks
+                                        System.out.println("You chose: "
+                                                + "(4) Show container "
+                                                + "networks\n");
+                                        DockerNetwork.showNetworks();
                                         break;
                                     case "..": //going back to main menu...
                                         GetHelp.goToMainMenu();
