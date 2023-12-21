@@ -179,7 +179,7 @@ final class GetHelp {
     } //end case 8: Kill
     public static void case0Subnets() {
         if (DockerInstance.noActiveContainers()) {
-            System.out.println("There are no active containers."
+            System.out.println("There are no active containers.\n"
                     + "This means that no container is connected to a network.");
             wait2seconds();
         } else {
