@@ -19,7 +19,8 @@ final class Messages {
         System.out.println("(1) View ALL the containers\n"
                 + "(2) View ACTIVE containers only\n"
                 + "(3) Container Tools\n"
-                + "(4) Container Volumes\n"
+                + "(4) Volumes\n"
+                + "(5) Networks\n"
                 + "Press (..) to go Back(Main Menu)\n"
                 + "Press (*) to EXIT THE APP");
         System.out.print("YOUR CHOICE ---> ");
@@ -32,8 +33,8 @@ final class Messages {
                 + "(3) RENAME a container\n(4) REMOVE a container"
                 + "\n(5) RESTART a container\n(6) PAUSE a "
                 + "container\n(7) UNPAUSE a container"
-                + "\n(8) KILL a container\n(9)Show LOGS of a Container"
-                + "\n(0)Show SUBNET of a Container\nPress (..) to go Back(Container Menu)"
+                + "\n(8) KILL a container\n(9) Show LOGS of a Container"
+                + "\n(0) Show SUBNET of a Container\nPress (..) to go Back(Container Menu)"
                 + "\nPress (*) to EXIT THE APP");
         System.out.print("YOUR CHOICE---> ");
     }

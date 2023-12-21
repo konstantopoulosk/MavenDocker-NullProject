@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.command.ListVolumesResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
@@ -101,6 +102,16 @@ final class ClientUpdater {
             System.out.println("Failed to close the client");
         }
         return volumes; //Updated Volumes
+    }
+    public static List<Network> getUpdatedNetworksFromClient() {
+        DockerClient client = getUpdatedClient(); //Method Below
+        List<Network> networks = client.listNetworksCmd().exec();
+        try {
+            client.close();
+        } catch (IOException e) {
+            System.out.println("Failed to close the client");
+        }
+        return networks; //Updated Volumes
     }
     /**
      * This method gets the Updated Docker Client.
