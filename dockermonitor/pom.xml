@@ -14,7 +14,7 @@
     <groupId>com.nullproject</groupId>
     <artifactId>nullteamproject</artifactId>
     <version>3.3.4</version>
-    
+
     <build>
         <plugins>
             <plugin>

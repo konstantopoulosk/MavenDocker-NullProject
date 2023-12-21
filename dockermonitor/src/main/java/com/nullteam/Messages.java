@@ -60,10 +60,10 @@ final class Messages {
         try {
             switch (finalAnswer) {
                 case "Y":
-                    ClientUpdater.closeConnection(connection);
                     System.out.println("\nBye..."
                                 + "\n*******EXITING APP*******");
                     System.exit(0);
+                    ClientUpdater.closeConnection(connection);
                     break;
                 case "N":
                     System.out.println("Going Back ... ");
