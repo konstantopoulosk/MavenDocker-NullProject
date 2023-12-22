@@ -1,7 +1,7 @@
 package com.nullteam;
 import java.sql.Connection;
 import java.util.Scanner;
-final class Messages {
+public final class Messages {
     private Messages() {
     }
 
@@ -52,19 +52,22 @@ final class Messages {
         System.out.print("YOUR CHOICE ---> ");
     }
 
-    public static void exitApp(Connection connection) {
+    public static void exitApp() {
+        /*
         Scanner in = new Scanner(System.in);
         System.out.println("\nAre you sure you want to "
                     + "exit? Answer Y or N (Yes/No)\n");
         System.out.print("Answer: ");
         String finalAnswer = in.nextLine();
+
+         */
         try {
+/*
             switch (finalAnswer) {
                 case "Y":
                     System.out.println("\nBye..."
                                 + "\n*******EXITING APP*******");
                     System.exit(0);
-                    ClientUpdater.closeConnection(connection);
                     break;
                 case "N":
                     System.out.println("Going Back ... ");
@@ -72,6 +75,9 @@ final class Messages {
                 default:
                     GetHelp.thr(finalAnswer);
             }
+
+ */
+            System.exit(0);
         } catch (IllegalStateException e) {
                 GetHelp.repChoice();
         }

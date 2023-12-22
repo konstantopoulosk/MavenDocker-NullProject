@@ -24,7 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-final class ClientUpdater {
+public final class ClientUpdater {
 
     /**
      * Checks if the connection with the Docker Client was Accomplished

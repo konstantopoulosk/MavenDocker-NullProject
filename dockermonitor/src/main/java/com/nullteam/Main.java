@@ -99,7 +99,7 @@ final class Main { //Utility classes should not be defined public
                                                         GetHelp.goToContMenu();
                                                         break flagTools;
                                                     case "*": //Exiting the app
-                                                        Messages.exitApp(connection);
+                                                        Messages.exitApp();
                                                         break;
                                                     default:
                                                         GetHelp.thr(ansT);
@@ -125,7 +125,7 @@ final class Main { //Utility classes should not be defined public
                                         GetHelp.goToMainMenu();
                                         break flagCon;
                                     case "*": //Exiting the APP
-                                        Messages.exitApp(connection);
+                                        Messages.exitApp();
                                         break;
                                     default:
                                         GetHelp.thr(ansC);
@@ -162,7 +162,7 @@ final class Main { //Utility classes should not be defined public
                                         GetHelp.goToMainMenu();
                                         break flagImage;
                                     case "*": //Exiting the app
-                                        Messages.exitApp(connection);
+                                        Messages.exitApp();
                                         break;
                                     default:
                                         GetHelp.thr(ansI);
@@ -173,7 +173,7 @@ final class Main { //Utility classes should not be defined public
                         }
                         break; //end of case 2
                     case "*"://exiting APP!!!
-                        Messages.exitApp(connection);
+                        Messages.exitApp();
                         break;
                     default:
                         GetHelp.thr(menu);
