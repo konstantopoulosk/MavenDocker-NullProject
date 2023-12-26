@@ -32,8 +32,11 @@ public class App extends Application {
             FileInputStream inputStream = new FileInputStream("docker.png");
             Image icon = new Image(inputStream);
             // End Icon
-
             Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+
 
             primaryStage.getIcons().add(icon);
             primaryStage.setTitle("Docker Project");
