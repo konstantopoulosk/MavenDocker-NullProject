@@ -88,7 +88,7 @@ public class DatabaseThread extends Thread {
             csvReader.close();
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
-        } catch (CsvValidationException _) {
+        } catch (CsvValidationException e) {
 
         } catch (ArrayIndexOutOfBoundsException e) {
 
@@ -187,7 +187,7 @@ public class DatabaseThread extends Thread {
                 statement.executeUpdate(query);
             }
             csvReader.close();
-        } catch (ArrayIndexOutOfBoundsException | CsvMalformedLineException _) {
+        } catch (ArrayIndexOutOfBoundsException | CsvMalformedLineException e) {
 
         } catch (CsvValidationException | IOException | SQLException ex) {
             //throw new RuntimeException(ex);
