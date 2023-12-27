@@ -90,4 +90,22 @@ public class MainSceneController {
         stage.show();
 
     }
+
+    @FXML
+    public void SwitchToImages(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("/Scene4.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+    @FXML
+    public void backtoscene2(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("/Scene2.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
 }
