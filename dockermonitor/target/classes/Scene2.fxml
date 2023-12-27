@@ -12,7 +12,11 @@
             <Font name="Calibri Light Italic" size="18.0" />
          </font>
       </Button>
+<<<<<<< HEAD
       <Button layoutX="554.0" layoutY="319.0" mnemonicParsing="false" text="Image" textFill="#0786db">
+=======
+      <Button layoutX="554.0" layoutY="319.0" mnemonicParsing="false" onAction="#SwitchToImages" text="Image" textFill="#0786db">
+>>>>>>> cdc83d9068b82fc25752079781837f9d554f8dd6
          <font>
             <Font name="Calibri Light Italic" size="18.0" />
          </font>
