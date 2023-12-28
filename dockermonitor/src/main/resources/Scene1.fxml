@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -11,16 +12,19 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="789.0" styleClass="anchor" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
    
    <children>
-      <Button layoutX="14.0" layoutY="110.0" mnemonicParsing="false" onAction="#startApp" prefHeight="42.0" prefWidth="104.0" text="Start App" textFill="#0786db">
+      <Button layoutX="7.0" layoutY="152.0" mnemonicParsing="false" onAction="#startApp" prefHeight="42.0" prefWidth="104.0" text="Start App" textFill="#0786db">
          <font>
             <Font name="Calibri Light Italic" size="18.0" />
          </font></Button>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutY="31.0" lineSpacing="1.0" prefHeight="79.0" prefWidth="796.0" text="NULL-TEAM" textAlignment="CENTER" textFill="#0095ff">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-3.0" layoutY="14.0" lineSpacing="2.0" prefHeight="79.0" prefWidth="796.0" text="NULL-TEAM" textAlignment="CENTER" textFill="#56b0e8e6" underline="true" wrapText="true">
          <font>
             <Font name="Calibri Bold Italic" size="50.0" />
          </font>
+         <effect>
+            <Reflection bottomOpacity="0.2" fraction="1.0" topOffset="10.0" topOpacity="0.2" />
+         </effect>
       </Label>
-      <Button layoutX="678.0" layoutY="110.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="42.0" prefWidth="104.0" text="Exit App" textFill="#0786db">
+      <Button layoutX="671.0" layoutY="152.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="42.0" prefWidth="104.0" text="Exit App" textFill="#0786db">
          <font>
             <Font name="Calibri Light Italic" size="18.0" />
          </font>
