@@ -99,6 +99,7 @@ public class MainSceneController {
         stage.setScene(scene);
         stage.show();
     }
+
     @FXML
     public void backtoscene2(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("/Scene2.fxml"));
@@ -107,5 +108,4 @@ public class MainSceneController {
         stage.setScene(scene);
         stage.show();
     }
-
 }
