@@ -17,7 +17,7 @@
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="27.0" layoutY="288.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" text="Networks" textFill="#162dc1">
+      <Button layoutX="27.0" layoutY="288.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" onAction="#pressNetworks" text="Networks" textFill="#162dc1">
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>
@@ -27,17 +27,17 @@
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="27.0" layoutY="213.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" text="Volumes" textFill="#162dc1">
+      <Button layoutX="27.0" layoutY="213.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" onAction="#pressVolumes" text="Volumes" textFill="#162dc1">
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="27.0" layoutY="357.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" text="Logs" textFill="#162dc1">
+      <Button layoutX="27.0" layoutY="357.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" onAction="#pressLogs" text="Logs" textFill="#162dc1">
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="27.0" layoutY="431.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" text="Exit App" textFill="#162dc1">
+      <Button layoutX="27.0" layoutY="431.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" onAction="#exitApp" text="Exit App" textFill="#162dc1">
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>
