@@ -31,11 +31,7 @@
 <<<<<<< Updated upstream
       <Button layoutX="27.0" layoutY="288.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" onAction="#pressNetworks" text="Networks" textFill="#162dc1">
 =======
-<<<<<<< HEAD
-      <Button layoutX="554.0" layoutY="319.0" mnemonicParsing="false" text="Image" textFill="#0786db">
-=======
       <Button layoutX="576.0" layoutY="324.0" mnemonicParsing="false" onAction="#SwitchToImages" text="Image" textFill="#0786db">
->>>>>>> 41c0c70e3479e82b3a65e6a3dea640e365ad1ec0
 >>>>>>> Stashed changes
          <font>
             <Font name="Calibri Light" size="14.0" />
