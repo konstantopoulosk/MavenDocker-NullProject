@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<<<<<<< Updated upstream
 <?import javafx.scene.control.TextField?>
+=======
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+>>>>>>> Stashed changes
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="789.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
    <children>
+<<<<<<< Updated upstream
       <TextField alignment="TOP_LEFT" disable="true" layoutX="14.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.7" prefHeight="41.0" prefWidth="129.0" promptText="Welcome!" text="Welcome!">
+=======
+      <Button layoutX="264.0" layoutY="324.0" mnemonicParsing="false" text="Container" textFill="#0786db">
+>>>>>>> Stashed changes
          <font>
             <Font name="Calibri Bold Italic" size="22.0" />
          </font>
@@ -17,17 +28,25 @@
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
+<<<<<<< Updated upstream
       <Button layoutX="27.0" layoutY="288.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" onAction="#pressNetworks" text="Networks" textFill="#162dc1">
+=======
+      <Button layoutX="576.0" layoutY="324.0" mnemonicParsing="false" onAction="#SwitchToImages" text="Image" textFill="#0786db">
+>>>>>>> Stashed changes
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
+<<<<<<< Updated upstream
       <Button layoutX="27.0" layoutY="143.0" mnemonicParsing="false" onAction="#switchToImages" prefHeight="42.0" prefWidth="94.0" text="Images" textFill="#162dc1">
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
       <Button layoutX="27.0" layoutY="213.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="94.0" onAction="#pressVolumes" text="Volumes" textFill="#162dc1">
+=======
+      <Button layoutX="258.0" layoutY="454.0" mnemonicParsing="false" onAction="#backtoscene1" prefHeight="35.0" prefWidth="60.0" text="Back" textFill="#0786db">
+>>>>>>> Stashed changes
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>
@@ -42,5 +61,25 @@
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
+      <BorderPane prefHeight="517.0" prefWidth="162.0" style="-fx-background-color: #5881ef;" />
+      <BorderPane layoutX="-1.0" prefHeight="102.0" prefWidth="790.0" style="-fx-background-color: #4268d1;">
+         <center>
+            <Label style="-fx-background-color: white;" text="What Would You Like To Work On?" textFill="#5881ef" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Calibri Italic" size="36.0" />
+               </font>
+            </Label>
+         </center>
+      </BorderPane>
+      <ImageView fitHeight="145.0" fitWidth="249.0" layoutX="187.0" layoutY="164.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Docker%20Containers.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="145.0" fitWidth="249.0" layoutX="486.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@What%20Is%20a%20Docker%20Image.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

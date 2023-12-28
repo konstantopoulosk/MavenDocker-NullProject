@@ -51,6 +51,7 @@ public class MainSceneController {
         stage.setScene(scene);
         stage.show();
     }
+
     @FXML
     public void pressContainers(ActionEvent event) throws IOException {
         System.out.println("Containers Pressed");
