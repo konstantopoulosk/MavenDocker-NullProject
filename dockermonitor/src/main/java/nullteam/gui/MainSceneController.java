@@ -45,15 +45,7 @@ public class MainSceneController {
     }
     @FXML
     public void switchToImages(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("/Scene4.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-    @FXML
-    public void backtoscene2(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("/Scene2.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/images.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -62,17 +54,37 @@ public class MainSceneController {
     @FXML
     public void pressContainers(ActionEvent event) throws IOException {
         System.out.println("Containers Pressed");
+        root = FXMLLoader.load(getClass().getResource("/containers.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
     @FXML
     public void pressLogs(ActionEvent event) throws IOException {
         System.out.println("Logs Pressed");
+        root = FXMLLoader.load(getClass().getResource("/logs.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
     @FXML
     public void pressNetworks(ActionEvent event) throws IOException {
         System.out.println("Networks Pressed");
+        root = FXMLLoader.load(getClass().getResource("/networks.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
     @FXML
     public void pressVolumes(ActionEvent event) throws IOException {
         System.out.println("Volumes Pressed");
+        root = FXMLLoader.load(getClass().getResource("/volumes.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }
