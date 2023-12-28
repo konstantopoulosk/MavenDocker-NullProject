@@ -15,25 +15,28 @@ import java.sql.Connection;
 
 public class App extends Application {
     /*
-    String sceneOne = "nullteam.gui/Scene1.fxml";
-    URL url  = null;
-
+     * String sceneOne = "nullteam.gui/Scene1.fxml";
+     * URL url = null;
+     * 
      */
     static final int width = 1000;
     static final int height = 800;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("/Scene1.fxml"));
-            //Icon
+            // Icon
             FileInputStream inputStream = new FileInputStream("docker.png");
             Image icon = new Image(inputStream);
-            //End Icon
-
-
+            // End Icon
             Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+
 
             primaryStage.getIcons().add(icon);
             primaryStage.setTitle("Docker Project");
@@ -45,11 +48,12 @@ public class App extends Application {
             e.printStackTrace();
         }
     }
+
     public static void main(String[] args) throws Exception {
-        //ClientUpdater.connectionAccomplished();
+        // ClientUpdater.connectionAccomplished();
 
         launch(args);
-        Connection connection = ClientUpdater.connectToDatabase();
+         Connection connection = ClientUpdater.connectToDatabase();
 
     }
 }
