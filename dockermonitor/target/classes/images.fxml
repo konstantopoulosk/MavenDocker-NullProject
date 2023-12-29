@@ -1,46 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="789.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
-   <children>
-      <TextField alignment="TOP_LEFT" disable="true" layoutX="14.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.7" prefHeight="42.0" prefWidth="145.0" promptText="Image Menu" text="Image Menu">
-         <font>
-            <Font name="Calibri Bold Italic" size="22.0" />
-         </font>
-      </TextField>
-      <Button layoutX="27.0" layoutY="74.0" mnemonicParsing="false" onAction="#pressContainers" prefHeight="42.0" prefWidth="94.0" text="Containers" textFill="#162dc1">
-         <font>
-            <Font name="Calibri Light" size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="27.0" layoutY="288.0" mnemonicParsing="false" onAction="#pressNetworks" prefHeight="42.0" prefWidth="94.0" text="Networks" textFill="#162dc1">
-         <font>
-            <Font name="Calibri Light" size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="27.0" layoutY="143.0" mnemonicParsing="false" onAction="#switchToImages" prefHeight="42.0" prefWidth="94.0" text="Images" textFill="#162dc1">
-         <font>
-            <Font name="Calibri Light" size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="27.0" layoutY="213.0" mnemonicParsing="false" onAction="#pressVolumes" prefHeight="42.0" prefWidth="94.0" text="Volumes" textFill="#162dc1">
-         <font>
-            <Font name="Calibri Light" size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="27.0" layoutY="357.0" mnemonicParsing="false" onAction="#pressLogs" prefHeight="42.0" prefWidth="94.0" text="Logs" textFill="#162dc1">
-         <font>
-            <Font name="Calibri Light" size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="27.0" layoutY="431.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="42.0" prefWidth="94.0" text="Exit App" textFill="#162dc1">
-         <font>
-            <Font name="Calibri Light" size="14.0" />
-         </font>
-      </Button>
-   </children>
-</AnchorPane>
+<SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="789.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="516.0" prefWidth="121.0">
+         <children>
+            <TextField alignment="TOP_CENTER" disable="true" layoutX="27.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.7" prefHeight="42.0" prefWidth="183.0" promptText="Containers Menu" text="Containers Menu">
+               <font>
+                  <Font name="Calibri Bold Italic" size="22.0" />
+               </font>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </TextField>
+            <TextField alignment="TOP_CENTER" disable="true" layoutX="627.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.7" prefHeight="41.0" prefWidth="94.0" promptText="Tools" text="Tools">
+               <font>
+                  <Font name="Calibri Bold Italic" size="22.0" />
+               </font>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </TextField>
+            <SplitPane layoutX="19.0" layoutY="62.0" orientation="VERTICAL" prefHeight="439.0" prefWidth="200.0">
+               <effect>
+                  <DropShadow />
+               </effect>
+               <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="198.0">
+                     <children>
+                        <Button layoutX="27.0" layoutY="164.0" mnemonicParsing="false" onAction="#pressVolumes" prefHeight="42.0" prefWidth="94.0" text="Volumes" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="27.0" layoutY="234.0" mnemonicParsing="false" onAction="#pressNetworks" prefHeight="42.0" prefWidth="94.0" text="Networks" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="27.0" layoutY="304.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="42.0" prefWidth="94.0" text="Exit App" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="27.0" layoutY="94.0" mnemonicParsing="false" onAction="#pressImages" prefHeight="42.0" prefWidth="94.0" text="Images" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="27.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressContainers" prefHeight="42.0" prefWidth="94.0" text="Containers" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+               </items>
+            </SplitPane>
+            <SplitPane layoutX="574.0" layoutY="62.0" orientation="VERTICAL" prefHeight="439.0" prefWidth="200.0">
+               <effect>
+                  <DropShadow />
+               </effect>
+               <items>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="198.0">
+                     <children>
+                        <Button layoutX="52.0" layoutY="154.0" mnemonicParsing="false" onAction="#pressRemoveImage" prefHeight="42.0" prefWidth="94.0" text="Remove" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="52.0" layoutY="84.0" mnemonicParsing="false" onAction="#pressImplement" prefHeight="42.0" prefWidth="94.0" text="Implement" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="52.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressPull" prefHeight="42.0" prefWidth="94.0" text="Pull" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+               </items>
+            </SplitPane>
+         </children></AnchorPane>
+  </items>
+</SplitPane>

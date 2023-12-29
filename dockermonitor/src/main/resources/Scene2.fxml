@@ -22,7 +22,7 @@
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="27.0" layoutY="143.0" mnemonicParsing="false" onAction="#switchToImages" prefHeight="42.0" prefWidth="94.0" text="Images" textFill="#162dc1">
+      <Button layoutX="27.0" layoutY="143.0" mnemonicParsing="false" onAction="#pressImages" prefHeight="42.0" prefWidth="94.0" text="Images" textFill="#162dc1">
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>
