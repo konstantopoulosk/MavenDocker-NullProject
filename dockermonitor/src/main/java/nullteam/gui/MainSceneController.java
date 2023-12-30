@@ -2,6 +2,7 @@ package nullteam.gui;
 
 import com.nullteam.ClientUpdater;
 import com.nullteam.DatabaseThread;
+import com.nullteam.DockerMonitor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -133,9 +134,10 @@ public class MainSceneController implements Initializable {
     private ListView<String> containersList = new ListView<>(containers);
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        containersList.getItems().sorted();
-        Database connectNow = new Database();
-        Connection connection = connectNow.getConnection();
+        DockerMonitor monitor = new DockerMonitor();
+        monitor.start();
+        Database database = new Database();
+        Connection connection = database.getConnection();
         DatabaseThread databaseThread = new DatabaseThread(connection);
         databaseThread.start();
         String query = "select name, image, state from dockerinstance";

@@ -73,7 +73,7 @@ public class DockerMonitor extends Thread {
         final String csvFilePath = "images.csv";
         CSVWriter csvWriter = null;
         try {
-             csvWriter = new CSVWriter(
+            csvWriter = new CSVWriter(
                     new FileWriter(csvFilePath, false));
             csvWriter.writeNext(new String[]{"Image ID", "Repository Name",
                     "Image Tag", "Times Used", "Size"}); //HEADER

@@ -40,7 +40,7 @@ public class DatabaseThread extends Thread {
                 deleteAllRowsFromTable(connection, "measurementsofcontainers");
             }
             if (!checkTableEmpty(connection, "measurementsofimages")) {
-            deleteAllRowsFromTable(connection,"measurementsofimages");
+                deleteAllRowsFromTable(connection,"measurementsofimages");
             }
 
              */
@@ -81,7 +81,7 @@ public class DatabaseThread extends Thread {
             }
             csvReader.close();
         } catch (SQLException | IOException | CsvValidationException e) {
-            throw new RuntimeException(e);
+
         }
     }
     //Reads the containers.csv and inserts everything into the table dockerinstance.
@@ -101,7 +101,7 @@ public class DatabaseThread extends Thread {
             }
             csvReader.close();
         } catch (IOException | SQLException e) {
-            throw new RuntimeException(e);
+
         } catch (CsvValidationException e) {
 
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -125,8 +125,10 @@ public class DatabaseThread extends Thread {
              } else {
                  return false;
              }
-         } catch (CsvValidationException | IOException e) {
-             throw new RuntimeException(e);
+         } catch (CsvValidationException e) {
+            return false;
+         } catch (IOException e) {
+             return false;
          }
     }
     public static void deleteAllRowsFromTable(Connection connection, String tableName) {
@@ -135,7 +137,7 @@ public class DatabaseThread extends Thread {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
     }
     public static void addToMeasurementsOf(Connection connection, String tableName, String tableColumn, int i) {

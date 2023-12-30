@@ -36,12 +36,10 @@ public class App extends Application {
         }
     }
     public static void main(String[] args) throws Exception {
-        ClientUpdater.connectionAccomplished();
-        Connection connection = ClientUpdater.connectToDatabase();
-        DockerMonitor monitor = new DockerMonitor();
-        monitor.start();
-        ClientUpdater.dropTables(connection);
-        ClientUpdater.createTables(connection);
+        //ClientUpdater.connectionAccomplished();
+        Database database = new Database();
+        ClientUpdater.dropTables(database.getConnection());
+        ClientUpdater.createTables(database.getConnection());
         launch(args);
     }
 }
