@@ -132,6 +132,11 @@ public class MainSceneController implements Initializable {
     private final ObservableList<String> containers = FXCollections.observableArrayList("Name", "Image", "State");
     @FXML
     private ListView<String> containersList = new ListView<>(containers);
+    private final ObservableList<String> images = FXCollections.observableArrayList("Repository",
+            "Tag", "Times Used", "Size");
+    @FXML
+    private ListView<String> imagesList = new ListView<>(images);
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DockerMonitor monitor = new DockerMonitor();
@@ -140,11 +145,11 @@ public class MainSceneController implements Initializable {
         Connection connection = database.getConnection();
         DatabaseThread databaseThread = new DatabaseThread(connection);
         databaseThread.start();
-        String query = "select name, image, state from dockerinstance";
+        String queryContainers = "select name, image, state from dockerinstance";
+        String queryImages = "select repository, tag, timesUsed, size from dockerimage";
         try {
             Statement statement = connection.createStatement();
-            ResultSet containersOutput = statement.executeQuery(query);
-
+            ResultSet containersOutput = statement.executeQuery(queryContainers);
             while (containersOutput.next()) {
                 String name, image, state;
                 name = containersOutput.getString("name");
@@ -152,6 +157,18 @@ public class MainSceneController implements Initializable {
                 state = containersOutput.getString("state");
                 String containersOut = name + " \"" + image + " \"" + state + " \"";
                 containersList.getItems().add(containersOut);
+            }
+            Statement statement1 = connection.createStatement();
+            ResultSet imagesOutput = statement1.executeQuery(queryImages);
+            while (imagesOutput.next()) {
+                String repository, tag, timesUsed, size;
+                repository = imagesOutput.getString("repository");
+                tag = imagesOutput.getString("tag");
+                timesUsed = imagesOutput.getString("timesUsed");
+                size = imagesOutput.getString("size");
+                String imagesOut = repository + " \"" + tag + " \""
+                        + timesUsed + " \"" + size + " \"";
+                imagesList.getItems().add(imagesOut);
             }
         } catch (Exception e) {
             e.printStackTrace();
