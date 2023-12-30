@@ -25,11 +25,25 @@ public class DatabaseThread extends Thread {
     }
     @Override
     public void run() {
+        //ClientUpdater.dropTables(connection);
+        //ClientUpdater.createTables(connection);
         try {
-            deleteAllRowsFromTable(connection, "dockerimage");
-            deleteAllRowsFromTable(connection,"dockerinstance");
-            deleteAllRowsFromTable(connection, "measurementsofcontainers");
+
+            if (!checkTableEmpty(connection, "dockerimage")) {
+                deleteAllRowsFromTable(connection, "dockerimage");
+            }
+            if (!checkTableEmpty(connection, "dockerinstance")) {
+                deleteAllRowsFromTable(connection, "dockerinstance");
+            }
+            /*
+            if (!checkTableEmpty(connection,"measurementsofcontainers")) {
+                deleteAllRowsFromTable(connection, "measurementsofcontainers");
+            }
+            if (!checkTableEmpty(connection, "measurementsofimages")) {
             deleteAllRowsFromTable(connection,"measurementsofimages");
+            }
+
+             */
             if (checkTableEmpty(connection, "dockerimage")) {
                 readImagesFromCsv(connection); //No duplicate primary keys
             }

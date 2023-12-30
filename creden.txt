@@ -24,3 +24,15 @@ DB_HOST=gcp.connect.psdb.cloud
 DB_USERNAME=19ngi5chkrn64cuca1kb
 DB_PASSWORD=pscale_pw_ewro2owyRnOB9mRiThiMveV4V8xUmC0F0kMjWtWoUtc
 DB_NAME=dockerdb
+
+
+
+
+for javafx
+url: jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY
+user: 2zi5nloj67hbyd2kj0v4
+password: pscale_pw_dFEza7bdXQNbpaaCwU328EFeSGXcSLdC6g4u0qEp6u9 
+
+
+
+

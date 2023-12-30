@@ -161,7 +161,7 @@ public final class ClientUpdater {
                     "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY",
                     "2zi5nloj67hbyd2kj0v4",
                     "pscale_pw_dFEza7bdXQNbpaaCwU328EFeSGXcSLdC6g4u0qEp6u9");
-            System.out.println("Successful connection to the Database!");
+            //System.out.println("Successful connection to the Database!");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -198,7 +198,7 @@ public final class ClientUpdater {
                     "ports VARCHAR(10) NOT NULL," +
                     "idmc INT," +
                     "PRIMARY KEY (id)," +
-                    "CONSTRAINT i FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc))");
+                    "CONSTRAINT i FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc) ON DELETE CASCADE)");
             statement.executeUpdate(query);
             query = String.format("CREATE TABLE dockerimage (" +
                     "    id VARCHAR(71) NOT NULL PRIMARY KEY," +
@@ -207,7 +207,7 @@ public final class ClientUpdater {
                     "    timesUsed VARCHAR(15)," +
                     "    size VARCHAR(10)," +
                     "    idmi INT NOT NULL," +
-                    "CONSTRAINT j FOREIGN KEY (idmi) REFERENCES measurementsofimages (idmi))");
+                    "CONSTRAINT j FOREIGN KEY (idmi) REFERENCES measurementsofimages (idmi) ON DELETE CASCADE)");
             statement.executeUpdate(query);
             // Re-enable foreign key constraints
         } catch (SQLException e) {

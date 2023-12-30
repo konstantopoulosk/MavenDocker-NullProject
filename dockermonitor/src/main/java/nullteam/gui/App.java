@@ -1,12 +1,17 @@
 package nullteam.gui;
+
+import com.nullteam.ClientUpdater;
+import com.nullteam.DockerMonitor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Connection;
 
 public class App extends Application {
     static final int width = 1000;
@@ -31,8 +36,12 @@ public class App extends Application {
         }
     }
     public static void main(String[] args) throws Exception {
-        //ClientUpdater.connectionAccomplished();
+        ClientUpdater.connectionAccomplished();
+        Connection connection = ClientUpdater.connectToDatabase();
+        DockerMonitor monitor = new DockerMonitor();
+        monitor.start();
+        ClientUpdater.dropTables(connection);
+        ClientUpdater.createTables(connection);
         launch(args);
-        //Connection connection = ClientUpdater.connectToDatabase();
     }
 }

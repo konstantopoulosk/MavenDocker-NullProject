@@ -11,7 +11,7 @@
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="516.0" prefWidth="121.0">
          <children>
-            <TextField alignment="TOP_CENTER" disable="true" layoutX="27.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.7" prefHeight="42.0" prefWidth="183.0" promptText="Containers Menu" text="Containers Menu">
+            <TextField alignment="TOP_CENTER" disable="true" layoutX="27.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.7" prefHeight="42.0" prefWidth="183.0" promptText="Images Menu" text="Images Menu">
                <font>
                   <Font name="Calibri Bold Italic" size="22.0" />
                </font>

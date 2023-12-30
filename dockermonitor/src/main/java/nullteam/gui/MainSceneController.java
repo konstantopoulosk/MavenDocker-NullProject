@@ -1,30 +1,33 @@
 package nullteam.gui;
 
-import com.nullteam.DockerInstance;
+import com.nullteam.ClientUpdater;
+import com.nullteam.DatabaseThread;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 
-public class MainSceneController {
+public class MainSceneController implements Initializable {
      Stage stage;
      Scene scene;
      Parent root;
 
     @FXML
     public void startApp(ActionEvent event) throws IOException  {
-        //gia allagi skhnhs
-        System.out.println("Start!!!!");
+        //Goes from Scene1 to Scene2.
         root = FXMLLoader.load(getClass().getResource("/Scene2.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -33,11 +36,12 @@ public class MainSceneController {
     }
     @FXML
     public void exitApp(ActionEvent event) {
-        System.exit(0);
         //Exiting Application.
+        System.exit(0);
     }
     @FXML
     public void pressImages(ActionEvent event) throws IOException {
+        //Goes to Images Menu.
         root = FXMLLoader.load(getClass().getResource("/images.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -47,7 +51,7 @@ public class MainSceneController {
 
     @FXML
     public void pressContainers(ActionEvent event) throws IOException {
-        System.out.println("Containers Pressed");
+        //Goes to Containers Menu.
         root = FXMLLoader.load(getClass().getResource("/containers.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -56,7 +60,7 @@ public class MainSceneController {
     }
     @FXML
     public void pressNetworks(ActionEvent event) throws IOException {
-        System.out.println("Networks Pressed");
+        //Goes to Networks Menu.
         root = FXMLLoader.load(getClass().getResource("/networks.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -65,76 +69,13 @@ public class MainSceneController {
     }
     @FXML
     public void pressVolumes(ActionEvent event) throws IOException {
-        System.out.println("Volumes Pressed");
+        //Goes to Volumes Menu.
         root = FXMLLoader.load(getClass().getResource("/volumes.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-    /*
-    @FXML
-    private Label nameLabel, imageLabel, statusLabel;
-    private List<DockerInstance> containers = DockerInstance.containerslist;
-
-    public void initialize(URL location, ResourceBundle resources) {
-        DockerInstance.listAllContainers(); // Update the status of all containers
-        updateLabels();
-    }
-
-    private void updateLabels() {
-        nameLabel.setText("");
-        imageLabel.setText("");
-        statusLabel.setText("");
-
-        int i = 0;
-        for (DockerInstance container : containers) {
-            i++;
-            nameLabel.setText(nameLabel.getText() + i + ") " + container.getContainerName() + "\n");
-            imageLabel.setText(imageLabel.getText() + i + ") " + container.getContainerImage() + "\n");
-            statusLabel.setText(statusLabel.getText() + i + ") " + container.getContainerStatus() + "\n");
-        }
-    }
-    @FXML
-//creating a choicebox so the user can choose what tool they want to use
-    private ChoiceBox<String> Actions;
-
-    public void ContainerClicked(ActionEvent event) throws IOException {
-        handleAction(event);
-    }
-
-
-    private void handleAction(ActionEvent event) {
-        String selectedAction = Actions.getValue();
-        // Perform actions based on the selected choice
-        switch (selectedAction) {
-            case "Start":
-                // Handle start action
-                break;
-            case "Stop":
-                // Handle stop action
-                break;
-            case "Pause":
-                // Handle pause action
-                break;
-            case "Unpause":
-                // Handle unpause action
-                break;
-            case "Restart":
-                //Handle Restart action
-                break;
-            case "Rename":
-                // Handle Rename action
-                break;
-            case "Remove":
-                // Handle Remove action
-                break;
-            case "Kill":
-                // Handle Kill action
-                break;
-        }
-    }
-    */
     @FXML
     public void pressStart(ActionEvent event) throws IOException {
         System.out.println("User pressed Start Container");
@@ -186,5 +127,32 @@ public class MainSceneController {
     @FXML
     public void pressRemoveImage(ActionEvent event) throws IOException {
         System.out.println("User pressed Remove an image");
+    }
+    private final ObservableList<String> containers = FXCollections.observableArrayList("Name", "Image", "State");
+    @FXML
+    private ListView<String> containersList = new ListView<>(containers);
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        containersList.getItems().sorted();
+        Database connectNow = new Database();
+        Connection connection = connectNow.getConnection();
+        DatabaseThread databaseThread = new DatabaseThread(connection);
+        databaseThread.start();
+        String query = "select name, image, state from dockerinstance";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet containersOutput = statement.executeQuery(query);
+
+            while (containersOutput.next()) {
+                String name, image, state;
+                name = containersOutput.getString("name");
+                image = containersOutput.getString("image");
+                state = containersOutput.getString("state");
+                String containersOut = name + " \"" + image + " \"" + state + " \"";
+                containersList.getItems().add(containersOut);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

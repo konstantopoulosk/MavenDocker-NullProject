@@ -12,7 +12,6 @@
 
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="789.0" styleClass="anchor" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
-   
    <children>
       <Button fx:id="startApp" layoutX="7.0" layoutY="152.0" mnemonicParsing="false" onAction="#startApp" prefHeight="42.0" prefWidth="104.0" text="Start App" textFill="#0786db">
          <font>
