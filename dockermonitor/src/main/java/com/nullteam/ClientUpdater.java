@@ -111,7 +111,7 @@ public final class ClientUpdater {
         } catch (IOException e) {
             System.out.println("Failed to close the client");
         }
-        return networks; //Updated Volumes
+        return networks; //Updated Networks
     }
     /**
      * This method gets the Updated Docker Client.

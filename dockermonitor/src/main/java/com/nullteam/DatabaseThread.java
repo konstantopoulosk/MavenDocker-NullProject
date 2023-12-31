@@ -19,6 +19,12 @@ public class DatabaseThread extends Thread {
     List<String[]> lastStateImage = null;
     List<String[]> currentStateContainer = null;
     List<String[]> currentStateImage = null;
+    static int networks = 0;
+    static int volumes = 0;
+    List<String[]> lastStateNetworks = null;
+    List<String[]> lastStateVolumes = null;
+    List<String[]> currentStateNetworks = null;
+    List<String[]> currentStateVolumes = null;
     Connection connection;
      public DatabaseThread(Connection connection) { //Moved the connectToDatabase to ClientUpdater
         this.connection = connection; //Because connectivity methods
@@ -35,6 +41,12 @@ public class DatabaseThread extends Thread {
             if (!checkTableEmpty(connection, "dockerinstance")) {
                 deleteAllRowsFromTable(connection, "dockerinstance");
             }
+            if (!checkTableEmpty(connection, "Volumes")) {
+                deleteAllRowsFromTable(connection, "Volumes");
+            }
+            if (!checkTableEmpty(connection, "Networks")) {
+                deleteAllRowsFromTable(connection, "Networks");
+            }
             /*
             if (!checkTableEmpty(connection,"measurementsofcontainers")) {
                 deleteAllRowsFromTable(connection, "measurementsofcontainers");
@@ -50,6 +62,12 @@ public class DatabaseThread extends Thread {
             if (checkTableEmpty(connection, "dockerinstance")) {
                 readContainersFromCsv(connection);
             }
+            if (checkTableEmpty(connection, "Volumes")) {
+                readVolumesFromCsv(connection); //No duplicate primary keys
+            }
+            if (checkTableEmpty(connection, "Networks")) {
+                readNetworksFromCsv(connection);
+            }
             while (!Thread.currentThread().isInterrupted()) { //Runs until interrupted
                  //Table not empty we should update the rows. not insert something
                 if (hasNewData("images.csv", currentStateImage, lastStateImage)) { //if new data -> do sth, else do nth
@@ -58,6 +76,13 @@ public class DatabaseThread extends Thread {
                     //Table not empty -> Update not insert
                 if (hasNewData("containers.csv", currentStateContainer, lastStateContainer)) { //New data -> do sth
                     updateContainers(connection);
+                }
+                if (hasNewData("Volumes.csv", currentStateVolumes, lastStateVolumes)) { //if new data -> do sth, else do nth
+                    updateVolumes(connection);
+                }
+                //Table not empty -> Update not insert
+                if (hasNewData("Networks.csv", currentStateNetworks, lastStateNetworks)) { //New data -> do sth
+                    updateNetworks(connection);
                 }
             }
         } catch (RuntimeException e) {
@@ -80,7 +105,7 @@ public class DatabaseThread extends Thread {
                 }
             }
             csvReader.close();
-        } catch (SQLException | IOException | CsvValidationException e) {
+        } catch (IOException | SQLException | CsvValidationException | ArrayIndexOutOfBoundsException e) {
 
         }
     }
@@ -100,14 +125,53 @@ public class DatabaseThread extends Thread {
                 }
             }
             csvReader.close();
-        } catch (IOException | SQLException e) {
-
-        } catch (CsvValidationException e) {
-
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IOException | SQLException | CsvValidationException | ArrayIndexOutOfBoundsException e) {
 
         }
     }
+
+    //Reads the Volumes.csv and inserts everything into the table Volumes.
+    public void readVolumesFromCsv(Connection connection) {
+        try {
+            FileReader fr = new FileReader("Volumes.csv");
+            CSVReader csvReader = new CSVReader(fr);
+            String[] volume;
+            while ((volume = csvReader.readNext()) != null) {
+                if (!volume[0].equals("Volume Name")) {
+                    volumes++;
+                    addToMeasurementsOf(connection, "measurementsofVolumes", "idmv", volumes);
+                    String queryVolumes = String.format("REPLACE INTO Volumes ( name, driver, created, mountpoint, state) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", volume[0], volume[1], volume[2], volume[3], volumes);
+                    Statement statement = connection.createStatement();
+                    statement.executeUpdate(queryVolumes);
+                }
+            }
+            csvReader.close();
+        } catch (IOException | SQLException | CsvValidationException | ArrayIndexOutOfBoundsException e) {
+
+        }
+    }
+
+    //Reads the Networks.csv and inserts everything into the table Networks.
+    public void readNetworksFromCsv(Connection connection) {
+        try {
+            FileReader fr = new FileReader("Networks.csv");
+            CSVReader csvReader = new CSVReader(fr);
+            String[] network;
+            while ((network = csvReader.readNext()) != null) {
+                if (!network[0].equals("Network ID")) {
+                    networks++;
+                    addToMeasurementsOf(connection, "measurementsofNetworks", "idmn", networks);
+                    String queryNetworks = String.format("REPLACE INTO Networks ( networkid, name, driver, scope) VALUES (\"%s\", \"%s\", \"%s\", \"%s\")", network[0], network[1], network[2], networks);
+                    Statement statement = connection.createStatement();
+                    statement.executeUpdate(queryNetworks);
+                }
+            }
+            csvReader.close();
+        } catch (IOException | SQLException | CsvValidationException | ArrayIndexOutOfBoundsException e) {
+
+        }
+    }
+
     //Checks if CSV has any new data since last checked
     public boolean hasNewData(String fileName, List<String[]> current, List<String[]> last) {
          try {
@@ -200,6 +264,50 @@ public class DatabaseThread extends Thread {
                 containers++;
                 addToMeasurementsOf(connection, "measurementsofcontainers", "idmc", containers);
                 String query = String.format("REPLACE INTO dockerinstance (id, name, image, state, command, created, ports, idmc) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", container[0], container[1], container[2], container[3], container[4], container[5], container[6], containers);
+                statement.executeUpdate(query);
+            }
+            csvReader.close();
+        } catch (ArrayIndexOutOfBoundsException | CsvMalformedLineException e) {
+
+        } catch (CsvValidationException | IOException | SQLException ex) {
+            //throw new RuntimeException(ex);
+        }
+    }
+
+    public void updateVolumes(Connection connection) {
+        try {
+            FileReader fr = new FileReader("Volumes.csv");
+            CSVReader csvReader = new CSVReader(fr);
+            String[] volume;
+            while ((volume = csvReader.readNext()) != null) {
+                Statement statement = connection.createStatement();
+                String queryDelete = String.format("DELETE FROM Volumes WHERE id = '%s'", volume[0]);
+                statement.executeUpdate(queryDelete);
+                volumes++;
+                addToMeasurementsOf(connection, "measurementsofVolumes", "idmv", volumes);
+                String query = String.format("REPLACE INTO Volumes ( name, driver, created, mountpoint, state) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", volume[0], volume[1], volume[2], volume[3], volumes);
+                statement.executeUpdate(query);
+            }
+            csvReader.close();
+        } catch (ArrayIndexOutOfBoundsException | CsvMalformedLineException e) {
+
+        } catch (CsvValidationException | IOException | SQLException ex) {
+            //throw new RuntimeException(ex);
+        }
+    }
+
+    public void updateNetworks(Connection connection) {
+        try {
+            FileReader fr = new FileReader("Networks.csv");
+            CSVReader csvReader = new CSVReader(fr);
+            String[] network;
+            while ((network = csvReader.readNext()) != null) {
+                Statement statement = connection.createStatement();
+                String queryDelete = String.format("DELETE FROM Networks WHERE id = '%s'", network[0]);
+                statement.executeUpdate(queryDelete);
+                volumes++;
+                addToMeasurementsOf(connection, "measurementsofNetworks", "idmn", networks);
+                String query = String.format("REPLACE INTO Networks ( networkid, name, driver, scope) VALUES (\"%s\", \"%s\", \"%s\", \"%s\")", network[0], network[1], network[2], networks);
                 statement.executeUpdate(query);
             }
             csvReader.close();

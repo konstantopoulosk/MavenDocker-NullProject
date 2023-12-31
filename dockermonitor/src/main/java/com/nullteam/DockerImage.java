@@ -238,7 +238,7 @@ public class DockerImage {
             if (f) {
                 num++;
                 System.out.println(num + ") "
-                        + img.toString()); //toString inside a for loop
+                        + img); //toString inside a for loop
             }
         }
     }

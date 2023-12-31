@@ -5,43 +5,30 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DockerVolume {
+/**
+ * @param driver     A field for the driver of a volume.
+ * @param name       A field for the name / id
+ *                   of a volume.
+ * @param created    A field for the datetime that
+ *                   a volume was created.
+ * @param mountpoint A field for the mountpoint path
+ *                   of a volume.
+ */
+public record DockerVolume(String driver, String name, String created, String mountpoint) {
     /**
      * List of all the DockerVolume objects,
      * all the volumes in the DockerDesktop.
      */
-    private static List<DockerVolume> volumeslist = new ArrayList<>();
-
-    /**
-     * A field for the driver of a volume.
-     */
-    private final String driver;
-
-    /**
-     * A field for the name / id
-     * of a volume.
-     */
-    private final String name;
-
-    /**
-     * A field for the datetime that
-     * a volume was created.
-     */
-    private final String created;
-
-    /**
-     * A field for the mountpoint path
-     * of a volume.
-     */
-    private final String mountpoint;
+    private static final List<DockerVolume> volumeslist = new ArrayList<>();
 
     /**
      * Constructor for Class DockerVolume.
      * It creates a new DockerImageVolume object
      * and adds it to the volumeslist.
-     * @param driver String
-     * @param name String
-     * @param created String
+     *
+     * @param driver     String
+     * @param name       String
+     * @param created    String
      * @param mountpoint String
      */
     public DockerVolume(final String driver, final String name,
@@ -55,34 +42,42 @@ public class DockerVolume {
 
     /**
      * Gets the driver of the volume.
+     *
      * @return String
      */
-    public String getDriver() {
+    @Override
+    public String driver() {
         return driver;
     }
 
     /**
      * Gets the name of the volume.
+     *
      * @return String
      */
-    public String getName() {
+    @Override
+    public String name() {
         return name;
     }
 
     /**
      * Gets the datetime the volume
      * was created at.
+     *
      * @return String
      */
-    public String getCreated() {
+    @Override
+    public String created() {
         return created;
     }
 
     /**
      * Gets the mountpoint of the volume.
+     *
      * @return String
      */
-    public String getMountpoint() {
+    @Override
+    public String mountpoint() {
         return mountpoint;
     }
 
@@ -90,13 +85,14 @@ public class DockerVolume {
      * A classic toString method.
      * We use it to show every volum's information
      * (driver, name, created, mountpoint)
+     *
      * @return String
      */
     @Override
     public String toString() {
-        return "Driver: " + getDriver() + " Name: "
-                + getName() + " CreatedAt: " + getCreated()
-                + "   Mountpoint: " + getMountpoint();
+        return "Driver: " + driver() + " Name: "
+                + name() + " CreatedAt: " + created()
+                + "   Mountpoint: " + mountpoint();
     }
 
     /**
@@ -118,6 +114,7 @@ public class DockerVolume {
      * This method returns the result of the command:
      * docker volume inspect --format='{{json .CreatedAt}}' [VOLUME]
      * without the quotation marks.
+     *
      * @param volumeName String
      * @return String
      */

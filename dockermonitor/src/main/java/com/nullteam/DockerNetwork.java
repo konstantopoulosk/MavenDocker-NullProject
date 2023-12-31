@@ -1,50 +1,37 @@
 package com.nullteam;
 
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.Network;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class DockerNetwork {
+/**
+ * @param networkId A field for the id of the network.
+ * @param name      A field for the name of the network.
+ * @param driver    A field for the network's driver,
+ *                  which is a Software that activates the actual
+ *                  transmission and receipt of data over the network.
+ * @param scope     A field for the network's scope,
+ *                  which is the extent or range of IP addresses
+ *                  that a particular network or subnet
+ *                  can encompass Network Scope.
+ */
+public record DockerNetwork(String networkId, String name, String driver, String scope) {
     /**
      * List of all the DockerNetwork objects,
      * all the networks in the DockerDesktop.
      */
-    private static List<DockerNetwork> networkslist = new ArrayList<>();
-    /**
-     * A field for the id of the network.
-     */
-    private final String networkId;
-    /**
-     * A field for the name of the network.
-     */
-    private final String name;
-    /**
-     * A field for the network's driver,
-     * which is a Software that activates the actual
-     * transmission and receipt of data over the network.
-     */
-    private final String driver;
-    /**
-     * A field for the network's scope,
-     * which is the extent or range of IP addresses
-     * that a particular network or subnet
-     * can encompass Network Scope.
-     */
-    private final String scope;
+    private static final List<DockerNetwork> networkslist = new ArrayList<>();
 
     /**
      * Constructor of Class DockerNetwork.
      * It creates a new DockerNetwork object
      * and adds it to the networkslist.
+     *
      * @param networkId String
-     * @param name String
-     * @param driver String
-     * @param scope String
+     * @param name      String
+     * @param driver    String
+     * @param scope     String
      */
     public DockerNetwork(final String networkId, final String name,
                          final String driver, final String scope) {
@@ -57,33 +44,41 @@ public class DockerNetwork {
 
     /**
      * Gets the network ID.
+     *
      * @return String
      */
-    public String getNetworkId() {
+    @Override
+    public String networkId() {
         return networkId;
     }
 
     /**
      * Gets the network name.
+     *
      * @return String
      */
-    public String getName() {
+    @Override
+    public String name() {
         return name;
     }
 
     /**
      * Gets the network driver.
+     *
      * @return String
      */
-    public String getDriver() {
+    @Override
+    public String driver() {
         return driver;
     }
 
     /**
      * Gets the network scope.
+     *
      * @return String
      */
-    public String getScope() {
+    @Override
+    public String scope() {
         return scope;
     }
 
@@ -91,13 +86,14 @@ public class DockerNetwork {
      * A classic toString method.
      * We use it to show every network's information
      * (id, name, driver, scope)
+     *
      * @return String
      */
     @Override
     public String toString() {
-        return "NetworkID: " + getNetworkId() + " Name: "
-                + getName() + " Driver: " + getDriver()
-                + " Scope: " + getScope();
+        return "NetworkID: " + networkId() + " Name: "
+                + name() + " Driver: " + driver()
+                + " Scope: " + scope();
     }
 
     /**
@@ -117,6 +113,7 @@ public class DockerNetwork {
     /**
      * This method returns the result of the command:
      * docker inspect --format='{{json .NetworkSettings}}' [CONTAINER].
+     *
      * @param containerId String
      * @return String
      */
@@ -147,14 +144,15 @@ public class DockerNetwork {
      * docker inspect --format='{{json .NetworkSettings}}' [CONTAINER]
      * and with some changes makes it more readable
      * and user-friendly.
+     *
      * @param inspectResult String
      * @return StringBuilder
      */
-    public static StringBuilder formatSubnetsSettings(String inspectResult){
+    public static StringBuilder formatSubnetsSettings(String inspectResult) {
         //we don't need all the network settings, just the network info
         //we also remove the outer quotation marks ''
         //and the last bracket } because it is not needed
-        String[] s1 = inspectResult.replace("'","")
+        String[] s1 = inspectResult.replace("'", "")
                 .replace("}}}", "\n   }\n}")
                 .split("\"Networks\":");
         //now we split the lines for a more readable result
@@ -165,7 +163,7 @@ public class DockerNetwork {
                 s = s.replace("\"\"", "null");
             }
             if (s.contains("{")) { //to change line
-                s = s.replace("{","{\n   ");
+                s = s.replace("{", "{\n   ");
                 result.append(s).append("\n");
             } else {
                 result.append("   ").append(s).append("\n");

@@ -1,7 +1,6 @@
 package com.nullteam.test;
 
 import com.nullteam.DockerVolume;
-import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,29 +26,29 @@ public class TestDockerVolume {
     @Test
     public void testConstructor() {
         Assert.assertEquals("Failure wrong size", volumeslist.size(), 2);
-        Assert.assertEquals("Failure wrong First", volumeslist.getFirst().getName(), name);
+        Assert.assertEquals("Failure wrong First", volumeslist.getFirst().name(), name);
     }
     @Test
     public void testGetDriver() {
         Assert.assertEquals("Failure - wrong Driver",
-                volumeslist.getFirst().getDriver(), "local");
+                volumeslist.getFirst().driver(), "local");
     }
     @Test
     public void testGetName() {
         Assert.assertEquals("Failure - wrong Name",
-                volumeslist.getFirst().getName(),
+                volumeslist.getFirst().name(),
                 "02cf53413ed35002a1a56531e43feda3ac39e029fbe635a0cca0cf30cab21a59");
     }
     @Test
     public void testGetCreated() {
         Assert.assertEquals("Failure - wrong Created",
-                volumeslist.getFirst().getCreated(),
+                volumeslist.getFirst().created(),
                 "2023-11-15T18:33:33Z");
     }
     @Test
     public void testGetMountpoint() {
         Assert.assertEquals("Failure - wrong Mountpoint",
-                volumeslist.getFirst().getMountpoint(),
+                volumeslist.getFirst().mountpoint(),
                 "/var/lib/docker/volumes/02cf53413ed35002a1a56531e43feda3ac39e029fbe635a0cca0cf30cab21a59/_data");
     }
     @Test

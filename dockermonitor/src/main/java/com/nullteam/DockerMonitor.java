@@ -1,10 +1,12 @@
 package com.nullteam;
 
+import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.model.Container;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.api.model.Network;
 import com.opencsv.CSVWriter;
 import java.util.List;
 import java.util.Arrays;
@@ -23,6 +25,10 @@ public class DockerMonitor extends Thread {
     private List<String[]> currentData = null;
     private List<String[]> lastStateImages = null;
     private List<String[]> currentDataImages = null;
+    private List<String[]> lastStateVolumes = null;
+    private List<String[]> currentDataVolumes = null;
+    private List<String[]> lastStateNetworks = null;
+    private List<String[]> currentDataNetworks = null;
 
     /**
      * Method run to execute Monitor Thread.
@@ -35,6 +41,12 @@ public class DockerMonitor extends Thread {
                 }
                 if (hasNewDataImage()) {
                     writeImageCsv();
+                }
+                if (hasNewDataVolumes()) {
+                    writeVolumeCsv();
+                }
+                if (hasNewDataNetworks()) {
+                    writeNetworkCsv();
                 }
             }
         } catch (RuntimeException e) {
@@ -98,6 +110,49 @@ public class DockerMonitor extends Thread {
             }
         }
     }
+
+    public void writeVolumeCsv() { //Write/update the csv file
+        final String csvFilePath = "Volumes.csv";
+        try (CSVWriter csvWriter = new CSVWriter(
+                new FileWriter(csvFilePath, false))) {
+            csvWriter.writeNext(new String[]{ "Name", "Driver",
+                    "Created", "Size", "Mountpoint" }); // CSVFile header
+            for (String[] csvData : currentData) {
+                csvWriter.writeNext(csvData);
+            }
+            try {
+                csvWriter.flush(); // To immediately write to the fill
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Update the lastState with the currentData
+            lastStateVolumes = new ArrayList<>(currentDataVolumes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeNetworkCsv() { //Write/update the csv file
+        final String csvFilePath = "Networks.csv";
+        try (CSVWriter csvWriter = new CSVWriter(
+                new FileWriter(csvFilePath, false))) {
+            csvWriter.writeNext(new String[]{ "NetworkID", "Name",
+                   "Scope", "Driver" }); // CSVFile header
+            for (String[] csvData : currentData) {
+                csvWriter.writeNext(csvData);
+            }
+            try {
+                csvWriter.flush(); // To immediately write to the fill
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Update the lastState with the currentData
+            lastStateNetworks = new ArrayList<>(currentDataNetworks);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Method hasNewData checks if,
      * container info has changed.
@@ -145,6 +200,49 @@ public class DockerMonitor extends Thread {
             return  true;
         } else {
             return  false;
+        }
+    }
+
+    public boolean hasNewDataVolumes() {
+        //Check if there is any change inside the cluster
+        List<InspectVolumeResponse> volumes =
+                ClientUpdater.getUpdatedVolumesFromClient();
+        currentDataVolumes = new ArrayList<>();
+        for (InspectVolumeResponse v : volumes) {
+            String[] csvData2 = new String[]{
+                    v.getName(),
+                    v.getDriver(),
+                    DockerVolume.createdAt(v.getName()), v.getMountpoint()
+            };
+            currentDataVolumes.add(csvData2);
+        }
+        if (!listsAreEqual(currentDataVolumes, lastStateVolumes)) {
+            lastStateVolumes = new ArrayList<>(currentDataVolumes);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean hasNewDataNetworks() {
+        //Check if there is any change inside the cluster
+        List<Network> networks =
+                ClientUpdater.getUpdatedNetworksFromClient();
+        currentDataVolumes = new ArrayList<>();
+        for (Network n : networks) {
+            String[] csvData3 = new String[]{
+                    n.getId(),
+                    n.getName(),
+                    n.getDriver(),
+                    n.getScope()
+            };
+            currentDataNetworks.add(csvData3);
+        }
+        if (!listsAreEqual(currentDataNetworks, lastStateNetworks)) {
+            lastStateNetworks = new ArrayList<>(currentDataNetworks);
+            return true;
+        } else {
+            return false;
         }
     }
 
