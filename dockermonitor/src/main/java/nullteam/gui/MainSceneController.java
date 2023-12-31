@@ -129,6 +129,15 @@ public class MainSceneController implements Initializable {
     @FXML
     public void pressRestart(ActionEvent event) throws IOException {
         System.out.println("User pressed Restart Container");
+        changeTheScenes("/restartContainer.fxml", event);
+    }
+    @FXML
+    public void restartContainer(ActionEvent event) throws IOException {
+         System.out.println("Connect Executor");
+    }
+    @FXML
+    public void tapToSeeRestartContainers(ActionEvent event) throws IOException {
+        setListRestartContainers();
     }
     @FXML
     public void pressPause(ActionEvent event) throws IOException {
@@ -370,6 +379,37 @@ public class MainSceneController implements Initializable {
             ObservableList<String> pause1 = FXCollections.observableArrayList("No Paused Containers");
             pauseContainers = new ListView<>(pause1);
             pauseContainers.getItems().add("Nothing to Show Here :(");
+        }
+    }
+    private ObservableList<String> restart = FXCollections.observableArrayList("name");
+    @FXML
+    private ListView<String> restartListContainer = new ListView<>(restart);
+    public void setListRestartContainers() {
+        setListContainers();
+        if (containersList.getItems().size() > 1) {
+            int j = 0, i;
+            for (i = 0; i < containersList.getItems().size(); i++) {
+                String containerInfo = containersList.getItems().get(i);
+                String[] containerInfoArr = containerInfo.split(",");
+                String state = containerInfoArr[0];
+                if (state.endsWith("(Paused)")) {
+                    j++;
+                    restartListContainer.getItems().add(containerInfoArr[0]);
+                }
+            }
+            if (i == 0 || j == 0) {
+                restartListContainer.getItems().removeAll();
+                ObservableList<String> restart1 = FXCollections.observableArrayList("No Paused Containers");
+                restartListContainer = new ListView<>(restart1);
+                restartListContainer.getItems().add("Nothing to Show Here :(");
+            } else {
+                restartListContainer.getItems().remove(restart);
+            }
+        } else {
+            restartListContainer.getItems().removeAll();
+            ObservableList<String> restart1 = FXCollections.observableArrayList("No Paused Containers");
+            restartListContainer = new ListView<>(restart1);
+            restartListContainer.getItems().add("Nothing to Show Here :(");
         }
     }
 }
