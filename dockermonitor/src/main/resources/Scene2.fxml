@@ -32,12 +32,7 @@
             <Font name="Calibri Light" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="27.0" layoutY="357.0" mnemonicParsing="false" onAction="#pressLogs" prefHeight="42.0" prefWidth="94.0" text="Logs" textFill="#162dc1">
-         <font>
-            <Font name="Calibri Light" size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="27.0" layoutY="431.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="42.0" prefWidth="94.0" text="Exit App" textFill="#162dc1">
+      <Button layoutX="27.0" layoutY="357.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="42.0" prefWidth="94.0" text="Exit App" textFill="#162dc1">
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>

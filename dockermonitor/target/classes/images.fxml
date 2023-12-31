@@ -110,6 +110,11 @@
                   </Lighting>
                </effect>
             </ListView>
+            <Button layoutX="305.0" layoutY="13.0" mnemonicParsing="false" onAction="#tapToListImages" prefHeight="42.0" prefWidth="177.0" text="Tap to See Your Images" textFill="#162dc1">
+               <font>
+                  <Font name="Calibri Light" size="14.0" />
+               </font>
+            </Button>
          </children></AnchorPane>
   </items>
 </SplitPane>
