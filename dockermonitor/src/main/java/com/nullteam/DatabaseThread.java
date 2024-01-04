@@ -41,11 +41,11 @@ public class DatabaseThread extends Thread {
             if (!checkTableEmpty(connection, "dockerinstance")) {
                 deleteAllRowsFromTable(connection, "dockerinstance");
             }
-            if (!checkTableEmpty(connection, "Volumes")) {
-                deleteAllRowsFromTable(connection, "Volumes");
+            if (!checkTableEmpty(connection, "DockerVolume")) {
+                deleteAllRowsFromTable(connection, "DockerVolume");
             }
-            if (!checkTableEmpty(connection, "Networks")) {
-                deleteAllRowsFromTable(connection, "Networks");
+            if (!checkTableEmpty(connection, "DockerNetwork")) {
+                deleteAllRowsFromTable(connection, "DockerNetwork");
             }
             /*
             if (!checkTableEmpty(connection,"measurementsofcontainers")) {
@@ -57,17 +57,18 @@ public class DatabaseThread extends Thread {
 
              */
             if (checkTableEmpty(connection, "dockerimage")) {
-                readImagesFromCsv(connection); //No duplicate primary keys
+                readImagesFromCsv(connection);
             }
             if (checkTableEmpty(connection, "dockerinstance")) {
                 readContainersFromCsv(connection);
             }
-            if (checkTableEmpty(connection, "Volumes")) {
-                readVolumesFromCsv(connection); //No duplicate primary keys
+            if (checkTableEmpty(connection, "DockerVolume")) {
+                readVolumesFromCsv(connection);
             }
-            if (checkTableEmpty(connection, "Networks")) {
+            if (checkTableEmpty(connection, "DockerNetwork")) {
                 readNetworksFromCsv(connection);
             }
+
             while (!Thread.currentThread().isInterrupted()) { //Runs until interrupted
                  //Table not empty we should update the rows. not insert something
                 if (hasNewData("images.csv", currentStateImage, lastStateImage)) { //if new data -> do sth, else do nth
@@ -118,7 +119,6 @@ public class DatabaseThread extends Thread {
             while ((container = csvReader.readNext()) != null) {
                 if (!container[0].equals("Container ID")) {
                     containers++;
-                    addToMeasurementsOf(connection, "measurementsofcontainers", "idmc", containers);
                     String queryContainer = String.format("INSERT INTO dockerinstance (id, name, image, state, command, created, ports, idmc) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", container[0], container[1], container[2], container[3], container[4], container[5], container[6], containers);
                     Statement statement = connection.createStatement();
                     statement.executeUpdate(queryContainer);
@@ -139,7 +139,6 @@ public class DatabaseThread extends Thread {
             while ((volume = csvReader.readNext()) != null) {
                 if (!volume[0].equals("Volume Name")) {
                     volumes++;
-                    addToMeasurementsOf(connection, "measurementsofVolumes", "idmv", volumes);
                     String queryVolumes = String.format("REPLACE INTO Volumes ( name, driver, created, mountpoint, state) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", volume[0], volume[1], volume[2], volume[3], volumes);
                     Statement statement = connection.createStatement();
                     statement.executeUpdate(queryVolumes);
@@ -160,7 +159,6 @@ public class DatabaseThread extends Thread {
             while ((network = csvReader.readNext()) != null) {
                 if (!network[0].equals("Network ID")) {
                     networks++;
-                    addToMeasurementsOf(connection, "measurementsofNetworks", "idmn", networks);
                     String queryNetworks = String.format("REPLACE INTO Networks ( networkid, name, driver, scope) VALUES (\"%s\", \"%s\", \"%s\", \"%s\")", network[0], network[1], network[2], networks);
                     Statement statement = connection.createStatement();
                     statement.executeUpdate(queryNetworks);
@@ -284,7 +282,6 @@ public class DatabaseThread extends Thread {
                 String queryDelete = String.format("DELETE FROM Volumes WHERE id = '%s'", volume[0]);
                 statement.executeUpdate(queryDelete);
                 volumes++;
-                addToMeasurementsOf(connection, "measurementsofVolumes", "idmv", volumes);
                 String query = String.format("REPLACE INTO Volumes ( name, driver, created, mountpoint, state) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", volume[0], volume[1], volume[2], volume[3], volumes);
                 statement.executeUpdate(query);
             }
@@ -306,7 +303,6 @@ public class DatabaseThread extends Thread {
                 String queryDelete = String.format("DELETE FROM Networks WHERE id = '%s'", network[0]);
                 statement.executeUpdate(queryDelete);
                 volumes++;
-                addToMeasurementsOf(connection, "measurementsofNetworks", "idmn", networks);
                 String query = String.format("REPLACE INTO Networks ( networkid, name, driver, scope) VALUES (\"%s\", \"%s\", \"%s\", \"%s\")", network[0], network[1], network[2], networks);
                 statement.executeUpdate(query);
             }
@@ -314,7 +310,7 @@ public class DatabaseThread extends Thread {
         } catch (ArrayIndexOutOfBoundsException | CsvMalformedLineException e) {
 
         } catch (CsvValidationException | IOException | SQLException ex) {
-            //throw new RuntimeException(ex);
+            throw new RuntimeException(ex);
         }
     }
 }
