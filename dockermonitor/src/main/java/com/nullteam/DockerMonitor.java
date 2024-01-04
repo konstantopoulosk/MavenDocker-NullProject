@@ -228,7 +228,7 @@ public class DockerMonitor extends Thread {
         //Check if there is any change inside the cluster
         List<Network> networks =
                 ClientUpdater.getUpdatedNetworksFromClient();
-        currentDataVolumes = new ArrayList<>();
+        currentDataNetworks = new ArrayList<>();
         for (Network n : networks) {
             String[] csvData3 = new String[]{
                     n.getId(),

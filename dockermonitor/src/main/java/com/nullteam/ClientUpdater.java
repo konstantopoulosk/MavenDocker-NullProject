@@ -144,7 +144,6 @@ public final class ClientUpdater {
         }
         return status;
     }
-
     /**
      * This method makes a connection
      * to a database using a given url,
