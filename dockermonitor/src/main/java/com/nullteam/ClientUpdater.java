@@ -194,7 +194,7 @@ public final class ClientUpdater {
                     "CONSTRAINT i FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc) ON DELETE CASCADE)");
             statement.executeUpdate(query);
             query = String.format("CREATE TABLE dockerimage (" +
-                    "    id VARCHAR(71) NOT NULL, PRIMARY KEY," +
+                    "    id VARCHAR(71) NOT NULL PRIMARY KEY," +
                     "    repository VARCHAR(100) NOT NULL," +
                     "    tag VARCHAR(100)," +
                     "    timesUsed VARCHAR(15)," +
@@ -203,17 +203,19 @@ public final class ClientUpdater {
                     "CONSTRAINT j FOREIGN KEY (idmi) REFERENCES measurementsofimages (idmi) ON DELETE CASCADE)");
             statement.executeUpdate(query);
             query = String.format("CREATE TABLE DockerVolume (" +
-                    "name VARCHAR(100) NOT NULL PRIMARY KEY," +
-                    "driver VARCHAR(100) NOT NULL," +
-                    "created VARCHAR(20) NOT NULL," +
-                    "mountpoint VARCHAR(255) NOT NULL," +
-                    "size VARCHAR(10) NOT NULL INT,");
+                    "name VARCHAR(100) NOT NULL," +
+                    "driver VARCHAR(100)," +
+                    "created VARCHAR(20)," +
+                    "mountpoint VARCHAR(255)," +
+                    "size VARCHAR(10)," +
+                    "PRIMARY KEY (name))");
             statement.executeUpdate(query);
             query = String.format("CREATE TABLE DockerNetwork (" +
-                    "networkid VARCHAR(64) NOT NULL PRIMARY KEY," +
-                    "name VARCHAR(128) NOT NULL," +
-                    "driver VARCHAR(100) NOT NULL," +
-                    "scope VARCHAR(100) NOT NULL,");
+                    "networkid VARCHAR(64) NOT NULL," +
+                    "name VARCHAR(128)," +
+                    "driver VARCHAR(100)," +
+                    "scope VARCHAR(100)," +
+                    "PRIMARY KEY (networkid))");
             statement.executeUpdate(query);
             // Re-enable foreign key constraints
         } catch (SQLException e) {
