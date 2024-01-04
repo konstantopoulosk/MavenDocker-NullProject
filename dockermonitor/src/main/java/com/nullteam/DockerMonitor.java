@@ -246,6 +246,7 @@ public class DockerMonitor extends Thread {
         }
     }
 
+
     /**
      * Method listsAreEqual checks if,
      * two lists are equal.

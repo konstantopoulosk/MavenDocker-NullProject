@@ -5,7 +5,6 @@ import com.github.dockerjava.api.command.ListVolumesResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import java.io.IOException;
@@ -17,13 +16,7 @@ import java.util.List;
 import javax.ws.rs.ProcessingException;
 import java.io.File;
 import java.awt.Desktop;
-import java.util.Properties;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Properties;
+
 public final class ClientUpdater {
 
     /**
@@ -98,6 +91,7 @@ public final class ClientUpdater {
         List<InspectVolumeResponse> volumes = volumesResponse.getVolumes();
         try {
             client.close();
+
         } catch (IOException e) {
             System.out.println("Failed to close the client");
         }
@@ -200,13 +194,26 @@ public final class ClientUpdater {
                     "CONSTRAINT i FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc) ON DELETE CASCADE)");
             statement.executeUpdate(query);
             query = String.format("CREATE TABLE dockerimage (" +
-                    "    id VARCHAR(71) NOT NULL PRIMARY KEY," +
+                    "    id VARCHAR(71) NOT NULL, PRIMARY KEY," +
                     "    repository VARCHAR(100) NOT NULL," +
                     "    tag VARCHAR(100)," +
                     "    timesUsed VARCHAR(15)," +
                     "    size VARCHAR(10)," +
                     "    idmi INT NOT NULL," +
                     "CONSTRAINT j FOREIGN KEY (idmi) REFERENCES measurementsofimages (idmi) ON DELETE CASCADE)");
+            statement.executeUpdate(query);
+            query = String.format("CREATE TABLE DockerVolume (" +
+                    "name VARCHAR(100) NOT NULL PRIMARY KEY," +
+                    "driver VARCHAR(100) NOT NULL," +
+                    "created VARCHAR(20) NOT NULL," +
+                    "mountpoint VARCHAR(255) NOT NULL," +
+                    "size VARCHAR(10) NOT NULL INT,");
+            statement.executeUpdate(query);
+            query = String.format("CREATE TABLE DockerNetwork (" +
+                    "networkid VARCHAR(64) NOT NULL PRIMARY KEY," +
+                    "name VARCHAR(128) NOT NULL," +
+                    "driver VARCHAR(100) NOT NULL," +
+                    "scope VARCHAR(100) NOT NULL,");
             statement.executeUpdate(query);
             // Re-enable foreign key constraints
         } catch (SQLException e) {
@@ -229,6 +236,10 @@ public final class ClientUpdater {
             query = String.format("DROP TABLE measurementsofcontainers");
             statement.executeUpdate(query);
             query = String.format("DROP TABLE measurementsofimages");
+            statement.executeUpdate(query);
+            query = String.format("DROP TABLE DockerVolume");
+            statement.executeUpdate(query);
+            query = String.format("DROP TABLE DockerNetwork");
             statement.executeUpdate(query);
         } catch (SQLException e) {
             throw new RuntimeException(e);

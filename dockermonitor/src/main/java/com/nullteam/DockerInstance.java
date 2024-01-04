@@ -1,21 +1,19 @@
 package com.nullteam;
 
-import com.github.dockerjava.api.command.StopContainerCmd;
-import com.github.dockerjava.api.command.StartContainerCmd;
-import com.github.dockerjava.api.command.RenameContainerCmd;
-import com.github.dockerjava.api.command.RemoveContainerCmd;
-import com.github.dockerjava.api.command.RestartContainerCmd;
-import com.github.dockerjava.api.command.PauseContainerCmd;
-import com.github.dockerjava.api.command.UnpauseContainerCmd;
-import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.*;
 
 
 import com.github.dockerjava.api.exception.NotModifiedException;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.InputMismatchException;
+
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.DockerClientBuilder;
 import org.glassfish.jersey.internal.util.collection.StringIgnoreCaseKeyComparator;
 
 import java.util.ArrayList;
@@ -512,6 +510,50 @@ public class DockerInstance {
             }
         }
         return flag;
+    }
+
+    public static void showContainerLogs(String containerId) {
+        try (DockerClient client = DockerClientBuilder.getInstance().build()) {
+            LogContainerCmd logContainerCmd = client.logContainerCmd(containerId)
+                    .withStdOut(true)
+                    .withStdErr(true)
+                    .withFollowStream(true)
+                    .withTailAll();
+
+            client.logContainerCmd(containerId).withStdOut(true).withStdErr(true).exec(new LogCallback());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error displaying logs for container: " + containerId);
+        }
+    }
+
+    private static class LogCallback implements com.github.dockerjava.api.async.ResultCallback<Frame> {
+        @Override
+        public void onStart(Closeable closeable) {
+            // Do nothing on start
+        }
+
+        @Override
+        public void onNext(Frame frame) {
+            // Print log frames to the console
+            System.out.print(frame.toString());
+        }
+
+        @Override
+        public void onError(Throwable throwable) {
+            // Handle error
+            throwable.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+            // Do nothing on completion
+        }
+
+        @Override
+        public void close() {
+            // Close resources
+        }
     }
     /* !! TO AVOID REPETITIONS OF CODE
     public static String chooseAStoppedContainer() {

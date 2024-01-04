@@ -90,7 +90,7 @@ final class Main { //Utility classes should not be defined public
                                                         GetHelp.case8Kill();
                                                         break;
                                                     case "9": //LOGS of a Container
-                                                        //todo
+                                                        GetHelp.case9ViewLogs();
                                                         break;
                                                     case "0": //SUBNET of a Container
                                                         GetHelp.case0Subnets();

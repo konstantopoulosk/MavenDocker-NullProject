@@ -6,6 +6,8 @@ import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.PullResponseItem;
 
 import java.io.IOException;
@@ -58,6 +60,7 @@ final class GetHelp {
                     n.getDriver(), n.getScope());
         }
     }
+
     public static void case1Stop() {
         System.out.println("You chose: (1) Stop a container\n");
         if (DockerInstance.noActiveContainers()) {
@@ -190,6 +193,18 @@ final class GetHelp {
                     DockerNetwork.inspectContainersForSubnet(
                             DockerInstance.chooseAnActiveContainer()));
             System.out.println(d);
+        }
+    }
+
+    public static void case9ViewLogs() {
+        if (DockerInstance.noActiveContainers()) {
+            System.out.println("There are no active containers.\n"
+                    + "Logs are available only for active containers.");
+            wait2seconds();
+        } else {
+            System.out.println("\nWhich container's logs would you like to view?");
+            String containerId = DockerInstance.chooseAnActiveContainer();
+            DockerInstance.showContainerLogs(containerId);
         }
     }
 
