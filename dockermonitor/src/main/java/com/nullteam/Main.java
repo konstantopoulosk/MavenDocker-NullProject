@@ -26,7 +26,7 @@ final class Main { //Utility classes should not be defined public
         //final String musicFile = "Godfather.mid";
         //MidiPlayer m = new MidiPlayer(musicFile);
         Connection connection = ClientUpdater.connectToDatabase(); //Connected to Database.
-        ClientUpdater.dropTables(connection); // Drops previous user's tables
+        //ClientUpdater.dropTables(connection); // Drops previous user's tables
         ClientUpdater.createTables(connection); // Creates user's tables
         DatabaseThread databaseThread = new DatabaseThread(connection);
         databaseThread.start(); //Initialized Database Thread.

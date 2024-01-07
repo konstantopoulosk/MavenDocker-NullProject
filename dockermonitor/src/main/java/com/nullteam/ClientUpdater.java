@@ -1,4 +1,5 @@
 package com.nullteam;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.command.ListVolumesResponse;
@@ -7,15 +8,18 @@ import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
+
+import javax.ws.rs.ProcessingException;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import javax.ws.rs.ProcessingException;
-import java.io.File;
-import java.awt.Desktop;
 
 public final class ClientUpdater {
 
@@ -171,17 +175,13 @@ public final class ClientUpdater {
     public static void createTables(Connection connection) {
         try {
             Statement statement = connection.createStatement();
-            String query = String.format("CREATE TABLE measurementsofcontainers ("
+            String query = String.format("CREATE TABLE measurements ("
                     + "idmc INT NOT NULL,"
                     + "date DATETIME NOT NULL,"
-                    + "PRIMARY KEY(idmc))");
+                    + "PRIMARY KEY(idmc),"
+                    + "SystemIp VARCHAR(50))");
             statement.executeUpdate(query);
-            query = String.format("CREATE TABLE measurementsofimages ("
-                    + "idmi INT NOT NULL,"
-                    + "date DATETIME NOT NULL,"
-                    + "PRIMARY KEY(idmi))");
-            statement.executeUpdate(query);
-            query = String.format("CREATE TABLE dockerinstance (" +
+            query = String.format("CREATE TABLE containers (" +
                     "id VARCHAR(64) NOT NULL," +
                     "name VARCHAR(100)," +
                     "image VARCHAR(100) NOT NULL," +
@@ -190,75 +190,21 @@ public final class ClientUpdater {
                     "created VARCHAR(20) NOT NULL," +
                     "ports VARCHAR(10) NOT NULL," +
                     "idmc INT," +
+                    "SystemIp VARCHAR(50)," +
                     "PRIMARY KEY (id)," +
                     "CONSTRAINT i FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc) ON DELETE CASCADE)");
             statement.executeUpdate(query);
-            query = String.format("CREATE TABLE dockerimage (" +
-                    "    id VARCHAR(71) NOT NULL PRIMARY KEY," +
-                    "    repository VARCHAR(100) NOT NULL," +
-                    "    tag VARCHAR(100)," +
-                    "    timesUsed VARCHAR(15)," +
-                    "    size VARCHAR(10)," +
-                    "    idmi INT NOT NULL," +
-                    "CONSTRAINT j FOREIGN KEY (idmi) REFERENCES measurementsofimages (idmi) ON DELETE CASCADE)");
-            statement.executeUpdate(query);
-            query = String.format("CREATE TABLE DockerVolume (" +
-                    "name VARCHAR(100) NOT NULL," +
-                    "driver VARCHAR(100)," +
-                    "created VARCHAR(20)," +
-                    "mountpoint VARCHAR(255)," +
-                    "size VARCHAR(10)," +
-                    "PRIMARY KEY (name))");
-            statement.executeUpdate(query);
-            query = String.format("CREATE TABLE DockerNetwork (" +
-                    "networkid VARCHAR(64) NOT NULL," +
-                    "name VARCHAR(128)," +
-                    "driver VARCHAR(100)," +
-                    "scope VARCHAR(100)," +
-                    "PRIMARY KEY (networkid))");
-            statement.executeUpdate(query);
-            // Re-enable foreign key constraints
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * This method drops the tables that have
-     * been created inside the database query.
-     * @param connection Connection
-     */
-    public static void dropTables(Connection connection) {
+    public static String getIp() {
+        InetAddress localhost = null;
         try {
-            Statement statement = connection.createStatement();
-            String query = String.format("DROP TABLE dockerinstance");
-            statement.executeUpdate(query);
-            query = String.format("DROP TABLE dockerimage");
-            statement.executeUpdate(query);
-            query = String.format("DROP TABLE measurementsofcontainers");
-            statement.executeUpdate(query);
-            query = String.format("DROP TABLE measurementsofimages");
-            statement.executeUpdate(query);
-            query = String.format("DROP TABLE DockerVolume");
-            statement.executeUpdate(query);
-            query = String.format("DROP TABLE DockerNetwork");
-            statement.executeUpdate(query);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            localhost = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+                throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * This method closes the connection with the database
-     * in order to reopen it once the user reopens the app.
-     * @param connection Connection
-     */
-    public static void closeConnection(Connection connection) {
-        try {
-            connection.close();
-            System.out.println("Closed connection to the database!");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return String.valueOf(localhost);
     }
 }

@@ -202,7 +202,6 @@ public class DockerMonitor extends Thread {
             return  false;
         }
     }
-
     public boolean hasNewDataVolumes() {
         //Check if there is any change inside the cluster
         List<InspectVolumeResponse> volumes =

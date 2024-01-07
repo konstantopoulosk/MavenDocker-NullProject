@@ -1,9 +1,7 @@
 package nullteam.gui;
 
-import com.nullteam.ClientUpdater;
-import com.nullteam.DatabaseThread;
-import com.nullteam.DockerMonitor;
-import javafx.application.Platform;
+import com.google.gson.Gson;
+import com.nullteam.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,27 +14,97 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.time.Duration;
 import java.util.ResourceBundle;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MainSceneController implements Initializable {
     static final Connection connection = ClientUpdater.connectToDatabase();
+    final String ip = ClientUpdater.getIp();
      Stage stage;
      Scene scene;
      Parent root;
      static boolean isPressed = false;
+    private static final String API_URL = "http://localhost:8080/api/perform-action";
+    Gson gson = new Gson();
+    private void sendActionRequest(ActionRequest actionRequest, Gson gson) {
+        try {
+            // Serialize the ActionRequest to JSON
+            String jsonPayload = gson.toJson(actionRequest);
+            // Send the request to the API
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL))
+                    .header("Content-Type", "application/json")
+                    .timeout(Duration.ofSeconds(10)) // Set a timeout value in seconds
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Check the response status
+            if (response.statusCode() == 200) {
+                System.out.println("Action request successful");
+            } else {
+                System.out.println("Error: " + response.statusCode() + ", " + response.body());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    //o parakatw kwdikas afora thn ekkinhsh tou server opou 8a phgainoun ta requests
+    private void startHttpServer(PerformActionHandler handler) {
+        try {
+            // Create an HTTP server on the specified port
+            com.sun.net.httpserver.HttpServer server =
+                    com.sun.net.httpserver.HttpServer.create(new java.net.InetSocketAddress(8080), 0);
+
+            // Create a context for the API path and set the handler
+            server.createContext("/api/perform-action", handler);
+
+            // Use a fixed thread pool to handle incoming requests
+            server.setExecutor(Executors.newFixedThreadPool(10));
+
+            // Start the server
+            server.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //API CONFIGURATION
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!isPressed) {
             isPressed = true;
+            GetHelp.listContainers();
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
-            DatabaseThread databaseThread = new DatabaseThread(connection);
-            databaseThread.start();
+            BlockingQueue<ActionRequest> actionQueue = new LinkedBlockingQueue<>();
+            PerformActionHandler performActionHandler = new PerformActionHandler(actionQueue, gson);
+            ExecutorThread executorThread = new ExecutorThread(actionQueue);
+            executorThread.start();
+            startHttpServer(performActionHandler);
+            databaseThread();
+        }
+    }
+    public void databaseThread() {
+        DatabaseThread databaseThread = new DatabaseThread(connection);
+        databaseThread.run();
+        try {
+            databaseThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
      public void changeTheScenes(String fxmlFile, ActionEvent event) throws IOException {
@@ -85,7 +153,8 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void tapToListImages(ActionEvent event) throws IOException {
-        setListImages();
+        System.out.println("Tap List Images");
+        //setListImages();
     }
     @FXML
     public void pressContainers(ActionEvent event) throws IOException {
@@ -94,6 +163,7 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void tapToListContainers(ActionEvent event) throws IOException {
+        databaseThread();
         setListContainers();
     }
     @FXML
@@ -126,7 +196,19 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void startContainer(ActionEvent event) throws IOException {
+        databaseThread();
         //todo: Executor.
+        ClientUpdater.getUpdatedContainersFromClient();
+        String containerId = "ad952480f9f28d0992ec70b5942efc8b5d3b8b8aaa50551f22a14db4ebcc5c39";
+        // Create an ActionRequest object
+        ActionRequest actionRequest = new ActionRequest("START", containerId);
+        // Send the request to the API
+        CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
+                .thenRun(() -> System.out.println("Request sent successfully"))
+                .exceptionally(throwable -> {
+                    throwable.printStackTrace();
+                    return null;
+                });
         openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirm.fxml");
     }
     @FXML
@@ -135,6 +217,7 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void stopContainer(ActionEvent event) throws IOException {
+        databaseThread();
         //todo: Executor.
         openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirm.fxml");
     }
@@ -148,6 +231,7 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
+        databaseThread();
         openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirm.fxml");
         //todo: Executor.
     }
@@ -157,7 +241,8 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void removeContainer(ActionEvent event) throws IOException {
-         openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirm.fxml");
+        databaseThread();
+        openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirm.fxml");
         //todo: Executor.
     }
     @FXML
@@ -166,7 +251,8 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void restartContainer(ActionEvent event) throws IOException {
-         openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirm.fxml");
+        databaseThread();
+        openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirm.fxml");
         //todo: Executor.
     }
     @FXML
@@ -179,7 +265,8 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pauseContainer(ActionEvent event) throws IOException {
-         openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirm.fxml");
+        databaseThread();
+        openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirm.fxml");
         //todo: Executor.
     }
     @FXML
@@ -192,7 +279,8 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void unpauseContainer(ActionEvent event) throws IOException {
-         openConfirmationWindow(event,"Unpause Container Properties", "unpauseContainerConfirm.fxml");
+        databaseThread();
+        openConfirmationWindow(event,"Unpause Container Properties", "unpauseContainerConfirm.fxml");
         //todo: Executor.
     }
     @FXML
@@ -201,7 +289,8 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void killContainer(ActionEvent event) throws IOException {
-         openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirm.fxml");
+        databaseThread();
+        openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirm.fxml");
         //todo: Executor.
     }
     @FXML
@@ -262,9 +351,11 @@ public class MainSceneController implements Initializable {
     private ListView<String> containersList = new ListView<>(containers);
     public void setListContainers() {
         try {
-            String queryContainers = "select name, image, state from dockerinstance";
-            Statement statement = connection.createStatement();
-            ResultSet containersOutput = statement.executeQuery(queryContainers);
+            System.out.println(ip);
+            String queryContainers = "SELECT name, image, state FROM containers WHERE SystemIp = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(queryContainers);
+            preparedStatement.setString(1, ip);
+            ResultSet containersOutput = preparedStatement.executeQuery();
             int i = 0;
             while (containersOutput.next()) {
                 i++;
@@ -291,6 +382,7 @@ public class MainSceneController implements Initializable {
             "Tag", "Times Used", "Size");
     @FXML
     private ListView<String> imagesList = new ListView<>(images);
+    /*
     public void setListImages() {
         try {
             String queryImages = "select repository, tag, timesUsed, size from dockerimage";
@@ -320,15 +412,18 @@ public class MainSceneController implements Initializable {
             e.printStackTrace();
         }
     }
+
+     */
     private final ObservableList<String> exitedContainersINIT = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> exitedContainers = new ListView<>(exitedContainersINIT);
     public void setListExitedContainers() {
         try {
             String exited = "exited";
-            String queryExited = "select name from dockerinstance where state = ?";
+            String queryExited = "select name, id from containers where state = ? and SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryExited);
             preparedStatement.setString(1, exited);
+            preparedStatement.setString(2, ip);
             ResultSet resultSet = preparedStatement.executeQuery();
             int i = 0;
             while (resultSet.next()) {
@@ -355,9 +450,10 @@ public class MainSceneController implements Initializable {
     public void setListActiveContainers() {
         try {
             String state = "running";
-            String queryExited = "select name from dockerinstance where state = ?";
+            String queryExited = "select name from containers where state = ? and SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryExited);
             preparedStatement.setString(1, state);
+            preparedStatement.setString(2, ip);
             ResultSet resultSet = preparedStatement.executeQuery();
             int i = 0;
             while (resultSet.next()) {

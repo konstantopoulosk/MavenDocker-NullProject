@@ -1,109 +1,20 @@
 package com.nullteam;
 
-import com.github.dockerjava.api.command.PullImageCmd;
-import com.github.dockerjava.api.command.PullImageResultCallback;
-import com.github.dockerjava.api.model.PullResponseItem;
+import java.util.concurrent.BlockingQueue;
+
+import com.google.gson.Gson;
 
 public class ExecutorThread extends Thread {
+
+    private final BlockingQueue<ActionRequest> actionQueue;
+
+    public ExecutorThread(BlockingQueue<ActionRequest> actionQueue) {
+        this.actionQueue= actionQueue;
+    }
     /**
      * id represents container's id.
      */
-    private final String id; //container id
-    /**
-     * task field is used in order to,
-     * switch between cases in run.
-     */
-    private final TaskType task; // taskType
-    /**
-     * name2Rename field represents,
-     * new Name to rename a container.
-     */
     private String name2Rename = null; //gia to rename
-    public enum TaskType {
-        /**
-         * START TaskType is used,
-         * to execute the action to start,
-         * the container.
-         */
-        START,
-        /**
-         * STOP TaskType is used,
-         * to execute the action to stop,
-         * the container.
-         */
-        STOP,
-        /**
-         * RENAME TaskType is used,
-         * to execute the action to rename,
-         * the container.
-         */
-        RENAME,
-        /**
-         * RESTART TaskType is used,
-         * to execute the action to restart,
-         * the container.
-         */
-        RESTART,
-        /**
-         * PAUSE TaskType is used,
-         * to execute the action to pause,
-         * the container.
-         */
-        PAUSE,
-        /**
-         * UNPAUSE TaskType is used,
-         * to execute the action to unpause,
-         * the container.
-         */
-        UNPAUSE,
-        /**
-         * REMOVE TaskType is used,
-         * to execute the action to remove,
-         * the container.
-         */
-        REMOVE,
-        /**
-         * KILL TaskType is used,
-         * to execute the action to kill,
-         * the container.
-         */
-        KILL,
-        /**
-         * IMPLEMENT TaskType is used,
-         * to execute the action to implement,
-         * the container.
-         */
-        IMPLEMENT,
-        REMOVEIMAGE
-    }
-    //Constructor for RENAME
-
-    /**
-     * Constructor is used only when user,
-     * wants to rename a container.
-     * @param iD the id of the container
-     * @param task1 the task is to rename
-     * @param nameToRename the new name
-     */
-    public ExecutorThread(final String iD,
-                          final TaskType task1,
-                          final String nameToRename) {
-        this.id = iD;
-        this.task = task1;
-        this.name2Rename = nameToRename;
-    }
-
-    /**
-     * Constructor is used always except,
-     * for rename.
-     * @param iD the id of the container
-     * @param task1 everything else but rename
-     */
-    public ExecutorThread(final String iD, final TaskType task1) {
-        this.id = iD;
-        this.task = task1;
-    }
-
     /**
      * Method run is used to execute,
      * the thread based on a specific,
@@ -112,51 +23,78 @@ public class ExecutorThread extends Thread {
 
     @Override
     public void run() {
-        switch (task) {
-            case START: //start
-                startContainer();
+        while (true) {
+            try {
+                System.out.println("Executor is running..");
+                // Dequeue the ActionRequest from the actionQueue
+                ActionRequest actionRequest = actionQueue.take();
+
+                // Extract the actionType and containerId from the ActionRequest
+                String actionType = actionRequest.getActionType();
+                String containerId = actionRequest.getContainerId();
+
+                // Perform the corresponding Docker action based on actionType and containerId
+                performDockerAction(actionType, containerId);
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+
+    private void performDockerAction(String actionType, String containerId) {
+        // Logic to perform the Docker action based on actionType and containerId
+        System.out.println("Performing action: " + actionType + " on container: " + containerId);
+        switch (actionType) {
+            case "START": //start
+                startContainer(containerId);
+                System.out.println("Started container: " + containerId );
                 break;
-            case STOP: //stop
-                stopContainer();
+            case "STOP": //stop
+                stopContainer(containerId);
                 break;
-            case RENAME: //rename
-                renameContainer();
+            case "RENAME": //rename
+                renameContainer(containerId);
                 break;
-            case REMOVE:
-                removeContainer();
+            case "REMOVE":
+                removeContainer(containerId);
                 break;
-            case RESTART:
-                restartContainer();
+            case "RESTART":
+                restartContainer(containerId);
                 break;
-            case PAUSE:
-                pauseContainer();
+            case "PAUSE":
+                pauseContainer(containerId);
                 break;
-            case UNPAUSE:
-                unpauseContainer();
+            case "UNPAUSE":
+                unpauseContainer(containerId);
                 break;
-            case KILL:
-                killContainer();
+            case "KILL":
+                killContainer(containerId);
                 break;
-            case IMPLEMENT:
-                implementImage();
+            /*
+            case "IMPLEMENT":
+                implementImage(containerId);
                 break;
-            case REMOVEIMAGE:
-                removeImage();
+            case "REMOVEIMAGE":
+                removeImage(containerId);
                 break;
+             */
             default:
                 System.out.println("Invalid action type");
         }
     }
 
-    private DockerInstance findContainerInClient() {
+    private DockerInstance findContainerInClient(String id) {
         DockerInstance instance = null;
         for (DockerInstance c : DockerInstance.containerslist) {
-            if (c.getContainerId().equals(this.id)) {
+            if (c.getContainerId().equals(id)) {
                 instance = c;
             }
         }
         return instance;
     }
+    /*
     private DockerImage findImageInClient() {
         DockerImage image = null;
         for (DockerImage i : DockerImage.imageslist) {
@@ -166,35 +104,38 @@ public class ExecutorThread extends Thread {
         }
         return image;
     }
+     */
     //ALL THE EXECUTION METHODS
-    private void startContainer() {
-        findContainerInClient().startContainer();
+    private void startContainer(String id) {
+        findContainerInClient(id).startContainer();
     }
-    private void stopContainer() {
-        findContainerInClient().stopContainer();
+    private void stopContainer(String id) {
+        findContainerInClient(id).stopContainer();
     }
-    private void renameContainer() {
-        findContainerInClient().renameContainer(this.name2Rename);
+    private void renameContainer(String id) {
+        findContainerInClient(id).renameContainer(this.name2Rename);
     }
-    private void removeContainer() {
-        findContainerInClient().removeContainer();
+    private void removeContainer(String id) {
+        findContainerInClient(id).removeContainer();
     }
-    private void restartContainer() {
-        findContainerInClient().restartContainer();
+    private void restartContainer(String id) {
+        findContainerInClient(id).restartContainer();
     }
-    private void pauseContainer() {
-        findContainerInClient().pauseContainer();
+    private void pauseContainer(String id) {
+        findContainerInClient(id).pauseContainer();
     }
-    private void unpauseContainer() {
-        findContainerInClient().unpauseContainer();
+    private void unpauseContainer(String id) {
+        findContainerInClient(id).unpauseContainer();
     }
-    private void killContainer() {
-        findContainerInClient().killContainer();
+    private void killContainer(String id) {
+        findContainerInClient(id).killContainer();
     }
+    /*
     private void implementImage() {
         findImageInClient().implementImage();
     }
     private void removeImage() {
         findImageInClient().removeImage();
     }
+     */
 }

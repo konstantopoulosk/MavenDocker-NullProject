@@ -1,7 +1,5 @@
 package nullteam.gui;
-
-import com.nullteam.ClientUpdater;
-import com.nullteam.DockerMonitor;
+import com.nullteam.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,9 +35,6 @@ public class App extends Application {
     }
     public static void main(String[] args) throws Exception {
         //ClientUpdater.connectionAccomplished();
-        Database database = new Database();
-        ClientUpdater.dropTables(database.getConnection());
-        ClientUpdater.createTables(database.getConnection());
         launch(args);
     }
 }

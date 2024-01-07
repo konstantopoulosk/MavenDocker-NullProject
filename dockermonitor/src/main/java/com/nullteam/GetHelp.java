@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
-final class GetHelp {
+public class GetHelp {
     private GetHelp() {
     }
     public static void listImage() {
