@@ -555,29 +555,4 @@ public class DockerInstance {
             // Close resources
         }
     }
-    /* !! TO AVOID REPETITIONS OF CODE
-    public static String chooseAStoppedContainer() {
-        return chooseBasedOnCondition("!(c.getContainerStatus()
-                .startsWith("+"\"\\"+"Up"+"\"\\"+"))");
-    }
-    public static String chooseBasedOnCondition(String condition) {
-        List<DockerInstance> mylist = new ArrayList<>();
-        int i=1;
-        for (DockerInstance c :containerslist) {
-            if (Boolean.parseBoolean(condition)) {
-                System.out.println(i + ") " + "Name: "
-                        + c.getContainerName() + "  ID: " + c.getContainerId()
-                        + "  Image: " + c.getContainerImage()
-                        + "  STATUS: " + c.getContainerStatus());
-                mylist.add(c);
-                i++;
-            }
-        }
-        Scanner in = new Scanner(System.in);
-        System.out.print("YOUR CHOICE---> ");
-        int answer = in.nextInt();
-        return containerslist.get(containerslist
-                .indexOf(mylist.get(answer-1))).getContainerId();
-    }
-    */
 }
