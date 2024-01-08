@@ -229,8 +229,8 @@ public class DockerImage {
      * This method lists all the images that are in use.
      * This means all the images that run containers.
     */
-    public static void listUsedImages() {
-        System.out.println("Listing all the images that are in use...\n.\n.\n.");
+    public static List<String> listUsedImages() {
+        List<String> usedImages = new ArrayList<>();
         int num = 0; //Numbers to make the output more User Friendly
         for (DockerImage img : imageslist) {
             List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
@@ -245,9 +245,9 @@ public class DockerImage {
             }
             if (f) {
                 num++;
-                System.out.println(num + ") "
-                        + img); //toString inside a for loop
+                usedImages.add(num + ") " + img);
             }
         }
+        return usedImages;
     }
 }
