@@ -91,7 +91,9 @@ public class MainSceneController implements Initializable {
         if (!isPressed) {
             isPressed = true;
             GetHelp.listContainers();
+            GetHelp.listImage();
             GetHelp.listVolumes();
+            GetHelp.listNetworks();
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
             BlockingQueue<ActionRequest> actionQueue = new LinkedBlockingQueue<>();
@@ -158,7 +160,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListImages(ActionEvent event) throws IOException {
         System.out.println("Tap List Images");
-        //setListImages();
+        setListImages();
         imagesList = new ListView<>(images);
     }
     @FXML
@@ -179,7 +181,6 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void tapToSeeYourNetworks(ActionEvent event) throws IOException {
-         //todo: Executor.
         setListNetworks();
         networksList = new ListView<>(networks);
     }
@@ -397,38 +398,15 @@ public class MainSceneController implements Initializable {
             "Tag", "Times Used", "Size");
     @FXML
     private ListView<String> imagesList = new ListView<>(images);
-    /*
     public void setListImages() {
-        try {
-            String queryImages = "select repository, tag, timesUsed, size from dockerimage";
-            Statement statement1 = connection.createStatement();
-            ResultSet imagesOutput = statement1.executeQuery(queryImages);
-            int i = 0;
-            while (imagesOutput.next()) {
-                i++;
-                String repository, tag, timesUsed, size;
-                repository = imagesOutput.getString("repository");
-                tag = imagesOutput.getString("tag");
-                timesUsed = imagesOutput.getString("timesUsed");
-                size = imagesOutput.getString("size");
-                String imagesOut = i + ", " + repository + ", " + tag + ", "
-                        + timesUsed + ", " + size + " ";
-                imagesList.getItems().add(imagesOut);
-            }
-            if (i == 0) {
-                imagesList.getItems().removeAll();
-                ObservableList<String> images1 = FXCollections.observableArrayList("No Images");
-                imagesList = new ListView<>(images1);
-                imagesList.getItems().add("Nothing to Show Here :(");
-            } else {
-                imagesList.getItems().remove(images);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        int num = 0; //Numbers to make the output more User Friendly
+        for (DockerImage img : DockerImage.imageslist) {
+            num++;
+            imagesList.getItems().add(num + ") " + img.toString());
         }
     }
 
-     */
+
     private final ObservableList<String> exitedContainersINIT = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> exitedContainers = new ListView<>(exitedContainersINIT);
@@ -575,6 +553,10 @@ public class MainSceneController implements Initializable {
     @FXML
     private ListView<String> networksList = new ListView<>(networks);
     public void setListNetworks() {
-        //todo.
+        int num = 0;
+        for (DockerNetwork n : DockerNetwork.networkslist) {
+            num++;
+            networksList.getItems().add(num + ") " + n.toString());
+        }
     }
 }
