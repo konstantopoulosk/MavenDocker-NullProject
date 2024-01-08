@@ -10,7 +10,7 @@ public class DockerVolume {
      * List of all the DockerVolume objects,
      * all the volumes in the DockerDesktop.
      */
-    private static final List<DockerVolume> volumeslist = new ArrayList<>();
+    public static final List<DockerVolume> volumeslist = new ArrayList<>();
     final String driver;
     final String name;
     final String created;
@@ -81,24 +81,9 @@ public class DockerVolume {
      */
     @Override
     public String toString() {
-        return "Driver: " + getDriver() + " Name: "
-                + getName() + " CreatedAt: " + getCreated()
-                + "   Mountpoint: " + getMountpoint();
-    }
-
-    /**
-     * This method prints all the volumes inside the
-     * user's Docker Desktop with their information
-     * in a shorted list.
-     */
-    public static void showVolumes() {
-        System.out.println("Listing all the volumes...\n.\n.\n.");
-        int num = 0; //Numbers to make the output more User Friendly
-        for (DockerVolume v : volumeslist) {
-            num++;
-            System.out.println(num + ") "
-                    + v.toString() + "\n"); //toString inside a for loop
-        }
+        return "Driver: " + getDriver() + "  Name: "
+                + getName() + "  CreatedAt: " + getCreated()
+                + "    Mountpoint: " + getMountpoint();
     }
 
     /**

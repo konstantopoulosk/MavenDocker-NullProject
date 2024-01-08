@@ -91,6 +91,7 @@ public class MainSceneController implements Initializable {
         if (!isPressed) {
             isPressed = true;
             GetHelp.listContainers();
+            GetHelp.listVolumes();
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
             BlockingQueue<ActionRequest> actionQueue = new LinkedBlockingQueue<>();
@@ -564,8 +565,11 @@ public class MainSceneController implements Initializable {
     @FXML
     private ListView<String> volumesList = new ListView<>(volumes);
     public void setListVolumes() {
-        volumesList.getItems().add("TO DO");
-        //todo.
+        int num = 0;
+        for (DockerVolume v : DockerVolume.volumeslist) {
+            num++;
+            volumesList.getItems().add(num + ") " + v.toString() + "\n");
+        }
     }
     private ObservableList<String> networks = FXCollections.observableArrayList("name");
     @FXML
