@@ -365,6 +365,22 @@ public class MainSceneController implements Initializable {
         openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirm.fxml");
         databaseThread();
     }
+    @FXML
+    public void changeToSeeAnotherList(ActionEvent event) throws IOException {
+        changeTheScenes("/seeImagesInUse.fxml", event);
+    }
+    private final ObservableList<String> imagesInUseINIT = FXCollections.observableArrayList(" ");
+    @FXML
+    private ListView<String> imagesInUse = new ListView<>(imagesInUseINIT);
+    @FXML
+    public void tapToSeeImagesInUse(ActionEvent event) {
+        setImagesInUse();
+    }
+    public void setImagesInUse() {
+        //todo: IMAGES IN USE!!!
+        //endeiktiko
+        imagesInUse.getItems().add("ANTE GEIA");
+    }
     private final ObservableList<String> containers = FXCollections.observableArrayList("Name", "Image", "State");
     @FXML
     private ListView<String> containersList = new ListView<>(containers);
