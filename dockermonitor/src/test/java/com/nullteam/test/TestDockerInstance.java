@@ -1,6 +1,8 @@
 package com.nullteam.test;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.github.dockerjava.api.model.Container;
+import com.nullteam.ClientUpdater;
 import com.nullteam.DockerImage;
 import com.nullteam.DockerInstance;
 import org.junit.After;
@@ -13,11 +15,12 @@ import java.util.List;
 
 public class TestDockerInstance {
     private static List<DockerInstance> allContainers;
-    private final String containerId = "6cfa7f0707e0";
-    //private final DockerImage image = new DockerImage("mongo", "Latest", "123456789");
-    private String status = "Exited";
-    private final String name = "GREGORY";
-    private final String imageContainer = "mongo1";
+    List<Container> updatedContainers = ClientUpdater.getUpdatedContainersFromClient();
+    Container container = updatedContainers.get(0);
+    private final String containerId = container.getId();
+    private String status = container.getState();
+    private final String name = container.getNames()[0];
+    private final String imageContainer = container.getImage();
     DockerInstance container1 = new DockerInstance(name, containerId,
             imageContainer, status);
     DockerInstance container2 = new DockerInstance("NewContainer", "af1214c44590",
