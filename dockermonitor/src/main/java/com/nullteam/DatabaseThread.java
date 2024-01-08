@@ -23,14 +23,17 @@ public class DatabaseThread extends Thread {
     public void run() {
          try {
              if (newUser(connection, ip)) {
+                 System.out.println("You are new User");
                  containers++;
                  addToMeasurements(connection, containers);
                  readContainersFromCsv(connection, containers);
              } else {
+                 System.out.println("Not a new user");
                  //Not a new User, so update name, state, id (foreign key).
                  //also container from csv may not exist in database (implement) so insert.
                  //also container could be deleted (remove).
                 if (csvEqualsDatabase(connection, ip)) {
+                    System.out.println("update");
                     //no remove, no implement. JUST UPDATE.
                     containers++; //something is wrong here!!! //todo
                     addToMeasurements(connection, containers);
@@ -38,9 +41,11 @@ public class DatabaseThread extends Thread {
                 } else {
                     //remove or implement image.
                     if (csvHasMoreContainers(connection, ip)) {
+                        System.out.println("Implement");
                         //implement image, start new container.
                         addContainer(connection, ip, containers);
                     } else {
+                        System.out.println("Remove");
                         //container removed or image removed -> delete all containers.
                         removeContainerFromDatabase(connection, ip);
                     }
@@ -57,37 +62,32 @@ public class DatabaseThread extends Thread {
              PreparedStatement preparedStatement = connection1.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery();
              resultSet.next();
-             return resultSet.getInt(1);
+             int count = resultSet.getInt(1);
+             connection1.close();
+             return count;
          } catch (Exception e) {
              e.printStackTrace();
              return -1;
          }
     }
-    public CSVReader openMyCSV() {
-         try {
-             FileReader fr = new FileReader("containers.csv");
-             return new CSVReader(fr);
-         } catch (Exception e) {
-             e.printStackTrace();
-             return null;
-         }
-    }
     //Reads the containers.csv and inserts everything into the table containers.
     public void readContainersFromCsv(Connection connection, int containers) {
         try {
-            CSVReader csvReader = openMyCSV();
+            FileReader fr = new FileReader("containers.csv");
+            CSVReader csvReader = new CSVReader(fr);
             String[] container;
             while ((container = csvReader.readNext()) != null) {
+                System.out.println("PRINT");
                 if (!container[0].equals("Container ID")) {
                     String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
                             "VALUES (?, ?, ?, ?, ?, ?)";
                     PreparedStatement preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setString(1, container[0]);
-                    preparedStatement.setString(2, container[1]);
-                    preparedStatement.setString(3, container[2]);
-                    preparedStatement.setString(4, container[3]);
+                    for (int i = 0; i < 4; i++) {
+                        preparedStatement.setString(i+1, container[i]);
+                    }
                     preparedStatement.setString(5, ip);
                     preparedStatement.setInt(6, containers);
+                    preparedStatement.executeUpdate();
                 }
             }
             csvReader.close();
@@ -127,17 +127,20 @@ public class DatabaseThread extends Thread {
     }
     public void updateDatabase(Connection connection, String ip, int containers) {
          try {
-             CSVReader csvReader = openMyCSV();
+             FileReader fr = new FileReader("containers.csv");
+             CSVReader csvReader = new CSVReader(fr);
              String[] container;
              while ((container = csvReader.readNext()) != null) {
+                 System.out.println("PRINT");
                  if (!container[0].equals("Container ID")) {
-                     String query = "UPDATE containers SET name = ?, state = ?, id = ? WHERE SystemIp = ?";
+                     String query = "UPDATE containers SET name = ?, state = ?, id = ? WHERE SystemIp = ? AND containerId = ?";
                      PreparedStatement preparedStatement = connection.prepareStatement(query);
                      preparedStatement.setString(1, container[1]);
                      preparedStatement.setString(2, container[3]);
                      preparedStatement.setInt(3, containers);
                      preparedStatement.setString(4, ip);
-                     ResultSet resultSet = preparedStatement.executeQuery();
+                     preparedStatement.setString(5, container[0]);
+                     preparedStatement.executeUpdate();
                  }
              }
              csvReader.close();
@@ -147,7 +150,8 @@ public class DatabaseThread extends Thread {
     }
     public void addContainer(Connection connection, String ip, int containers) {
          try {
-             CSVReader csvReader = openMyCSV();
+             FileReader fr = new FileReader("containers.csv");
+             CSVReader csvReader = new CSVReader(fr);
              String[] container;
              while ((container = csvReader.readNext()) != null) {
                  if (!container[0].equals("Container ID")) {
@@ -160,7 +164,7 @@ public class DatabaseThread extends Thread {
                         }
                         preparedStatement.setString(5, ip);
                         preparedStatement.setInt(6, containers);
-                        ResultSet resultSet = preparedStatement.executeQuery();
+                        preparedStatement.executeUpdate();
                     }
                  }
              }
@@ -171,7 +175,8 @@ public class DatabaseThread extends Thread {
     }
     public List<String> getListContainersCsv() {
         try {
-            CSVReader csvReader = openMyCSV();
+            FileReader fr = new FileReader("containers.csv");
+            CSVReader csvReader = new CSVReader(fr);
             String[] container;
             List<String> csvContainers = new ArrayList<>();
             while ((container = csvReader.readNext()) != null) {
@@ -207,7 +212,7 @@ public class DatabaseThread extends Thread {
              PreparedStatement preparedStatement = connection.prepareStatement(queryDelete);
              preparedStatement.setString(1, ip);
              preparedStatement.setString(2, id);
-             ResultSet resultSet = preparedStatement.executeQuery();
+             preparedStatement.executeUpdate();
          } catch (Exception e) {
              e.printStackTrace();
          }
@@ -253,7 +258,8 @@ public class DatabaseThread extends Thread {
     }
     public boolean csvHasMoreContainers(Connection connection, String ip) {
          try {
-             CSVReader csvReader = openMyCSV();
+             FileReader fr = new FileReader("containers.csv");
+             CSVReader csvReader = new CSVReader(fr);
              String[] container;
              int containersInCSV = 0;
              while ((container = csvReader.readNext()) != null) {
@@ -279,7 +285,8 @@ public class DatabaseThread extends Thread {
     }
     public boolean csvEqualsDatabase(Connection connection, String ip) {
          try {
-             CSVReader csvReader = openMyCSV();
+             FileReader fr = new FileReader("containers.csv");
+             CSVReader csvReader = new CSVReader(fr);
              String[] container;
              int containersInCSV = 0;
              while ((container = csvReader.readNext()) != null) {
@@ -304,6 +311,3 @@ public class DatabaseThread extends Thread {
          }
     }
 }
-
-
-

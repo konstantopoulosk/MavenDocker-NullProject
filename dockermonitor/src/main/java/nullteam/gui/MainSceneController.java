@@ -1,5 +1,6 @@
 package nullteam.gui;
 
+import com.github.dockerjava.api.model.Container;
 import com.google.gson.Gson;
 import com.nullteam.*;
 import javafx.collections.FXCollections;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -23,6 +25,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Duration;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
@@ -87,7 +90,7 @@ public class MainSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!isPressed) {
             isPressed = true;
-            //GetHelp.listContainers();
+            GetHelp.listContainers();
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
             BlockingQueue<ActionRequest> actionQueue = new LinkedBlockingQueue<>();
@@ -163,8 +166,8 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void tapToListContainers(ActionEvent event) throws IOException {
-        databaseThread();
         setListContainers();
+        //databaseThread();
     }
     @FXML
     public void pressNetworks(ActionEvent event) throws IOException {
@@ -196,10 +199,11 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void startContainer(ActionEvent event) throws IOException {
-        databaseThread();
         //todo: Executor.
-        ClientUpdater.getUpdatedContainersFromClient();
-        String containerId = "ad952480f9f28d0992ec70b5942efc8b5d3b8b8aaa50551f22a14db4ebcc5c39";
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        String containerId = containers.getFirst().getId();
+        System.out.println(containerId);
+//        String containerId = "ad952480f9f28d0992ec70b5942efc8b5d3b8b8aaa50551f22a14db4ebcc5c39";
         // Create an ActionRequest object
         ActionRequest actionRequest = new ActionRequest("START", containerId);
         // Send the request to the API
@@ -210,6 +214,7 @@ public class MainSceneController implements Initializable {
                     return null;
                 });
         openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirm.fxml");
+        databaseThread();
     }
     @FXML
     public void pressStop(ActionEvent event) throws IOException {

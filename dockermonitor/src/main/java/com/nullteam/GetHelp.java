@@ -1,5 +1,5 @@
 package com.nullteam;
-/*
+
 import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PullImageResultCallback;
@@ -18,6 +18,7 @@ import java.util.concurrent.Executor;
 public class GetHelp {
     private GetHelp() {
     }
+    /*
     public static void listImage() {
         List<Image> images =
                 ClientUpdater.getUpdatedImagesFromClient();
@@ -28,6 +29,8 @@ public class GetHelp {
                     "latest", i.getId());
         }
     }
+
+     */
     public static void listContainers() {
         List<Container> containers =
                 ClientUpdater.getUpdatedContainersFromClient();
@@ -60,7 +63,7 @@ public class GetHelp {
                     n.getDriver(), n.getScope());
         }
     }
-
+    /*
     public static void case1Stop() {
         System.out.println("You chose: (1) Stop a container\n");
         if (DockerInstance.noActiveContainers()) {
@@ -78,6 +81,9 @@ public class GetHelp {
             avoidInterruption(executorStop);
         }
     } //end case 1: Stop
+
+     */
+    /*
     public static void case2Start() {
         System.out.println("You chose: (2) Start a container\n");
         System.out.println("Choose one of the exited containers bellow "
@@ -89,6 +95,9 @@ public class GetHelp {
         System.out.println("Starting the container...");
         avoidInterruption(executorStart);
     } //end case 2: Start
+
+     */
+    /*
     public static void case3Rename() {
         Scanner in = new Scanner(System.in);
         System.out.println("You chose: (3) Rename a container\n");
@@ -207,12 +216,12 @@ public class GetHelp {
             DockerInstance.showContainerLogs(containerId);
         }
     }
-
+*/
     /**
      * This method is used to wait for an object
      * ExecutorThread, which is a thread, to finish.
      * @param et ExecutorThread
-
+*/
     public static void avoidInterruption(ExecutorThread et){
         try {
             et.join();
@@ -224,7 +233,7 @@ public class GetHelp {
     /**
      * This method pauses the programm
      * for 2 seconds.
-
+*/
     public static void wait2seconds() {
         try {
             final int m = 2000;
@@ -245,6 +254,7 @@ public class GetHelp {
         System.out.println("Transferring you "
                + "to the Main Menu ...");
     }
+    /*
     public static void imageCase1() {
         System.out.println("You chose: (1) View available images\n");
         DockerImage.listAllImages();
@@ -253,10 +263,13 @@ public class GetHelp {
         System.out.println("You chose: (2) View images in use\n");
         DockerImage.listUsedImages();
     }
+
+     */
     /**
      * This method pulls an image from DockerHub
      * and adds it to the imagelist
-
+*/
+    /*
     public static void case3Pull() {
         System.out.println("You chose: (3) Pull an image "
                 + "from DockerHub\n");
@@ -340,5 +353,6 @@ public class GetHelp {
     public static void goToImMenu() {
         System.out.println("\nTransferring you to the Image Menu ...");
     }
+
+     */
 }
-*/
