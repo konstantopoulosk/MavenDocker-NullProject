@@ -75,17 +75,22 @@
                <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="198.0">
                      <children>
-                        <Button layoutX="52.0" layoutY="154.0" mnemonicParsing="false" onAction="#pressRemoveImage" prefHeight="42.0" prefWidth="94.0" text="Remove" textFill="#162dc1">
+                        <Button layoutX="52.0" layoutY="154.0" mnemonicParsing="false" onAction="#pressRemoveImage" prefHeight="50.0" prefWidth="94.0" text="Remove" textFill="#162dc1">
                            <font>
                               <Font name="Calibri Light" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="52.0" layoutY="84.0" mnemonicParsing="false" onAction="#pressImplement" prefHeight="42.0" prefWidth="94.0" text="Implement" textFill="#162dc1">
+                        <Button layoutX="52.0" layoutY="84.0" mnemonicParsing="false" onAction="#pressImplement" prefHeight="50.0" prefWidth="94.0" text="Implement" textFill="#162dc1">
                            <font>
                               <Font name="Calibri Light" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="52.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressPull" prefHeight="42.0" prefWidth="94.0" text="Pull" textFill="#162dc1">
+                        <Button layoutX="52.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressPull" prefHeight="50.0" prefWidth="94.0" text="Pull" textFill="#162dc1">
+                           <font>
+                              <Font name="Calibri Light" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="52.0" layoutY="224.0" mnemonicParsing="false" onAction="#changeToSeeAnotherList" prefHeight="50.0" prefWidth="94.0" text="Images In Use" textAlignment="CENTER" textFill="#162dc1" wrapText="true">
                            <font>
                               <Font name="Calibri Light" size="14.0" />
                            </font>
