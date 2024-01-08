@@ -23,29 +23,24 @@ public class DatabaseThread extends Thread {
     public void run() {
          try {
              if (newUser(connection, ip)) {
-                 System.out.println("You are new User");
                  containers++;
                  addToMeasurements(connection, containers);
                  readContainersFromCsv(connection, containers);
              } else {
-                 System.out.println("Not a new user");
                  //Not a new User, so update name, state, id (foreign key).
                  //also container from csv may not exist in database (implement) so insert.
                  //also container could be deleted (remove).
                 if (csvEqualsDatabase(connection, ip)) {
-                    System.out.println("update");
                     //no remove, no implement. JUST UPDATE.
-                    containers++; //something is wrong here!!! //todo
+                    containers++;
                     addToMeasurements(connection, containers);
                     updateDatabase(connection, ip, containers);
                 } else {
                     //remove or implement image.
                     if (csvHasMoreContainers(connection, ip)) {
-                        System.out.println("Implement");
                         //implement image, start new container.
                         addContainer(connection, ip, containers);
                     } else {
-                        System.out.println("Remove");
                         //container removed or image removed -> delete all containers.
                         removeContainerFromDatabase(connection, ip);
                     }
@@ -77,7 +72,6 @@ public class DatabaseThread extends Thread {
             CSVReader csvReader = new CSVReader(fr);
             String[] container;
             while ((container = csvReader.readNext()) != null) {
-                System.out.println("PRINT");
                 if (!container[0].equals("Container ID")) {
                     String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
                             "VALUES (?, ?, ?, ?, ?, ?)";
@@ -125,13 +119,13 @@ public class DatabaseThread extends Thread {
              return false;
          }
     }
+    
     public void updateDatabase(Connection connection, String ip, int containers) {
          try {
              FileReader fr = new FileReader("containers.csv");
              CSVReader csvReader = new CSVReader(fr);
              String[] container;
              while ((container = csvReader.readNext()) != null) {
-                 System.out.println("PRINT");
                  if (!container[0].equals("Container ID")) {
                      String query = "UPDATE containers SET name = ?, state = ?, id = ? WHERE SystemIp = ? AND containerId = ?";
                      PreparedStatement preparedStatement = connection.prepareStatement(query);

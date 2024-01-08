@@ -104,11 +104,13 @@ public class MainSceneController implements Initializable {
     public void databaseThread() {
         DatabaseThread databaseThread = new DatabaseThread(connection);
         databaseThread.run();
+        /*
         try {
             databaseThread.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+         */
     }
      public void changeTheScenes(String fxmlFile, ActionEvent event) throws IOException {
          root = FXMLLoader.load(getClass().getResource(fxmlFile));
@@ -158,6 +160,7 @@ public class MainSceneController implements Initializable {
     public void tapToListImages(ActionEvent event) throws IOException {
         System.out.println("Tap List Images");
         //setListImages();
+        imagesList = new ListView<>(images);
     }
     @FXML
     public void pressContainers(ActionEvent event) throws IOException {
@@ -167,7 +170,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListContainers(ActionEvent event) throws IOException {
         setListContainers();
-        //databaseThread();
+        containersList = new ListView<>(containers);
+        databaseThread();
     }
     @FXML
     public void pressNetworks(ActionEvent event) throws IOException {
@@ -178,6 +182,7 @@ public class MainSceneController implements Initializable {
     public void tapToSeeYourNetworks(ActionEvent event) throws IOException {
          //todo: Executor.
         setListNetworks();
+        networksList = new ListView<>(networks);
     }
     @FXML
     public void pressVolumes(ActionEvent event) throws IOException {
@@ -188,6 +193,7 @@ public class MainSceneController implements Initializable {
     public void tapToSeeVolumes(ActionEvent event) throws IOException {
          //todo: Executor.
         setListVolumes();
+        volumesList = new ListView<>(volumes);
     }
     @FXML
     public void pressStart(ActionEvent event) throws IOException {
@@ -196,6 +202,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeExitedContainers(ActionEvent event) throws IOException {
         setListExitedContainers();
+        exitedContainers = new ListView<>(exitedContainersINIT);
     }
     @FXML
     public void startContainer(ActionEvent event) throws IOException {
@@ -203,7 +210,6 @@ public class MainSceneController implements Initializable {
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
         String containerId = containers.getFirst().getId();
         System.out.println(containerId);
-//        String containerId = "ad952480f9f28d0992ec70b5942efc8b5d3b8b8aaa50551f22a14db4ebcc5c39";
         // Create an ActionRequest object
         ActionRequest actionRequest = new ActionRequest("START", containerId);
         // Send the request to the API
@@ -222,13 +228,14 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void stopContainer(ActionEvent event) throws IOException {
-        databaseThread();
         //todo: Executor.
         openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirm.fxml");
+        databaseThread();
     }
     @FXML
     public void tapToSeeActiveContainers(ActionEvent event) throws IOException {
         setListActiveContainers();
+        activeContainers = new ListView<>(actives);
     }
     @FXML
     public void pressRename(ActionEvent event) throws IOException {
@@ -236,9 +243,9 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
-        databaseThread();
-        openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirm.fxml");
         //todo: Executor.
+        openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirm.fxml");
+        databaseThread();
     }
     @FXML
     public void pressRemove(ActionEvent event) throws IOException {
@@ -246,9 +253,9 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void removeContainer(ActionEvent event) throws IOException {
-        databaseThread();
-        openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirm.fxml");
         //todo: Executor.
+        openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirm.fxml");
+        databaseThread();
     }
     @FXML
     public void pressRestart(ActionEvent event) throws IOException {
@@ -256,13 +263,14 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void restartContainer(ActionEvent event) throws IOException {
-        databaseThread();
-        openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirm.fxml");
         //todo: Executor.
+        openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirm.fxml");
+        databaseThread();
     }
     @FXML
     public void tapToSeeRestartContainers(ActionEvent event) throws IOException {
         setListRestartContainers();
+        restartListContainer = new ListView<>(restart);
     }
     @FXML
     public void pressPause(ActionEvent event) throws IOException {
@@ -270,13 +278,14 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pauseContainer(ActionEvent event) throws IOException {
-        databaseThread();
-        openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirm.fxml");
         //todo: Executor.
+        openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirm.fxml");
+        databaseThread();
     }
     @FXML
     public void tapToSeePausedContainers(ActionEvent event) throws IOException {
          setListPauseContainers();
+        pauseContainers = new ListView<>(pause);
     }
     @FXML
     public void pressUnpause(ActionEvent event) throws IOException {
@@ -284,9 +293,9 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void unpauseContainer(ActionEvent event) throws IOException {
-        databaseThread();
-        openConfirmationWindow(event,"Unpause Container Properties", "unpauseContainerConfirm.fxml");
         //todo: Executor.
+        openConfirmationWindow(event,"Unpause Container Properties", "unpauseContainerConfirm.fxml");
+        databaseThread();
     }
     @FXML
     public void pressKill(ActionEvent event) throws IOException {
@@ -294,9 +303,9 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void killContainer(ActionEvent event) throws IOException {
-        databaseThread();
-        openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirm.fxml");
         //todo: Executor.
+        openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirm.fxml");
+        databaseThread();
     }
     @FXML
     public void pressLogs(ActionEvent event) throws IOException {
@@ -310,6 +319,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeTheLogs(ActionEvent event) throws IOException {
         setListLogs();
+        logsList = new ListView<>(logs);
     }
     @FXML
     public void pressSubnets(ActionEvent event) throws IOException {
@@ -323,6 +333,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeSubnets() {
         setListSubnets();
+        subnetsList = new ListView<>(subnets);
     }
     @FXML
     public void pressPull(ActionEvent event) throws IOException {
@@ -340,8 +351,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
          //todo: Executor
-        databaseThread();
         openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirm.fxml" );
+        databaseThread();
     }
     @FXML
     public void pressRemoveImage(ActionEvent event) throws IOException {
@@ -350,8 +361,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyRemove(ActionEvent event) throws IOException {
          //todo: Executor.
-        databaseThread();
         openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirm.fxml");
+        databaseThread();
     }
     private final ObservableList<String> containers = FXCollections.observableArrayList("Name", "Image", "State");
     @FXML
