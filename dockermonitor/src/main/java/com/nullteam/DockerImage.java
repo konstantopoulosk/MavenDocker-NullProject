@@ -1,8 +1,7 @@
 /**
  * Package for our .java files
- */
+
 package com.nullteam;
-/*
 
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
