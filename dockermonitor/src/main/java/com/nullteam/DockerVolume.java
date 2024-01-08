@@ -10,11 +10,11 @@ public class DockerVolume {
      * List of all the DockerVolume objects,
      * all the volumes in the DockerDesktop.
      */
+    private static final List<DockerVolume> volumeslist = new ArrayList<>();
     final String driver;
     final String name;
     final String created;
     final String mountpoint;
-    private static final List<DockerVolume> volumeslist = new ArrayList<>();
 
     /**
      * Constructor for Class DockerVolume.
