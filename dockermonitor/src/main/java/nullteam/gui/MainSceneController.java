@@ -162,7 +162,6 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void tapToListImages(ActionEvent event) throws IOException {
-        System.out.println("Tap List Images");
         setListImages();
         imagesList = new ListView<>(images);
     }

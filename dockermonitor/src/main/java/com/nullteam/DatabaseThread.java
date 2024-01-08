@@ -271,50 +271,6 @@ public class DatabaseThread extends Thread {
              e.printStackTrace();
          }
     }
-    //Implement happened so add the new Container.
-    public void addContainer(Connection connection, String ip, int containers) {
-         try {
-             FileReader fr = new FileReader("containers.csv");
-             CSVReader csvReader = new CSVReader(fr);
-             String[] container;
-             while ((container = csvReader.readNext()) != null) {
-                 if (!container[0].equals("Container ID")) {
-                    if (!containerExistsInDatabase(connection, ip, container[0])) {
-                        String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id)" +
-                                "VALUES (?, ?, ?, ?, ?, ?)";
-                        PreparedStatement preparedStatement = connection.prepareStatement(query);
-                        for (int i = 0; i < 4; i++) {
-                            preparedStatement.setString(i + 1, container[i]);
-                        } //fewer lines
-                        preparedStatement.setString(5, ip);
-                        preparedStatement.setInt(6, containers);
-                        preparedStatement.executeUpdate(); //executes query
-                    }
-                 }
-             }
-             csvReader.close(); //close csv
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-    }
-    //Take in a List the containers from csv.
-    public List<String> getListContainersCsv() {
-        try {
-            FileReader fr = new FileReader("containers.csv");
-            CSVReader csvReader = new CSVReader(fr); //opens csv
-            String[] container;
-            List<String> csvContainers = new ArrayList<>(); //List to return
-            while ((container = csvReader.readNext()) != null) {
-                if (!container[0].equals("Container ID")) { //Do not include the header from csv.
-                    csvContainers.add(container[0]); //add element to the list
-                }
-            }
-            return csvContainers; //return the list.
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
     //takes in List the containers from the database.
     public List<String> getListContainersDatabase() {
          try {
@@ -330,86 +286,6 @@ public class DatabaseThread extends Thread {
          } catch (Exception e) {
              e.printStackTrace();
              return null;
-         }
-    }
-    //Here we have the Delete query to execute when remove container OR remove image happened.
-    public void finallyRemove(String ip, String id) {
-         try {
-             String queryDelete = "DELETE FROM containers WHERE SystemIp = ? AND containerId = ?";
-             PreparedStatement preparedStatement = connection.prepareStatement(queryDelete);
-             preparedStatement.setString(1, ip);
-             preparedStatement.setString(2, id);
-             preparedStatement.executeUpdate();
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-    }
-    //Here we check if a container should be removed or not.
-    public void removeContainerFromDatabase(Connection connection, String ip) {
-         try {
-             List<String> csvContainers = new ArrayList<>(getListContainersCsv()); //containers in csv
-             List<String> databaseContainers = new ArrayList<>(getListContainersDatabase()); //containers in Database
-             boolean containerShouldBeRemoved = true; //flag -> container should be removed
-             for (int i = 0; i < databaseContainers.size(); i++) {
-                 for (int j = 0; j < csvContainers.size(); j++) {
-                     if (csvContainers.get(j).equals(databaseContainers.get(i))) { //if we find the container from database
-                         containerShouldBeRemoved = false; //in csv THEN container should NOT be removed
-                     }
-                 }
-                 if (containerShouldBeRemoved) { //if true then delete.
-                     finallyRemove(ip, databaseContainers.get(i));
-                 }
-             }
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-    }
-    //Checks if a container exists in database.
-    public boolean containerExistsInDatabase(Connection connection,
-                                             String ip, String containerId) {
-         try {
-             String query = "SELECT COUNT(*) FROM containers WHERE SystemIp = ? AND containerId = ?";
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
-             preparedStatement.setString(1, ip);
-             preparedStatement.setString(2, containerId);
-             ResultSet resultSet = preparedStatement.executeQuery();
-             resultSet.next();
-             int count = resultSet.getInt(1);
-             if (count > 0) { //if count = 1 then
-                 return true; //Container already exists.
-             } else {
-                 return false; //Container does not exist.
-             }
-         } catch (Exception e) {
-             e.printStackTrace();
-             return false;
-         }
-    }
-    //checks if csv has more containers than the database -> implement happened.
-    public boolean csvHasMoreContainers(Connection connection, String ip) {
-         try {
-             List<String> csvContainers = new ArrayList<>(getListContainersCsv());
-             int containersInCSV = csvContainers.size(); //amount of csv containers
-             List<String> dbContainers = new ArrayList<>(getListContainersDatabase());
-             int containersInDatabase = dbContainers.size(); //amount of db containers
-             return containersInDatabase < containersInCSV; //returns true if csv has more containers.
-         } catch (Exception e) {
-             e.printStackTrace();
-             return false;
-         }
-    }
-    //checks if csv and database has the same amount of containers then no new container or container did
-    //not removed
-    public boolean csvEqualsDatabase(Connection connection, String ip) {
-         try {
-             List<String> csvContainers = new ArrayList<>(getListContainersCsv());
-             int containersInCSV = csvContainers.size(); //amount of csv containers
-             List<String> dbContainers = new ArrayList<>(getListContainersDatabase());
-             int containersInDatabase = dbContainers.size(); //amount of db containers
-             return containersInDatabase == containersInCSV; //returns true if the amount is the same.
-         } catch (Exception e) {
-             e.printStackTrace();
-             return false;
          }
     }
 }
