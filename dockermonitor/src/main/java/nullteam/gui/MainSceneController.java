@@ -375,11 +375,13 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeImagesInUse(ActionEvent event) {
         setImagesInUse();
+        imagesInUse = new ListView<>(imagesInUseINIT);
     }
     public void setImagesInUse() {
-        //todo: IMAGES IN USE!!!
-        //endeiktiko
-        imagesInUse.getItems().add("ANTE GEIA");
+        List<String> usedImages = DockerImage.listUsedImages();
+        for (String usedImage : usedImages) {
+            imagesInUse.getItems().add(usedImage);
+        }
     }
     private final ObservableList<String> containers = FXCollections.observableArrayList("Name", "Image", "State");
     @FXML
