@@ -365,20 +365,6 @@ public class MainSceneController implements Initializable {
         openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirm.fxml");
         databaseThread();
     }
-    @FXML
-    public void changeToSeeAnotherList(ActionEvent event) throws IOException {
-        changeTheScenes("/seeImagesInUse.fxml", event);
-    }
-    @FXML
-    public void tapToSeeImagesInUse(ActionEvent event) throws IOException {
-        setImagesInUse();
-    }
-    private final ObservableList<String> imagesInUseINIT = FXCollections.observableArrayList(" ");
-    @FXML
-    private ListView<String> imagesInUse = new ListView<>(imagesInUseINIT);
-    public void setImagesInUse() {
-        imagesInUse.getItems().add("EIMAI WRAIOS");
-    }
     private final ObservableList<String> containers = FXCollections.observableArrayList("Name", "Image", "State");
     @FXML
     private ListView<String> containersList = new ListView<>(containers);
@@ -395,7 +381,7 @@ public class MainSceneController implements Initializable {
                 name = containersOutput.getString("name");
                 image = containersOutput.getString("image");
                 state = containersOutput.getString("state");
-                String containersOut = i + ") Name: " + name + ",\n  Image: " + image + ", State: " + state + " ";
+                String containersOut = i + ") " + name + ", " + image + ", " + state + " ";
                 containersList.getItems().add(containersOut);
             }
             if (i == 0) {
@@ -421,6 +407,7 @@ public class MainSceneController implements Initializable {
             imagesList.getItems().add(num + ") " + img.toString());
         }
     }
+
     private final ObservableList<String> exitedContainersINIT = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> exitedContainers = new ListView<>(exitedContainersINIT);
@@ -435,7 +422,7 @@ public class MainSceneController implements Initializable {
             while (resultSet.next()) {
                 i++;
                 String name = resultSet.getString("name");
-                String listOut = i + ") Name: " + name + " ";
+                String listOut = i + ", " + name + " ";
                 exitedContainers.getItems().add(listOut);
             }
             if (i == 0) {
@@ -464,7 +451,7 @@ public class MainSceneController implements Initializable {
             while (resultSet.next()) {
                 i++;
                 String name = resultSet.getString("name");
-                String listOut = i + ") Name: " + name + " ";
+                String listOut = i + ", " + name + " ";
                 activeContainers.getItems().add(listOut);
             }
             if (i == 0) {
@@ -483,23 +470,31 @@ public class MainSceneController implements Initializable {
     @FXML
     private ListView<String> pauseContainers = new ListView<>(pause);
     public void setListPauseContainers() {
-        try {
-            String query = "SELECT * FROM containers WHERE SystemIp = ? AND state = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, ip);
-            preparedStatement.setString(2, "paused");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            int i = 0;
-            while (resultSet.next()) {
-                i++;
-                String name, image;
-                name = resultSet.getString("name");
-                image = resultSet.getString("image");
-                String listOut = i + ") Name: " + name + ",\n Image: " + image + " ";
-                pauseContainers.getItems().add(listOut);
+        setListContainers();
+        if (containersList.getItems().size() > 1) {
+            int j = 0, i;
+            for (i = 0; i < containersList.getItems().size(); i++) {
+                String containerInfo = containersList.getItems().get(i);
+                String[] containerInfoArr = containerInfo.split(",");
+                String state = containerInfoArr[0];
+                if (!state.endsWith("(Paused)")) {
+                    j++;
+                    pauseContainers.getItems().add(containerInfoArr[0]);
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (i == 0 || j == 0) {
+                pauseContainers.getItems().removeAll();
+                ObservableList<String> pause1 = FXCollections.observableArrayList("No Paused Containers");
+                pauseContainers = new ListView<>(pause1);
+                pauseContainers.getItems().add("Nothing to Show Here :(");
+            } else {
+                pauseContainers.getItems().remove(pause);
+            }
+        } else {
+            pauseContainers.getItems().removeAll();
+            ObservableList<String> pause1 = FXCollections.observableArrayList("No Paused Containers");
+            pauseContainers = new ListView<>(pause1);
+            pauseContainers.getItems().add("Nothing to Show Here :(");
         }
     }
     private ObservableList<String> restart = FXCollections.observableArrayList("name");
@@ -554,7 +549,6 @@ public class MainSceneController implements Initializable {
             num++;
             volumesList.getItems().add(num + ") " + v.toString() + "\n");
         }
-        volumesList.getItems().add("TO DO");
     }
     private ObservableList<String> networks = FXCollections.observableArrayList("name");
     @FXML
