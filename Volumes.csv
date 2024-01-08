@@ -1,6 +1,0 @@
-"Name","Driver","Created","Size","Mountpoint"
-"054f35edea63473e4bb3617283380fd29bf65eb25a6a095a9d087565acf46069","/ItWorks","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1702055687","6d018ee8"
-"f7e236a367e3d5bea8bf822ad321dd6418835d7e108827205dd42dca51ca4b57","/NEWNAME","nginx","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1701811383","767ab588"
-"a220b2adfe5aaddee8c8f636059350ea2a30c1efc75d49cc6d2ec55f7dc9f7fd","/I_Love_Anastasia","mongo","exited","docker-entrypoint.sh mongod","1700323104","730329b7"
-"ad37182ee11679264f7beaa02ac1db6caa27042153b3857179aaf51452d43e92","/IAMPERFECT","nginx:latest","exited","/docker-entrypoint.sh nginx -g 'daemon off;'","1700309317","3bbccca2"
-"6cfa7f0707e0bc7c6ef0f189d84e8f53484c3988fbf0415f4a4b36d2dcc0a3bc","/GUSTAVO_FRING123","maven:latest","exited","/usr/local/bin/mvn-entrypoint.sh mvn","1700309275","5aab73f3"

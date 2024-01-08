@@ -152,13 +152,12 @@ public final class ClientUpdater {
         Connection connection = null;
         try {
             // Connect to the database
-            // String url = "jdbc:mysql://" + dbHost + "/" + dbName;
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver"); //DRIVER
             connection = DriverManager.getConnection(
                     "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY",
                     "2zi5nloj67hbyd2kj0v4",
                     "pscale_pw_dFEza7bdXQNbpaaCwU328EFeSGXcSLdC6g4u0qEp6u9");
-            //System.out.println("Successful connection to the Database!");
+            //Credentials.
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -166,38 +165,7 @@ public final class ClientUpdater {
         }
         return connection;
     }
-
-    /**
-     * This method creates tables inside
-     * the database query.
-     * @param connection Connection
-     */
-    public static void createTables(Connection connection) {
-        try {
-            Statement statement = connection.createStatement();
-            String query = String.format("CREATE TABLE measurements ("
-                    + "idmc INT NOT NULL,"
-                    + "date DATETIME NOT NULL,"
-                    + "PRIMARY KEY(idmc),"
-                    + "SystemIp VARCHAR(50))");
-            statement.executeUpdate(query);
-            query = String.format("CREATE TABLE containers (" +
-                    "id VARCHAR(64) NOT NULL," +
-                    "name VARCHAR(100)," +
-                    "image VARCHAR(100) NOT NULL," +
-                    "state VARCHAR(20) NOT NULL," +
-                    "command VARCHAR(100) NOT NULL," +
-                    "created VARCHAR(20) NOT NULL," +
-                    "ports VARCHAR(10) NOT NULL," +
-                    "idmc INT," +
-                    "SystemIp VARCHAR(50)," +
-                    "PRIMARY KEY (id)," +
-                    "CONSTRAINT i FOREIGN KEY (idmc) REFERENCES measurementsofcontainers (idmc) ON DELETE CASCADE)");
-            statement.executeUpdate(query);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    //This method gets the System Ip from User to identify him
     public static String getIp() {
         InetAddress localhost = null;
         try {

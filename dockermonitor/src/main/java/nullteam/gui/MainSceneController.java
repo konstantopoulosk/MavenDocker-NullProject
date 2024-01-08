@@ -104,13 +104,11 @@ public class MainSceneController implements Initializable {
     public void databaseThread() {
         DatabaseThread databaseThread = new DatabaseThread(connection);
         databaseThread.run();
-        /*
         try {
             databaseThread.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-         */
     }
      public void changeTheScenes(String fxmlFile, ActionEvent event) throws IOException {
          root = FXMLLoader.load(getClass().getResource(fxmlFile));
@@ -380,7 +378,7 @@ public class MainSceneController implements Initializable {
                 name = containersOutput.getString("name");
                 image = containersOutput.getString("image");
                 state = containersOutput.getString("state");
-                String containersOut = i + ", " + name + ", " + image + ", " + state + " ";
+                String containersOut = i + ") " + name + ", " + image + ", " + state + " ";
                 containersList.getItems().add(containersOut);
             }
             if (i == 0) {
