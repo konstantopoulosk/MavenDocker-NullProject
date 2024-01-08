@@ -14,7 +14,7 @@ public class DockerVolume {
     final String name;
     final String created;
     final String mountpoint;
-    private static final List<DockerVolume> volumeslist = new ArrayList<>();
+    public static final List<DockerVolume> volumeslist = new ArrayList<>();
 
     /**
      * Constructor for Class DockerVolume.

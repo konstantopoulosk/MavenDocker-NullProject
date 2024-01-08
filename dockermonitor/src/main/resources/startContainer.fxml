@@ -15,7 +15,7 @@
             <Font name="Calibri Bold Italic" size="21.0" />
          </font>
       </Label>
-      <ListView fx:id="exitedContainers" layoutX="31.0" layoutY="54.0" prefHeight="327.0" prefWidth="213.0">
+      <ListView fx:id="exitedContainers" layoutX="31.0" layoutY="54.0" onMouseClicked="#retrieveId" prefHeight="327.0" prefWidth="213.0">
          <effect>
             <DropShadow />
          </effect>

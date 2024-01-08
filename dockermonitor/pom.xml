@@ -60,9 +60,6 @@
         <port>3306</port>
     </properties>
 
-
-
-
     <dependencies>
         <dependency>
             <groupId>com.github.docker-java</groupId>

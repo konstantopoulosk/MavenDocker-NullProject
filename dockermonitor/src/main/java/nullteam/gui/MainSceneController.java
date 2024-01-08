@@ -6,6 +6,7 @@ import com.nullteam.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,8 +14,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -25,6 +26,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
@@ -91,6 +93,7 @@ public class MainSceneController implements Initializable {
         if (!isPressed) {
             isPressed = true;
             GetHelp.listContainers();
+            GetHelp.listVolumes();
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
             BlockingQueue<ActionRequest> actionQueue = new LinkedBlockingQueue<>();
@@ -564,13 +567,26 @@ public class MainSceneController implements Initializable {
     @FXML
     private ListView<String> volumesList = new ListView<>(volumes);
     public void setListVolumes() {
+        int num = 0; //Numbers to make the output more User Friendly
+        for (DockerVolume v : DockerVolume.volumeslist) {
+            num++;
+            volumesList.getItems().add(num + ") " + v.toString() + "\n");
+        }
         volumesList.getItems().add("TO DO");
-        //todo.
     }
     private ObservableList<String> networks = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> networksList = new ListView<>(networks);
     public void setListNetworks() {
         //todo.
+    }
+    @FXML
+    public void retrieveId(MouseEvent arg0) {
+        containersList.setOnMousePressed(event -> {
+            if(containersList.getSelectionModel().getSelectedItem() != null) {
+                String selectedValue = containersList.getSelectionModel().getSelectedItem();
+                System.out.println("Selected value: " + selectedValue);
+            }
+        });
     }
 }

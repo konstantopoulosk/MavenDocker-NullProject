@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.sql.Connection;
 
 public class App extends Application {
-    static final int width = 1000;
-    static final int height = 800;
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root;
@@ -34,7 +32,7 @@ public class App extends Application {
         }
     }
     public static void main(String[] args) throws Exception {
-        //ClientUpdater.connectionAccomplished();
+        ClientUpdater.connectionAccomplished();
         launch(args);
     }
 }
