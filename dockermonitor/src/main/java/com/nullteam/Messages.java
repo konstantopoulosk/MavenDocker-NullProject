@@ -1,4 +1,5 @@
 package com.nullteam;
+/*
 import java.sql.Connection;
 import java.util.Scanner;
 public final class Messages {
@@ -60,7 +61,7 @@ public final class Messages {
         System.out.print("Answer: ");
         String finalAnswer = in.nextLine();
 
-         */
+
         try {
 /*
             switch (finalAnswer) {
@@ -76,10 +77,11 @@ public final class Messages {
                     GetHelp.thr(finalAnswer);
             }
 
- */
+
             System.exit(0);
         } catch (IllegalStateException e) {
                 GetHelp.repChoice();
         }
     }
 }
+*/

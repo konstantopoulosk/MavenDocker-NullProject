@@ -1,5 +1,5 @@
 package com.nullteam;
-
+/*
 import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PullImageResultCallback;
@@ -212,7 +212,7 @@ public class GetHelp {
      * This method is used to wait for an object
      * ExecutorThread, which is a thread, to finish.
      * @param et ExecutorThread
-     */
+
     public static void avoidInterruption(ExecutorThread et){
         try {
             et.join();
@@ -224,7 +224,7 @@ public class GetHelp {
     /**
      * This method pauses the programm
      * for 2 seconds.
-     */
+
     public static void wait2seconds() {
         try {
             final int m = 2000;
@@ -256,7 +256,7 @@ public class GetHelp {
     /**
      * This method pulls an image from DockerHub
      * and adds it to the imagelist
-     */
+
     public static void case3Pull() {
         System.out.println("You chose: (3) Pull an image "
                 + "from DockerHub\n");
@@ -341,3 +341,4 @@ public class GetHelp {
         System.out.println("\nTransferring you to the Image Menu ...");
     }
 }
+*/

@@ -87,7 +87,7 @@ public class MainSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!isPressed) {
             isPressed = true;
-            GetHelp.listContainers();
+            //GetHelp.listContainers();
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
             BlockingQueue<ActionRequest> actionQueue = new LinkedBlockingQueue<>();
@@ -351,7 +351,6 @@ public class MainSceneController implements Initializable {
     private ListView<String> containersList = new ListView<>(containers);
     public void setListContainers() {
         try {
-            System.out.println(ip);
             String queryContainers = "SELECT name, image, state FROM containers WHERE SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryContainers);
             preparedStatement.setString(1, ip);
