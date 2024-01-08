@@ -78,9 +78,9 @@ public class DockerNetwork {
      */
     @Override
     public String toString() {
-        return "NetworkID: " + getNetworkId() + "  Name: "
-                + getName() + "  Driver: " + getDriver()
-                + "  Scope: " + getScope();
+        return "NetworkID: " + getNetworkId() + "\n    Name: "
+                + getName() + "   Driver: " + getDriver()
+                + "   Scope: " + getScope();
     }
 
     /**

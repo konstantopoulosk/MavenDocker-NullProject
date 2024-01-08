@@ -409,7 +409,6 @@ public class MainSceneController implements Initializable {
         }
     }
 
-
     private final ObservableList<String> exitedContainersINIT = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> exitedContainers = new ListView<>(exitedContainersINIT);
@@ -551,7 +550,6 @@ public class MainSceneController implements Initializable {
             num++;
             volumesList.getItems().add(num + ") " + v.toString() + "\n");
         }
-        volumesList.getItems().add("TO DO");
     }
     private ObservableList<String> networks = FXCollections.observableArrayList("name");
     @FXML

@@ -81,9 +81,9 @@ public class DockerVolume {
      */
     @Override
     public String toString() {
-        return "Driver: " + getDriver() + " Name: "
-                + getName() + " CreatedAt: " + getCreated()
-                + "   Mountpoint: " + getMountpoint();
+        return "Driver: " + getDriver() + "\n    Name: "
+                + getName() + "\n    CreatedAt: " + getCreated()
+                + "    Mountpoint: " + getMountpoint();
     }
 
     /**
