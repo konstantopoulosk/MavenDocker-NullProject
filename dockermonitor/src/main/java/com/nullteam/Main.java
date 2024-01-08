@@ -24,7 +24,6 @@ final class Main { //Utility classes should not be defined public
         GetHelp.listNetworks();
         DockerMonitor monitor = new DockerMonitor();
         monitor.start(); //Initialized Monitor Thread.
-        //final String musicFile = "Godfather.mid";
         //MidiPlayer m = new MidiPlayer(musicFile);
         Connection connection = ClientUpdater.connectToDatabase(); //Connected to Database.
         //ClientUpdater.dropTables(connection); // Drops previous user's tables
