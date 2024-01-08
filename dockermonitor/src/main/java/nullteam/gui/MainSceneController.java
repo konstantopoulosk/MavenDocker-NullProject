@@ -335,6 +335,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
          //todo: Executor
+        databaseThread();
         openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirm.fxml" );
     }
     @FXML
@@ -344,6 +345,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyRemove(ActionEvent event) throws IOException {
          //todo: Executor.
+        databaseThread();
         openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirm.fxml");
     }
     private final ObservableList<String> containers = FXCollections.observableArrayList("Name", "Image", "State");
@@ -418,10 +420,9 @@ public class MainSceneController implements Initializable {
     private ListView<String> exitedContainers = new ListView<>(exitedContainersINIT);
     public void setListExitedContainers() {
         try {
-            String exited = "exited";
             String queryExited = "select name, id from containers where state = ? and SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryExited);
-            preparedStatement.setString(1, exited);
+            preparedStatement.setString(1, "exited");
             preparedStatement.setString(2, ip);
             ResultSet resultSet = preparedStatement.executeQuery();
             int i = 0;
@@ -448,10 +449,9 @@ public class MainSceneController implements Initializable {
     private ListView<String> activeContainers = new ListView<>(actives);
     public void setListActiveContainers() {
         try {
-            String state = "running";
             String queryExited = "select name from containers where state = ? and SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryExited);
-            preparedStatement.setString(1, state);
+            preparedStatement.setString(1, "running");
             preparedStatement.setString(2, ip);
             ResultSet resultSet = preparedStatement.executeQuery();
             int i = 0;

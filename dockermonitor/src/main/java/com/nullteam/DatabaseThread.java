@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DatabaseThread extends Thread {
     final String ip = ClientUpdater.getIp();
-    static int containers = 0;
+    static int containers = giveMeCount();
     Connection connection;
      public DatabaseThread(Connection connection) { //Moved the connectToDatabase to ClientUpdater
         this.connection = connection; //Because connectivity methods
@@ -32,7 +32,7 @@ public class DatabaseThread extends Thread {
                  //also container could be deleted (remove).
                 if (csvEqualsDatabase(connection, ip)) {
                     //no remove, no implement. JUST UPDATE.
-                    containers++;
+                    containers++; //something is wrong here!!! //todo
                     addToMeasurements(connection, containers);
                     updateDatabase(connection, ip, containers);
                 } else {
@@ -49,6 +49,19 @@ public class DatabaseThread extends Thread {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+    }
+    public static int giveMeCount() {
+         try {
+             String query = "SELECT COUNT(*) FROM measurements";
+             Connection connection1 = ClientUpdater.connectToDatabase();
+             PreparedStatement preparedStatement = connection1.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery();
+             resultSet.next();
+             return resultSet.getInt(1);
+         } catch (Exception e) {
+             e.printStackTrace();
+             return -1;
+         }
     }
     public CSVReader openMyCSV() {
          try {
