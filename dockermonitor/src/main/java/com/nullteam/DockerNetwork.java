@@ -4,24 +4,16 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * @param networkId A field for the id of the network.
- * @param name      A field for the name of the network.
- * @param driver    A field for the network's driver,
- *                  which is a Software that activates the actual
- *                  transmission and receipt of data over the network.
- * @param scope     A field for the network's scope,
- *                  which is the extent or range of IP addresses
- *                  that a particular network or subnet
- *                  can encompass Network Scope.
- */
-public record DockerNetwork(String networkId, String name, String driver, String scope) {
+public class DockerNetwork {
     /**
      * List of all the DockerNetwork objects,
      * all the networks in the DockerDesktop.
      */
     private static final List<DockerNetwork> networkslist = new ArrayList<>();
+    final String networkId;
+    final String name;
+    final String driver;
+    final String scope;
 
     /**
      * Constructor of Class DockerNetwork.
@@ -41,14 +33,12 @@ public record DockerNetwork(String networkId, String name, String driver, String
         this.scope = scope;
         networkslist.add(this);
     }
-
     /**
      * Gets the network ID.
      *
      * @return String
      */
-    @Override
-    public String networkId() {
+    public String getNetworkId() {
         return networkId;
     }
 
@@ -57,8 +47,7 @@ public record DockerNetwork(String networkId, String name, String driver, String
      *
      * @return String
      */
-    @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -67,8 +56,7 @@ public record DockerNetwork(String networkId, String name, String driver, String
      *
      * @return String
      */
-    @Override
-    public String driver() {
+    public String getDriver() {
         return driver;
     }
 
@@ -77,8 +65,7 @@ public record DockerNetwork(String networkId, String name, String driver, String
      *
      * @return String
      */
-    @Override
-    public String scope() {
+    public String getScope() {
         return scope;
     }
 
@@ -91,9 +78,9 @@ public record DockerNetwork(String networkId, String name, String driver, String
      */
     @Override
     public String toString() {
-        return "NetworkID: " + networkId() + " Name: "
-                + name() + " Driver: " + driver()
-                + " Scope: " + scope();
+        return "NetworkID: " + getNetworkId() + " Name: "
+                + getName() + " Driver: " + getDriver()
+                + " Scope: " + getScope();
     }
 
     /**

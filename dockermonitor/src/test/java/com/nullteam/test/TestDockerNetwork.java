@@ -3,6 +3,7 @@ package com.nullteam.test;
 import com.github.dockerjava.api.model.Network;
 import com.nullteam.ClientUpdater;
 import com.nullteam.DockerNetwork;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,24 +35,30 @@ public class TestDockerNetwork {
     }
     @Test
     public void testGetNetworkId() {
-        Assert.assertEquals("Failure - wrong Network Id", dockerNetwork.networkId(), updatedNetworks.get(0).getId());
+        Assert.assertEquals("Failure - wrong Network Id", dockerNetwork.getNetworkId(), updatedNetworks.get(0).getId());
     }
     @Test
     public void testGetName() {
-        Assert.assertEquals("Failure - wrong Name", dockerNetwork.name(), updatedNetworks.get(0).getName());
+        Assert.assertEquals("Failure - wrong Name", dockerNetwork.getName(), updatedNetworks.get(0).getName());
     }
     @Test
     public void testGetDriver() {
-        Assert.assertEquals("Failure - wrong Driver", dockerNetwork.driver(), updatedNetworks.get(0).getDriver());
+        Assert.assertEquals("Failure - wrong Driver", dockerNetwork.getDriver(), updatedNetworks.get(0).getDriver());
     }
     @Test
     public void testGetScope() {
-        Assert.assertEquals("Failure - wrong Scope", dockerNetwork.scope(), updatedNetworks.get(0).getScope());
+        Assert.assertEquals("Failure - wrong Scope", dockerNetwork.getScope(), updatedNetworks.get(0).getScope());
     }
     @Test
     public void testToString() {
-        Assert.assertEquals("Failure wrong to String", dockerNetwork.toString(), updatedNetworks.toString());
+        String name = "NetworkID: " + updatedNetworks.get(0).getId() + " Name: "
+                + updatedNetworks.get(0).getName() + " Driver: " +updatedNetworks.get(0).getDriver()
+                + " Scope: " + updatedNetworks.get(0).getScope();
+        Assert.assertEquals("Failure wrong to String", dockerNetwork.toString(), name);
     }
-
+    @After
+    public void tearDown() {
+        //Not really needed.
+    }
 
 }

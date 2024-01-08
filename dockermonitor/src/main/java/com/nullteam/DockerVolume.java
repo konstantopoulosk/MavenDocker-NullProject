@@ -5,20 +5,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @param driver     A field for the driver of a volume.
- * @param name       A field for the name / id
- *                   of a volume.
- * @param created    A field for the datetime that
- *                   a volume was created.
- * @param mountpoint A field for the mountpoint path
- *                   of a volume.
- */
-public record DockerVolume(String driver, String name, String created, String mountpoint) {
+public class DockerVolume {
     /**
      * List of all the DockerVolume objects,
      * all the volumes in the DockerDesktop.
      */
+    final String driver;
+    final String name;
+    final String created;
+    final String mountpoint;
     private static final List<DockerVolume> volumeslist = new ArrayList<>();
 
     /**
@@ -45,8 +40,7 @@ public record DockerVolume(String driver, String name, String created, String mo
      *
      * @return String
      */
-    @Override
-    public String driver() {
+    public String getDriver() {
         return driver;
     }
 
@@ -55,8 +49,7 @@ public record DockerVolume(String driver, String name, String created, String mo
      *
      * @return String
      */
-    @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -66,8 +59,7 @@ public record DockerVolume(String driver, String name, String created, String mo
      *
      * @return String
      */
-    @Override
-    public String created() {
+    public String getCreated() {
         return created;
     }
 
@@ -76,8 +68,7 @@ public record DockerVolume(String driver, String name, String created, String mo
      *
      * @return String
      */
-    @Override
-    public String mountpoint() {
+    public String getMountpoint() {
         return mountpoint;
     }
 
@@ -90,9 +81,9 @@ public record DockerVolume(String driver, String name, String created, String mo
      */
     @Override
     public String toString() {
-        return "Driver: " + driver() + " Name: "
-                + name() + " CreatedAt: " + created()
-                + "   Mountpoint: " + mountpoint();
+        return "Driver: " + getDriver() + " Name: "
+                + getName() + " CreatedAt: " + getCreated()
+                + "   Mountpoint: " + getMountpoint();
     }
 
     /**

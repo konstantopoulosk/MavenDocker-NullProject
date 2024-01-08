@@ -1,6 +1,6 @@
 /**
  * Package for our .java files
-
+*/
 package com.nullteam;
 
 import com.github.dockerjava.api.command.CreateContainerCmd;
@@ -20,24 +20,23 @@ public class DockerImage {
     /**
      * List of all the DockerImage objects,
      * all the images in the DockerDesktop.
-
-
+    */
     public static List<DockerImage> imageslist = new ArrayList<>();
     // These fields won't ever change
     // That's why they are final
     /**
      * A field for the Repository where the image is located.
      * Also known as the name of the image.
-
+    */
     private final String imageRep;
     /**
      * A field for the Tag (=version) of the image.
      * Usually it's "latest".
-
+    */
     private final String imageTag;
     /**
      * A field for the Image ID.
-
+    */
     private final String imageId;
 
     /**
@@ -47,7 +46,7 @@ public class DockerImage {
      * @param iRep String
      * @param iTag String
      * @param iId String
-
+    */
     public DockerImage(final String iRep, final String iTag,
                        final String iId) {
         this.imageRep = iRep;
@@ -59,7 +58,7 @@ public class DockerImage {
     /**
      * Gets the Repository of the image.
      * @return String
-
+    */
     public String getImageRep() {
         String[] parts = this.imageRep.split("@");
         return parts[0]; //to keep only the name of the repository
@@ -67,14 +66,14 @@ public class DockerImage {
     /**
      * Gets the Tag / version of the image.
      * @return String
-
+    */
     public String getImageTag() {
         return imageTag;
     }
     /**
      * Gets the ID of the image.
      * @return String
-
+    */
     public String getImageId() {
         String[] parts = this.imageId.split(":");
         return parts[1]; //to keep only the id without the 'sha256'
@@ -86,7 +85,7 @@ public class DockerImage {
      * We use it to show every image's information
      * (repository, tag, id)
      * @return String
-
+    */
     @Override
     public String toString() {
         return "REPOSITORY: " + this.getImageRep() +  "  TAG: "
@@ -97,7 +96,7 @@ public class DockerImage {
      * Images Menu: case 1 (Show All Images)
      * This method prints all images with numbers in the
      * beginning to make the output more user-friendly.
-
+    */
     public static void listAllImages() {
         System.out.println("Listing all the images...\n.\n.\n.");
         int num = 0; //Numbers to make the output more User Friendly
@@ -111,7 +110,7 @@ public class DockerImage {
      * This method helps to match the numbers from
      * the printed images with their ID.
      * @return String
-
+    */
     public static String chooseAnImage() {
         DockerImage.listAllImages(); //Users sees his images with numbers
         Scanner in = new Scanner(System.in); //chooses the image by typing the number next to the image
@@ -133,7 +132,7 @@ public class DockerImage {
     /**
      * This method creates and starts an instance of the selected image
      * (creates a new container of the image).
-
+    */
     public void implementImage() {
         try (CreateContainerCmd createContainerCmd =
                      ClientUpdater.getUpdatedClient().createContainerCmd(
@@ -156,6 +155,7 @@ public class DockerImage {
                     DockerInstance newContainer = new DockerInstance(
                             c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
                     String containerIdStart = newContainer.getContainerId();
+                    /*
                     ExecutorThread executorStart = new ExecutorThread(
                             containerIdStart, ExecutorThread.TaskType.START);
                     executorStart.start(); //we start the container
@@ -164,6 +164,8 @@ public class DockerImage {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+                     */
                     System.out.println("The new container has been created and is running"
                             + "\n");
                 } else {
@@ -179,7 +181,7 @@ public class DockerImage {
     /**
      * This method removes an image from the DockerCluster
      * and from the image list
-
+    */
     public void removeImage() {
         //first we need to remove all instances of this image
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
@@ -188,6 +190,7 @@ public class DockerImage {
                     || c.getImage().equals(getImageId().substring(0, 12)) //e.g. '76506809a39f'
                     || c.getImage().startsWith(getImageRep())) { //e.g. 'mongo:latest'
                 //now we have to check if the container is running
+                /*
                 if (c.getStatus().startsWith("Up")) {
                     ExecutorThread executorStop = new ExecutorThread(
                             c.getId(), ExecutorThread.TaskType.STOP);
@@ -198,6 +201,8 @@ public class DockerImage {
                         e.printStackTrace();
                     }
                 }
+
+
                 //finally we remove the container
                 ExecutorThread executorRemove = new ExecutorThread(
                         c.getId(), ExecutorThread.TaskType.REMOVE);
@@ -207,6 +212,8 @@ public class DockerImage {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                 */
             }
         }
         try (RemoveImageCmd removeImageCmd = ClientUpdater.getUpdatedClient().removeImageCmd(imageId)) {
@@ -221,7 +228,7 @@ public class DockerImage {
     /**
      * This method lists all the images that are in use.
      * This means all the images that run containers.
-
+    */
     public static void listUsedImages() {
         System.out.println("Listing all the images that are in use...\n.\n.\n.");
         int num = 0; //Numbers to make the output more User Friendly
@@ -244,4 +251,3 @@ public class DockerImage {
         }
     }
 }
-*/

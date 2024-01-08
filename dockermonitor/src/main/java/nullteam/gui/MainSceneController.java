@@ -189,7 +189,6 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void tapToSeeVolumes(ActionEvent event) throws IOException {
-         //todo: Executor.
         setListVolumes();
         volumesList = new ListView<>(volumes);
     }
@@ -565,6 +564,7 @@ public class MainSceneController implements Initializable {
     @FXML
     private ListView<String> volumesList = new ListView<>(volumes);
     public void setListVolumes() {
+        volumesList.getItems().add("TO DO");
         //todo.
     }
     private ObservableList<String> networks = FXCollections.observableArrayList("name");

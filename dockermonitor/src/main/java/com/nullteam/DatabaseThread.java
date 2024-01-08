@@ -16,7 +16,6 @@ public class DatabaseThread extends Thread {
     final String ip = ClientUpdater.getIp(); //System Ip to recognize the user.
     static int containers = giveMeCount(); //Auto increment primary key for measurements table.
     Connection connection; //Connection to database.
-    static boolean firstTime = true;
      public DatabaseThread(Connection connection) { //Moved the connectToDatabase to ClientUpdater
         this.connection = connection; //Because connectivity methods
     }
@@ -109,8 +108,8 @@ public class DatabaseThread extends Thread {
              return false;
          }
     }
-    public List<String[]> getEverythingFromDatabase() {
-        try {
+    public List<String[]> getEverythingFromDatabase() { //Returns a list with String[]
+        try { //with the rows from containers table but only the containerId, name, image, state columns
             List<String[]> containersInDatabase = new ArrayList<>();
             String query = "SELECT * FROM containers WHERE SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -131,6 +130,7 @@ public class DatabaseThread extends Thread {
             return null;
         }
     }
+    //returns a list with String[] with the index of csv but only Container ID, Name, Image, State columns
     public List<String[]> getEverythingFromCsv() {
         try {
             List<String[]> containersInCsv = new ArrayList<>();
@@ -155,22 +155,28 @@ public class DatabaseThread extends Thread {
             return null;
         }
     }
+    //This method changes the name of a specific container and
+    //adds to measurements because Rename is a function
     public void changeName(String newName, String containerId) {
         try {
+            //THIS IS A MEASUREMENT SO ADD TO MEASUREMENTS
             containers++;
             addToMeasurements(connection, containers);
+            //QUERY to UPDATE the name and id (foreign key)
             String queryName = "UPDATE containers SET name = ?, id = ? WHERE SystemIp = ? AND containerId = ?";
             PreparedStatement preparedStatementName = connection.prepareStatement(queryName);
             preparedStatementName.setString(1, newName); //NEW NAME
             preparedStatementName.setInt(2, containers);
             preparedStatementName.setString(3, ip);
             preparedStatementName.setString(4, containerId);
+            //Set the values.
             preparedStatementName.executeUpdate(); //CHANGES THE NAME according to CSV
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    //This method changes the name of a specific container
+    //adds to measurements because we consider it a function
     public void changeState(String state, String containerId) {
         try {
             containers++;
@@ -186,6 +192,8 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
+    //this method removes a container from the table because
+    //user either selected remove container or remove image
     public void removeContainer(String containerId) {
         try {
             String queryRemove = "DELETE FROM containers WHERE SystemIp = ? AND containerId = ?";
@@ -198,6 +206,9 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
+    //this method inserts a new container into the table
+    //adds to measurements because it's a function
+    //User selected implement image
     public void implementContainer(List<String[]> containersInCsv,int i) {
         try {
             //THIS IS A MEASUREMENT ADD TO TABLE
@@ -218,27 +229,28 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
+    //When it's not a new User, we have to update the old values into new values
+    //if there is any new values.
     public void updateDatabase() {
+         //It's a measurement because
         containers++;
         addToMeasurements(connection,containers);
          try {
+             //Lists containing containers in DB and containers in CSV
              List<String[]> containersInDatabase = new ArrayList<>(getEverythingFromDatabase());
              List<String[]> containersInCsv = new ArrayList<>(getEverythingFromCsv());
             for (int i = 0; i < containersInDatabase.size(); i++) {
-                boolean exists = false;
+                boolean exists = false; //Container in database does NOT exist in CSV
                 for (int j = 0; j < containersInCsv.size(); j++) {
                     if (containersInDatabase.get(i)[0].equals(containersInCsv.get(j)[0])) {
-                        exists = true;
-                        //container in csv exists in database.
+                        exists = true; //Container in database EXISTS in CSV
                         //Checking with Container ID.
                         if (!containersInDatabase.get(i)[1].equals(containersInCsv.get(j)[1])) {
                             //Different Name -> RENAME HAPPENED.
-                            //THIS IS A MEASUREMENT SO ADD TO MEASUREMENTS
                             changeName(containersInCsv.get(j)[1], containersInDatabase.get(i)[0]);
                         }
                         if (!containersInDatabase.get(i)[3].equals(containersInCsv.get(j)[3])) {
                             //Different STATE -> START STOP RESTART PAUSE KILL UNPAUSE ... happened
-                            //THIS IS A MEASUREMENT SO ADD TO MEASUREMENTS
                             changeState(containersInCsv.get(j)[3], containersInDatabase.get(i)[0]);
                         }
                     }
