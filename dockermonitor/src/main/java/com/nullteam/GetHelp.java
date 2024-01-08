@@ -18,7 +18,6 @@ import java.util.concurrent.Executor;
 public class GetHelp {
     private GetHelp() {
     }
-    /*
     public static void listImage() {
         List<Image> images =
                 ClientUpdater.getUpdatedImagesFromClient();
@@ -29,8 +28,6 @@ public class GetHelp {
                     "latest", i.getId());
         }
     }
-
-     */
     public static void listContainers() {
         List<Container> containers =
                 ClientUpdater.getUpdatedContainersFromClient();

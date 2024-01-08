@@ -9,7 +9,7 @@ public class DockerNetwork {
      * List of all the DockerNetwork objects,
      * all the networks in the DockerDesktop.
      */
-    private static final List<DockerNetwork> networkslist = new ArrayList<>();
+    public static final List<DockerNetwork> networkslist = new ArrayList<>();
     final String networkId;
     final String name;
     final String driver;
@@ -78,23 +78,9 @@ public class DockerNetwork {
      */
     @Override
     public String toString() {
-        return "NetworkID: " + getNetworkId() + " Name: "
-                + getName() + " Driver: " + getDriver()
-                + " Scope: " + getScope();
-    }
-
-    /**
-     * This method prints all the networks inside the
-     * user's Docker Desktop with their information
-     * in a shorted list.
-     */
-    public static void showNetworks() {
-        System.out.println("Listing all the networks...\n.\n.\n.");
-        int num = 0; //Numbers to make the output more User Friendly
-        for (DockerNetwork n : networkslist) {
-            num++;
-            System.out.println(num + ") " + n.toString());
-        }
+        return "NetworkID: " + getNetworkId() + "  Name: "
+                + getName() + "  Driver: " + getDriver()
+                + "  Scope: " + getScope();
     }
 
     /**

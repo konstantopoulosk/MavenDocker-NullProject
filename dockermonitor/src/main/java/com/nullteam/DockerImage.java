@@ -88,8 +88,8 @@ public class DockerImage {
     */
     @Override
     public String toString() {
-        return "REPOSITORY: " + this.getImageRep() +  "  TAG: "
-                + this.getImageTag() + "  IMAGE ID: " + this.getImageId();
+        return "REPOSITORY: " + this.getImageRep() +  "   TAG: "
+                + this.getImageTag() + "   IMAGE ID: " + this.getImageId();
     }
     //helpful methods
     /**
