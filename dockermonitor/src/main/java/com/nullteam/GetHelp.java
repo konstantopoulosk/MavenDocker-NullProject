@@ -219,6 +219,7 @@ public class GetHelp {
      * ExecutorThread, which is a thread, to finish.
      * @param et ExecutorThread
 */
+    /*
     public static void avoidInterruption(ExecutorThread et){
         try {
             et.join();
@@ -226,7 +227,7 @@ public class GetHelp {
             e.printStackTrace();
         }
     }
-
+*/
     /**
      * This method pauses the programm
      * for 2 seconds.
