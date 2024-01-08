@@ -25,7 +25,7 @@ public class TestDockerVolume {
             DockerVolume dockerVolume = new DockerVolume(
                     volumeResponse.getDriver(),
                     volumeResponse.getName(),
-                    volumeResponse.getCreatedAt(),
+                    DockerVolume.createdAt(volumeResponse.getName()),
                     volumeResponse.getMountpoint()
             );
             volumesList.add(dockerVolume);
