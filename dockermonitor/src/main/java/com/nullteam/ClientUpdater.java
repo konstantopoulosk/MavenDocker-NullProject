@@ -165,7 +165,12 @@ public final class ClientUpdater {
         }
         return connection;
     }
-    //This method gets the System Ip from User to identify him
+
+    /**
+     * This method gets the System Ip
+     * from User to identify him.
+     * @return String
+     */
     public static String getIp() {
         InetAddress localhost = null;
         try {
