@@ -90,7 +90,7 @@ public class ExecutorThread extends Thread {
                 instance = c;
             }
         }
-        System.out.println(instance);
+        System.out.println(instance); //This somehow is null :(
         return instance;
     }
     /*

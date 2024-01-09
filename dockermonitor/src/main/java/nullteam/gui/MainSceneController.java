@@ -17,6 +17,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
+import javax.print.Doc;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -122,6 +124,7 @@ public class MainSceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!isPressed) {
+            GetHelp.listContainers();
             GetHelp.listImage(); //Creating objects of DockerImage class to use DockerImage.imagesList later
             GetHelp.listVolumes();//Creating objects of DockerVolume class to use DockerVolume.volumesList later
             GetHelp.listNetworks();//Creating objects of DockerNetwork class to use DockerNetwork.networksList later
@@ -461,6 +464,7 @@ public class MainSceneController implements Initializable {
             DockerImage.pullImage(image);
             //it should work but my computer is way too slow to process
         } else {
+            System.out.println(imageToPull);
             System.out.println("Something Is Wrong!");
         }
         imagesList = new ListView<>(observableList);
@@ -521,28 +525,13 @@ public class MainSceneController implements Initializable {
     }
     //This Method sets the field containersList.
     public void setListContainers() {
-        try {
-            String queryContainers = "SELECT containerId, name, image, state FROM containers WHERE SystemIp = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(queryContainers);
-            preparedStatement.setString(1, ip);
-            ResultSet containersOutput = preparedStatement.executeQuery();
-            int i = 0;
-            while (containersOutput.next()) {
-                i++;
-                String name, image, state, containerId;
-                name = containersOutput.getString("name");
-                image = containersOutput.getString("image");
-                state = containersOutput.getString("state");
-                containerId = containersOutput.getString("containerId");
-                String containersOut = i + ") Name: " + name + "  Image: " + image + "  State: " + state
-                        + "  Container ID ->" + containerId;
-                containersList.getItems().add(containersOut);
-            }
-            if (i == 0) {
-                containersList.getItems().add("NULL");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        int num = 0;
+        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
+            num++;
+            containersList.getItems().add(num + ") " + dockerInstance.toString());
+        }
+        if (num == 0) {
+            containersList.getItems().add("NULL");
         }
     }
     //This Method sets the field imagesList.
@@ -558,73 +547,42 @@ public class MainSceneController implements Initializable {
     }
     //This Method sets the field exitedContainers.
     public void setListExitedContainers() {
-        try {
-            String queryExited = "select name, containerId from containers where state = ? and SystemIp = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(queryExited);
-            preparedStatement.setString(1, "exited");
-            preparedStatement.setString(2, ip);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            int i = 0;
-            while (resultSet.next()) {
+        int num = 0;
+        int i = 0;
+        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
+            if (DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Exited")) {
                 i++;
-                String name = resultSet.getString("name");
-                String containerId = resultSet.getString("containerId");
-                String listOut = i + ") Name: " + name + "  Container ID ->" + containerId;
-                exitedContainers.getItems().add(listOut);
+                exitedContainers.getItems().add(dockerInstance.toString());
             }
-            if (i == 0) {
-                exitedContainers.getItems().add("NULL");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            num++;
+        }
+        if (i == 0) {
+            exitedContainers.getItems().add("NULL");
         }
     }
     //This Method sets the field activeContainers.
     public void setListActiveContainers() {
-        try {
-            String queryExited = "select name, containerId from containers where state = ? and SystemIp = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(queryExited);
-            preparedStatement.setString(1, "running");
-            preparedStatement.setString(2, ip);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            int i = 0;
-            while (resultSet.next()) {
+        int i = 0, num = 0;
+        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
+            if (DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Up")) {
                 i++;
-                String name = resultSet.getString("name");
-                String containerId = resultSet.getString("containerId");
-                String listOut = i + ") Name: " + name + "  Container ID ->" + containerId;
-                activeContainers.getItems().add(listOut);
+                activeContainers.getItems().add(i + ") " + dockerInstance.toString());
             }
-            if (i == 0) {
-                activeContainers.getItems().add("NULL");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            num++;
+        }
+        if (i == 0) {
+            activeContainers.getItems().add("NULL");
         }
     }
     //This Method sets the field restartListContainers -> PAUSED CONTAINERS!!!!
     public void setListRestartContainers() {
-        try {
-            String queryPaused = "SELECT name, image, containerId FROM containers WHERE SystemIp = ? AND state = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(queryPaused);
-            preparedStatement.setString(1, ip);
-            preparedStatement.setString(2, "paused");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            int i = 0;
-            while (resultSet.next()) {
+        int num = 0, i = 0;
+        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
+            if (DockerInstance.containerslist.get(num).getContainerStatus().endsWith("(Paused)")) {
                 i++;
-                String name, image, containerId;
-                name = resultSet.getString("name");
-                image = resultSet.getString("image");
-                containerId = resultSet.getString("containerId");
-                String listOut = i + ") Name: " + name + ", Image: " + image + "  Container ID ->" + containerId;
-                restartListContainer.getItems().add(listOut);
+                restartListContainer.getItems().add(i + ") " + dockerInstance.toString());
             }
-            if (i == 0) {
-                restartListContainer.getItems().add("NULL");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            num++;
         }
     }
     //This Method sets the field logsList.
@@ -682,7 +640,7 @@ public class MainSceneController implements Initializable {
     public void retrieveIdToStart(MouseEvent mouseEvent) {
         if (exitedContainers.getSelectionModel().getSelectedItem() != null) {
             String c = exitedContainers.getSelectionModel().getSelectedItem().toString();
-            String[] c1 = c.split("->", 2);
+            String[] c1 = c.split("ID: ", 2);
             containerId = c1[1];
         }
         System.out.println(exitedContainers.getSelectionModel().getSelectedItem());
@@ -693,7 +651,7 @@ public class MainSceneController implements Initializable {
     public void retrieveIdToStop(MouseEvent mouseEvent) {
         if (activeContainers.getSelectionModel().getSelectedItem() != null) {
             String c = activeContainers.getSelectionModel().getSelectedItem().toString();
-            String[] c1 = c.split("->", 2);
+            String[] c1 = c.split("ID: ", 2);
             containerId = c1[1];
         }
     }
@@ -702,7 +660,7 @@ public class MainSceneController implements Initializable {
     public void retrieveId(MouseEvent mouseEvent) {
         if (containersList.getSelectionModel().getSelectedItem() != null) {
             String c = containersList.getSelectionModel().getSelectedItem().toString();
-            String[] c1 = c.split("->", 2);
+            String[] c1 = c.split("ID: ", 2);
             containerId = c1[1];
         }
     }
@@ -711,7 +669,7 @@ public class MainSceneController implements Initializable {
     public void retrieveIdToUnpause(MouseEvent mouseEvent) {
         if (restartListContainer.getSelectionModel().getSelectedItem() != null) {
             String c = restartListContainer.getSelectionModel().getSelectedItem().toString();
-            String[] c1 = c.split("->", 2);
+            String[] c1 = c.split("ID: ", 2);
             containerId = c1[1];
         }
     }
