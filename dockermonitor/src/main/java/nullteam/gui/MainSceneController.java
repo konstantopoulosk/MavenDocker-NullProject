@@ -560,13 +560,12 @@ public class MainSceneController implements Initializable {
     @FXML
     private ListView<String> logsList = new ListView<>(logs);
     public void setListLogs() {
-        //todo.
-        /*
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
-        String containerId = containers.getFirst().getId();
-        String d = DockerLogs.showAllLogsOfContainer(containerId);
-        logsList.getItems().add(d);
-        */
+        //temporary gets only first id
+        List<String> containerLogs = DockerInstance.showlogs(containerId);
+        for (String log : containerLogs) {
+            logsList.getItems().add(log);
+        }
     }
     private ObservableList<String> subnets = FXCollections.observableArrayList("name");
     @FXML
