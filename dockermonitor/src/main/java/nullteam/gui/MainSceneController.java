@@ -347,12 +347,12 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressImplement(ActionEvent event) throws IOException {
-        changeTheScenes("/imageImplement.fxml", event);
+        changeTheScenes("/imageImplementNew.fxml", event);
     }
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
          //todo: Executor
-        openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirm.fxml" );
+        openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirmation.fxml" );
         databaseThread();
     }
     @FXML
