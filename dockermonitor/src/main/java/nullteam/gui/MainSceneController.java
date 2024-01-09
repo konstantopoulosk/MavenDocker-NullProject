@@ -502,7 +502,13 @@ public class MainSceneController implements Initializable {
     @FXML
     private ListView<String> subnetsList = new ListView<>(subnets);
     public void setListSubnets() { //not sure
-        //todo : subnets info
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        String containerId = containers.getFirst().getId();
+        //temporary to check
+        StringBuilder d = DockerNetwork.formatSubnetsSettings(
+                DockerNetwork.inspectContainersForSubnet(
+                        containerId));
+        subnetsList.getItems().add(d.toString());
     }
     private ObservableList<String> volumes = FXCollections.observableArrayList("name");
     @FXML
