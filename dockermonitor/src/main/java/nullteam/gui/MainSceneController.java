@@ -367,7 +367,6 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void applyPull(ActionEvent event) throws IOException {
-         //todo: EXECUTOR
          openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
     }
     @FXML
@@ -542,12 +541,23 @@ public class MainSceneController implements Initializable {
     private ListView<String> logsList = new ListView<>(logs);
     public void setListLogs() {
         //todo.
+        /*List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        String containerId = containers.getFirst().getId();
+        String d = DockerLogs.showAllLogsOfContainer(containerId);
+        logsList.getItems().add(d);
+        */
     }
     private ObservableList<String> subnets = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> subnetsList = new ListView<>(subnets);
-    public void setListSubnets() { //not sure
-        //todo : subnets info
+    public void setListSubnets() {
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        String containerId = containers.getFirst().getId();
+        //temporary to check
+        StringBuilder d = DockerNetwork.formatSubnetsSettings(
+                DockerNetwork.inspectContainersForSubnet(
+                        containerId));
+        subnetsList.getItems().add(d.toString());
     }
     private ObservableList<String> volumes = FXCollections.observableArrayList("name");
     @FXML

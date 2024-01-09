@@ -457,14 +457,13 @@ public class DockerInstance {
     }
 
     public static void showContainerLogs(String containerId) {
-        try (DockerClient client = DockerClientBuilder.getInstance().build()) {
+        try (DockerClient client = ClientUpdater.getUpdatedClient()) {
             LogContainerCmd logContainerCmd = client.logContainerCmd(containerId)
                     .withStdOut(true)
                     .withStdErr(true)
                     .withFollowStream(true)
                     .withTailAll();
             logContainerCmd.exec(new LogCallback());
-            //client.logContainerCmd(containerId).withStdOut(true).withStdErr(true).exec(new LogCallback());
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error displaying logs for container: " + containerId);
