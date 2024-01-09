@@ -275,12 +275,12 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressPause(ActionEvent event) throws IOException {
-        changeTheScenes("/pauseContainer.fxml", event);
+        changeTheScenes("/pauseContainerNew.fxml", event);
     }
     @FXML
     public void pauseContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirm.fxml");
+        openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
         databaseThread();
     }
     @FXML
@@ -300,12 +300,12 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressKill(ActionEvent event) throws IOException {
-        changeTheScenes("/killContainer.fxml", event);
+        changeTheScenes("/killContainerNew.fxml", event);
     }
     @FXML
     public void killContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirm.fxml");
+        openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
         databaseThread();
     }
     @FXML
