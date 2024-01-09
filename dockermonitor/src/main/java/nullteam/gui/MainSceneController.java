@@ -619,7 +619,13 @@ public class MainSceneController implements Initializable {
     }
     //This Method sets the field logsList.
     public void setListLogs() {
-
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        String containerId = containers.getFirst().getId();
+        //temporary gets only first id
+        List<String> containerLogs = DockerInstance.showlogs(containerId);
+        for (String log : containerLogs) {
+            logsList.getItems().add(log);
+        }
     }
     //This Method sets the field subnetsList.
     public void setListSubnets() {
