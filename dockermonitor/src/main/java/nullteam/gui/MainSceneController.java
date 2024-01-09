@@ -75,10 +75,10 @@ public class MainSceneController implements Initializable {
     private String imageId; //field for image id, user presses in list view an item and image id is here
     static final Connection connection = ClientUpdater.connectToDatabase(); //Variable to store the connection
     final String ip = ClientUpdater.getIp(); //variable to get the System Ip of a User.
-    Stage stage; //Stage to show
-    Scene scene; //Current scene
-    Parent root;
-    static boolean isPressed = false; //This is used to only execute the initialize once.
+     Stage stage; //Stage to show
+     Scene scene; //Current scene
+     Parent root;
+     static boolean isPressed = false; //This is used to only execute the initialize once.
     private static final String API_URL = "http://localhost:8080/api/perform-action"; //URL for API.
     Gson gson = new Gson();
     //Method to send the Request
@@ -164,14 +164,14 @@ public class MainSceneController implements Initializable {
         }
     }
     //This method is changes the scenes
-    public void changeTheScenes(String fxmlFile, ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource(fxmlFile));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-    //This method opens a new window when necessary
+     public void changeTheScenes(String fxmlFile, ActionEvent event) throws IOException {
+         root = FXMLLoader.load(getClass().getResource(fxmlFile));
+         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+         scene = new Scene(root);
+         stage.setScene(scene);
+         stage.show();
+     }
+     //This method opens a new window when necessary
     @FXML
     public void openNewWindow(ActionEvent event, String fxml, String title) throws IOException {
         Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
@@ -466,7 +466,7 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to implement an image -> Start a new Container
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
-        //todo: Executor
+         //todo: Executor
         System.out.println(imageId);
         if (imageId != null) {
             openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
@@ -482,7 +482,7 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to remove an image
     @FXML
     public void applyRemove(ActionEvent event) throws IOException {
-        //todo: Executor.
+         //todo: Executor.
         if (imageId != null) {
             openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
             databaseThread();
