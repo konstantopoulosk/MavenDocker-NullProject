@@ -175,7 +175,6 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListImages(ActionEvent event) throws IOException {
         setListImages();
-        imagesList = new ListView<>(images);
     }
     @FXML
     public void pressContainers(ActionEvent event) throws IOException {
@@ -467,7 +466,6 @@ public class MainSceneController implements Initializable {
         for (DockerImage img : DockerImage.imageslist) {
             num++;
             imagesList.getItems().add(num + ") " + img.toString());
-
         }
     }
 
@@ -597,7 +595,6 @@ public class MainSceneController implements Initializable {
             String c = exitedContainers.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("->", 2);
             containerId = c1[1];
-            System.out.println(containerId);
         }
     }
     @FXML
@@ -606,7 +603,6 @@ public class MainSceneController implements Initializable {
             String c = activeContainers.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("->", 2);
             containerId = c1[1];
-            System.out.println(containerId);
         }
     }
     @FXML
@@ -615,7 +611,6 @@ public class MainSceneController implements Initializable {
             String c = containersList.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("->", 2);
             containerId = c1[1];
-            System.out.println(containerId);
         }
     }
     @FXML
@@ -624,17 +619,14 @@ public class MainSceneController implements Initializable {
             String c = restartListContainer.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("->", 2);
             containerId = c1[1];
-            System.out.println(containerId);
         }
     }
     @FXML
     public void retrieveIdForImage(MouseEvent mouseEvent) {
-        System.out.println(imagesList.getSelectionModel().getSelectedItem());
         if (imagesList.getSelectionModel().getSelectedItem() != null) {
             String c = imagesList.getSelectionModel().getSelectedItem().toString();
-            String[] c1 = c.split("IMAGE ID: ", 2);
+            String[] c1 = c.split("ImageID: ", 2);
             imageId = c1[1];
-            System.out.println(imageId);
         }
     }
 }
