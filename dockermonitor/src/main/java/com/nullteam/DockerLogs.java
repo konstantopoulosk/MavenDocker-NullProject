@@ -35,9 +35,10 @@ public class DockerLogs {
 
     /**
      * This method is used to avoid repetition
-     * of code in the previous two methods.
-     * Its basically gives us the result of
-     * each command and handles possible exceptions.
+     * of code in methods showAllLogsOfContainer()
+     * and showLogsOfContainerSince().
+     * It basically gives us the result of
+     * a command and handles possible exceptions.
      *
      * @param command String[]
      * @return String
