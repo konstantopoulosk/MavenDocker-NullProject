@@ -310,6 +310,7 @@ public class GetHelp {
         System.out.println("Creating a new instance of this image...");
         avoidInterruption(executorImplementImage);
     } //end Image menu case 2: Implement an image
+
     public static void case5RmvImg() {
         System.out.println("You chose: (5) Remove "
                 + "an image\n");
