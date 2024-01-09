@@ -92,12 +92,11 @@ public class MainSceneController implements Initializable {
     //API CONFIGURATION
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        GetHelp.listContainers();
-        GetHelp.listImage();
-        GetHelp.listVolumes();
-        GetHelp.listNetworks();
         if (!isPressed) {
             isPressed = true;
+            GetHelp.listImage();
+            GetHelp.listVolumes();
+            GetHelp.listNetworks();
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
             BlockingQueue<ActionRequest> actionQueue = new LinkedBlockingQueue<>();
@@ -165,6 +164,16 @@ public class MainSceneController implements Initializable {
     public void tapToListImages(ActionEvent event) throws IOException {
         setListImages();
         imagesList = new ListView<>(images);
+    }
+    private final ObservableList<String> images = FXCollections.observableArrayList("null");
+    @FXML
+    private ListView<String> imagesList = new ListView<>(images);
+    public void setListImages() {
+        int num = 0;
+        for (DockerImage img : DockerImage.imageslist) {
+            num++;
+            imagesList.getItems().add(num + ") " + img.toString());
+        }
     }
     @FXML
     public void pressContainers(ActionEvent event) throws IOException {
@@ -400,14 +409,14 @@ public class MainSceneController implements Initializable {
     public void changeToSeeAnotherList(ActionEvent event) throws IOException {
         changeTheScenes("/seeImagesInUse.fxml", event);
     }
-    private final ObservableList<String> imagesInUseINIT = FXCollections.observableArrayList(" ");
-    @FXML
-    private ListView<String> imagesInUse = new ListView<>(imagesInUseINIT);
     @FXML
     public void tapToSeeImagesInUse(ActionEvent event) {
         setImagesInUse();
         imagesInUse = new ListView<>(imagesInUseINIT);
     }
+    private final ObservableList<String> imagesInUseINIT = FXCollections.observableArrayList("null");
+    @FXML
+    private ListView<String> imagesInUse = new ListView<>(imagesInUseINIT);
     public void setImagesInUse() {
         List<String> usedImages = DockerImage.listUsedImages();
         for (String usedImage : usedImages) {
@@ -447,18 +456,6 @@ public class MainSceneController implements Initializable {
             e.printStackTrace();
         }
     }
-    private final ObservableList<String> images = FXCollections.observableArrayList("Repository",
-            "Tag", "Times Used", "Size");
-    @FXML
-    private ListView<String> imagesList = new ListView<>(images);
-    public void setListImages() {
-        int num = 0; //Numbers to make the output more User Friendly
-        for (DockerImage img : DockerImage.imageslist) {
-            num++;
-            imagesList.getItems().add(num + ") " + img.toString());
-        }
-    }
-
     private final ObservableList<String> exitedContainersINIT = FXCollections.observableArrayList("Nothing to Show Here :(");
     @FXML
     private ListView<String> exitedContainers = new ListView<>(exitedContainersINIT);
