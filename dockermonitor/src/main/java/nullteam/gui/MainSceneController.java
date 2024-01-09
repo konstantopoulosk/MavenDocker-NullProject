@@ -208,7 +208,7 @@ public class MainSceneController implements Initializable {
         //todo: Executor.
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
         String containerId = containers.getFirst().getId();
-        System.out.println(containerId);
+        //System.out.println(containerId);
         // Create an ActionRequest object
         ActionRequest actionRequest = new ActionRequest("START", containerId);
         // Send the request to the API
