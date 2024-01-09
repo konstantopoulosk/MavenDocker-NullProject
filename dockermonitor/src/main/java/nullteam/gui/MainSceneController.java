@@ -37,38 +37,29 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class MainSceneController implements Initializable {
-    private final ObservableList<String> containers = FXCollections.observableArrayList(" ");
+    private final ObservableList<String> observableList = FXCollections.observableArrayList(" ");
     @FXML
-    private ListView<String> containersList = new ListView<>(containers); //List View to see All Containers
-    private final ObservableList<String> actives = FXCollections.observableArrayList(" ");
+    private ListView<String> containersList = new ListView<>(observableList); //List View to see All Containers
     @FXML
-    private ListView<String> activeContainers = new ListView<>(actives); //List View to see Active Containers
-    private final ObservableList<String> exitedContainersINIT = FXCollections.observableArrayList(" ");
+    private ListView<String> activeContainers = new ListView<>(observableList); //List View to see Active Containers
     @FXML
-    private ListView<String> exitedContainers = new ListView<>(exitedContainersINIT); //List View to see Exited Containers
-    private ObservableList<String> restart = FXCollections.observableArrayList(" ");
+    private ListView<String> exitedContainers = new ListView<>(observableList); //List View to see Exited Containers
     @FXML
-    private ListView<String> restartListContainer = new ListView<>(restart); //List View to see PAUSED Containers
-    private final ObservableList<String> images = FXCollections.observableArrayList(" ");
+    private ListView<String> restartListContainer = new ListView<>(observableList); //List View to see PAUSED Containers
     @FXML
-    private ListView<String> imagesList = new ListView<>(images); //List View to see Client's Image
-    private final ObservableList<String> imagesInUseINIT = FXCollections.observableArrayList(" ");
+    private ListView<String> imagesList = new ListView<>(observableList); //List View to see Client's Image
     @FXML
-    private ListView<String> imagesInUse = new ListView<>(imagesInUseINIT); //List View to see Images that are IN-USE
-    private ObservableList<String> volumes = FXCollections.observableArrayList(" ");
+    private ListView<String> imagesInUse = new ListView<>(observableList); //List View to see Images that are IN-USE
     @FXML
-    private ListView<String> volumesList = new ListView<>(volumes); //List View to see Client's Volumes
-    private ObservableList<String> networks = FXCollections.observableArrayList(" ");
+    private ListView<String> volumesList = new ListView<>(observableList); //List View to see Client's Volumes
     @FXML
-    private ListView<String> networksList = new ListView<>(networks); //List View to see Client's Networks (of containers)
+    private ListView<String> networksList = new ListView<>(observableList); //List View to see Client's Networks (of containers)
     //private List<DockerImage> dockerImagesStart;
     //private List<DockerImage> dockerImageNow;
-    private ObservableList<String> subnets = FXCollections.observableArrayList(" ");
     @FXML
-    private ListView<String> subnetsList = new ListView<>(subnets); //List View to see Subnets of an active Container
-    private ObservableList<String> logs = FXCollections.observableArrayList(" ");
+    private ListView<String> subnetsList = new ListView<>(observableList); //List View to see Subnets of an active Container
     @FXML
-    private ListView<String> logsList = new ListView<>(logs); //List View to see Logs of an active Container
+    private ListView<String> logsList = new ListView<>(observableList); //List View to see Logs of an active Container
     @FXML
     private TextField imageToPull; //Variable to get the text user types in order to pull the image.
     private String containerId; //field for container id, user presses an item in List View and the container id is here
@@ -226,7 +217,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListContainers(ActionEvent event) throws IOException {
         setListContainers();
-        containersList = new ListView<>(containers);
+        containersList = new ListView<>(observableList);
         databaseThread();
     }
     //This is used to go to Networks Menu
@@ -238,7 +229,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeYourNetworks(ActionEvent event) throws IOException {
         setListNetworks();
-        networksList = new ListView<>(networks);
+        networksList = new ListView<>(observableList);
     }
     //This is used to go to Volumes Menu
     @FXML
@@ -249,7 +240,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeVolumes(ActionEvent event) throws IOException {
         setListVolumes();
-        volumesList = new ListView<>(volumes);
+        volumesList = new ListView<>(observableList);
     }
     //This travels the User to a new Scene where he can see the exited containers and choose one to start
     @FXML
@@ -274,7 +265,7 @@ public class MainSceneController implements Initializable {
                     });
             openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
             databaseThread();
-            exitedContainers = new ListView<>(exitedContainersINIT); //Initialize this again so Listing all Over again
+            exitedContainers = new ListView<>(observableList); //Initialize this again so Listing all Over again
         } //and not below.
     }
     //This travels the User to a new Scene where he can see the active containers and choose one to stop
@@ -297,7 +288,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirmation.fxml");
             databaseThread();
         }
-        activeContainers = new ListView<>(actives);
+        activeContainers = new ListView<>(observableList);
     }
     //This is executed when user presses button to see his active containers in stop container scene.
     @FXML
@@ -317,7 +308,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirmation.fxml");
             databaseThread();
         }
-        containersList = new ListView<>(containers);
+        containersList = new ListView<>(observableList);
     }
     //This travels the user to new Scene where user sees his containers and chooses one to remove
     @FXML
@@ -332,7 +323,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirmation.fxml");
             databaseThread();
         }
-        containersList = new ListView<>(containers);
+        containersList = new ListView<>(observableList);
     }
     //This travels the user to a new Scene with a List View with the active containers and User chooses one to restart
     @FXML
@@ -347,7 +338,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
             databaseThread();
         }
-        activeContainers = new ListView<>(actives);
+        activeContainers = new ListView<>(observableList);
     }
     //This is executed when User presses Button to see PAUSED CONTAINERS TO UNPAUSE IT.
     @FXML
@@ -367,7 +358,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
             databaseThread();
         }
-        restartListContainer = new ListView<>(restart);
+        restartListContainer = new ListView<>(observableList);
     }
     //This travels the user to a new Scene with a List View of PAUSED containers
     @FXML
@@ -382,7 +373,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Unpause Container Properties", "unpauseContainerConfirmation.fxml");
             databaseThread();
         }
-        restartListContainer = new ListView<>(restart); //THIS SHOWS PAUSED CONTAINERS!!!!
+        restartListContainer = new ListView<>(observableList); //THIS SHOWS PAUSED CONTAINERS!!!!
     }
     //Travels the user to a new Scene with a List View of all containers
     @FXML
@@ -397,7 +388,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
             databaseThread();
         }
-        containersList = new ListView<>(containers);
+        containersList = new ListView<>(observableList);
     }
     //This travels the User to a new Scene with a List View of active containers.
     @FXML
@@ -412,13 +403,13 @@ public class MainSceneController implements Initializable {
 
             openNewWindow(event, "listOfLogsNew.fxml", "List of Logs"); //Opens a new Window with a List View of the Logs
         }
-        activeContainers = new ListView<>(actives);
+        activeContainers = new ListView<>(observableList);
     }
     //This is Executed in the new window when user presses Button to see the logs of container
     @FXML
     public void tapToSeeTheLogs(ActionEvent event) throws IOException {
         setListLogs();
-        logsList = new ListView<>(logs);
+        logsList = new ListView<>(observableList);
     }
     //Travels the user to a new Scene with a List View of active containers
     @FXML
@@ -432,13 +423,13 @@ public class MainSceneController implements Initializable {
         if (containerId != null) {
             openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets"); //Opens a new window to show the subnets
         }
-        activeContainers = new ListView<>(actives);
+        activeContainers = new ListView<>(observableList);
     }
     //THis is executed when user presses on new window button to see the subnets
     @FXML
     public void tapToSeeSubnets() {
         setListSubnets();
-        subnetsList = new ListView<>(subnets);
+        subnetsList = new ListView<>(observableList);
     }
     //Travels the user to a new scene with a List View of current images and a text field
     //for the user to write the image he wants to pull
@@ -457,6 +448,7 @@ public class MainSceneController implements Initializable {
         } else {
             System.out.println("Something Is Wrong!");
         }
+        imagesList = new ListView<>(observableList);
     }
     //Travels the User to a new Scene with a List View of current images
     @FXML
@@ -472,7 +464,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
             databaseThread();
         }
-        imagesList = new ListView<>(images);
+        imagesList = new ListView<>(observableList);
     }
     //Travels the user to a new Scene with a List View of the images
     @FXML
@@ -487,7 +479,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
             databaseThread();
         }
-        imagesList = new ListView<>(images);
+        imagesList = new ListView<>(observableList);
     }
     //Travels the user to a new Scene to see a list view with only IN-USE images
     @FXML
@@ -498,13 +490,18 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeImagesInUse(ActionEvent event) {
         setImagesInUse();
-        imagesInUse = new ListView<>(imagesInUseINIT);
+        imagesInUse = new ListView<>(observableList);
     }
     //This method sets the field images in use
     public void setImagesInUse() {
         List<String> usedImages = DockerImage.listUsedImages();
         for (String usedImage : usedImages) {
             imagesInUse.getItems().add(usedImage);
+        }
+        if (imagesInUse.getItems().size() > 1) {
+            imagesInUse.getItems().remove(observableList);
+        } else {
+            imagesInUse.getItems().add("Nothing to Show Here");
         }
     }
     //This Method sets the field containersList.
@@ -526,13 +523,10 @@ public class MainSceneController implements Initializable {
                         + "  Container ID ->" + containerId;
                 containersList.getItems().add(containersOut);
             }
-            if (i == 0) {
-                containersList.getItems().removeAll();
-                ObservableList<String> containers1 = FXCollections.observableArrayList("No Containers");
-                containersList = new ListView<>(containers1);
+            if (containersList.getItems().size() == 1) {
                 containersList.getItems().add("Nothing to Show Here");
             } else {
-                containersList.getItems().remove(containers);
+                containersList.getItems().remove(observableList);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -544,6 +538,11 @@ public class MainSceneController implements Initializable {
         for (DockerImage img : DockerImage.imageslist) {
             num++;
             imagesList.getItems().add(num + ") " + img.toString());
+        }
+        if (imagesList.getItems().size() > 1) {
+            imagesList.getItems().remove(observableList);
+        } else {
+            imagesList.getItems().add("Nothing to Show Here");
         }
     }
     //This Method sets the field exitedContainers.
@@ -563,7 +562,9 @@ public class MainSceneController implements Initializable {
                 exitedContainers.getItems().add(listOut);
             }
             if (i != 0) {
-                exitedContainers.getItems().remove(exitedContainersINIT);
+                exitedContainers.getItems().remove(observableList);
+            } else {
+                exitedContainers.getItems().add("Nothing to Show Here");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -586,7 +587,9 @@ public class MainSceneController implements Initializable {
                 activeContainers.getItems().add(listOut);
             }
             if (i != 0) {
-                activeContainers.getItems().remove(actives);
+                activeContainers.getItems().remove(observableList);
+            } else {
+                activeContainers.getItems().add("Nothing to Show Here");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -611,7 +614,9 @@ public class MainSceneController implements Initializable {
                 restartListContainer.getItems().add(listOut);
             }
             if (i != 0) {
-                restartListContainer.getItems().remove(restart);
+                restartListContainer.getItems().remove(observableList);
+            } else {
+                restartListContainer.getItems().add("Nothing to Show Here");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -626,6 +631,11 @@ public class MainSceneController implements Initializable {
         for (String log : containerLogs) {
             logsList.getItems().add(log);
         }
+        if (logsList.getItems().size() > 1) {
+            logsList.getItems().remove(observableList);
+        } else {
+            logsList.getItems().add("Nothing to Show Here");
+        }
     }
     //This Method sets the field subnetsList.
     public void setListSubnets() {
@@ -636,6 +646,11 @@ public class MainSceneController implements Initializable {
                 DockerNetwork.inspectContainersForSubnet(
                         containerId));
         subnetsList.getItems().add(d.toString());
+        if (subnetsList.getItems().size() > 1) {
+            subnetsList.getItems().remove(observableList);
+        } else {
+            subnetsList.getItems().add("Nothing to Show Here");
+        }
     }
     //This Method sets the field volumesList.
     public void setListVolumes() {
@@ -644,6 +659,11 @@ public class MainSceneController implements Initializable {
             num++;
             volumesList.getItems().add(num + ") " + v.toString() + "\n");
         }
+        if (num != 0) {
+            volumesList.getItems().remove(observableList);
+        } else {
+            volumesList.getItems().add("Nothing to Show Here");
+        }
     }
     //This Method sets the field networksList.
     public void setListNetworks() {
@@ -651,6 +671,11 @@ public class MainSceneController implements Initializable {
         for (DockerNetwork n : DockerNetwork.networkslist) {
             num++;
             networksList.getItems().add(num + ") " + n.toString());
+        }
+        if (num != 0) {
+            networksList.getItems().remove(observableList);
+        } else {
+            networksList.getItems().add("Nothing to Show Here");
         }
     }
     //This method retrieves the id of the last exited container that user clicked on, on List View
