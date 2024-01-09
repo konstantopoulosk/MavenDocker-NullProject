@@ -198,7 +198,7 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressStart(ActionEvent event) throws IOException {
-        changeTheScenes("/startContainer.fxml", event);
+        changeTheScenes("/startContainerNew.fxml", event);
     }
     @FXML
     public void tapToSeeExitedContainers(ActionEvent event) throws IOException {
@@ -220,17 +220,17 @@ public class MainSceneController implements Initializable {
                     throwable.printStackTrace();
                     return null;
                 });
-        openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirm.fxml");
+        openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
         databaseThread();
     }
     @FXML
     public void pressStop(ActionEvent event) throws IOException {
-        changeTheScenes("/stopContainer.fxml", event);
+        changeTheScenes("/stopContainerNew.fxml", event);
     }
     @FXML
     public void stopContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirm.fxml");
+        openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirmation.fxml");
         databaseThread();
     }
     @FXML
@@ -240,32 +240,32 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressRename(ActionEvent event) throws IOException {
-        changeTheScenes("/renameContainer.fxml", event);
+        changeTheScenes("/renameContainerNew.fxml", event);
     }
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirm.fxml");
+        openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirmation.fxml");
         databaseThread();
     }
     @FXML
     public void pressRemove(ActionEvent event) throws IOException {
-        changeTheScenes("/removeContainer.fxml", event);
+        changeTheScenes("/removeContainerNew.fxml", event);
     }
     @FXML
     public void removeContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirm.fxml");
+        openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirmation.fxml");
         databaseThread();
     }
     @FXML
     public void pressRestart(ActionEvent event) throws IOException {
-        changeTheScenes("/restartContainer.fxml", event);
+        changeTheScenes("/restartContainerNew.fxml", event);
     }
     @FXML
     public void restartContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirm.fxml");
+        openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
         databaseThread();
     }
     @FXML
@@ -290,12 +290,12 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressUnpause(ActionEvent event) throws IOException {
-        changeTheScenes("/unpauseContainer.fxml", event);
+        changeTheScenes("/unpauseContainerNew.fxml", event);
     }
     @FXML
     public void unpauseContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event,"Unpause Container Properties", "unpauseContainerConfirm.fxml");
+        openConfirmationWindow(event,"Unpause Container Properties", "unpauseContainerConfirmation.fxml");
         databaseThread();
     }
     @FXML
