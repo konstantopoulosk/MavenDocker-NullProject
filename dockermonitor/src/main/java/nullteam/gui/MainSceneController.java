@@ -1,5 +1,6 @@
 package nullteam.gui;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
 import com.google.gson.Gson;
 import com.nullteam.ActionRequest;
@@ -549,13 +550,14 @@ public class MainSceneController implements Initializable {
     private ObservableList<String> logs = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> logsList = new ListView<>(logs);
-    public void setListLogs() {
-        //todo.
-        /*List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+    public void setListLogs() { //i think it works
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
         String containerId = containers.getFirst().getId();
-        String d = DockerLogs.showAllLogsOfContainer(containerId);
-        logsList.getItems().add(d);
-        */
+        //temporary gets only first id
+        List<String> containerLogs = DockerInstance.showlogs(containerId);
+        for (String log : containerLogs) {
+            logsList.getItems().add(log);
+        }
     }
     private ObservableList<String> subnets = FXCollections.observableArrayList("name");
     @FXML

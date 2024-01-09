@@ -14,6 +14,7 @@ import java.util.InputMismatchException;
 
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.command.LogContainerResultCallback;
 import org.glassfish.jersey.internal.util.collection.StringIgnoreCaseKeyComparator;
 
 import java.util.ArrayList;
@@ -261,46 +262,30 @@ public class DockerInstance {
         }
     }
 
-    public static void showContainerLogs(String containerId) {
-        try (DockerClient client = ClientUpdater.getUpdatedClient()) {
-            LogContainerCmd logContainerCmd = client.logContainerCmd(containerId)
+    /**
+     * This method lists all the logs
+     * of a running container.
+     *
+     * @param containerId String
+     * @return List&lt;String&gt;
+     */
+    public static List<String> showlogs(String containerId) {
+        List<String> logs = new ArrayList<>();
+        try {
+            DockerClient client = ClientUpdater.getUpdatedClient();
+            client.logContainerCmd(containerId)
                     .withStdOut(true)
                     .withStdErr(true)
-                    .withFollowStream(true)
-                    .withTailAll();
-            logContainerCmd.exec(new LogCallback());
-        } catch (Exception e) {
+                    .withTailAll()
+                    .exec(new LogContainerResultCallback() {
+                        @Override
+                        public void onNext(Frame frame) {
+                            logs.add(new String(frame.getPayload()));
+                        }
+                    }).awaitCompletion();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-            System.out.println("Error displaying logs for container: " + containerId);
         }
-    }
-
-    private static class LogCallback implements com.github.dockerjava.api.async.ResultCallback<Frame> {
-        @Override
-        public void onStart(Closeable closeable) {
-            // Do nothing on start
-        }
-
-        @Override
-        public void onNext(Frame frame) {
-            // Print log frames to the console
-            System.out.print(frame.toString());
-        }
-
-        @Override
-        public void onError(Throwable throwable) {
-            // Handle error
-            throwable.printStackTrace();
-        }
-
-        @Override
-        public void onComplete() {
-            // Do nothing on completion
-        }
-
-        @Override
-        public void close() {
-            // Close resources
-        }
+        return logs;
     }
 }
