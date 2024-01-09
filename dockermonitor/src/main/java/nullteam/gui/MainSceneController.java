@@ -222,6 +222,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListImages(ActionEvent event) throws IOException {
         setListImages();
+        imagesList = new ListView<>(observableList);
     }
     //This is used to go to Containers Menu
     @FXML
@@ -544,6 +545,16 @@ public class MainSceneController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        /* ?another way?
+        int num = 0;
+        for (DockerInstance cont : DockerInstance.containerslist) {
+            num++;
+            containersList.getItems().add(num + ") " + cont.toString());
+        }
+        if (num == 0) {
+            containersList.getItems().add("NULL");
+        }
+        */
     }
     //This Method sets the field imagesList.
     public void setListImages() {

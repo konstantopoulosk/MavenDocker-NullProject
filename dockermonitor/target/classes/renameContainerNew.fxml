@@ -10,50 +10,40 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
     <children>
-        <Label layoutX="90.0" layoutY="26.0" text="Containers">
+        <Label layoutX="118.0" layoutY="14.0" text="Containers">
             <font>
                 <Font name="Calibri Bold Italic" size="21.0" />
             </font>
         </Label>
-        <ListView fx:id="containersList" onMouseClicked="#retrieveId" layoutX="31.0" layoutY="54.0" prefHeight="327.0" prefWidth="213.0">
+        <ListView fx:id="containersList" layoutX="14.0" layoutY="54.0" onMouseClicked="#retrieveId" prefHeight="327.0" prefWidth="303.0">
             <effect>
                 <DropShadow />
             </effect>
         </ListView>
-        <Label layoutX="394.0" layoutY="218.0" text="New Name">
+        <Label layoutX="423.0" layoutY="165.0" text="New Name">
             <font>
                 <Font name="Calibri Light Italic" size="17.0" />
             </font>
         </Label>
-        <TextField layoutX="357.0" layoutY="240.0">
+        <TextField layoutX="386.0" layoutY="205.0">
             <effect>
                 <DropShadow />
             </effect>
         </TextField>
-        <Button layoutX="332.0" layoutY="356.0" mnemonicParsing="false" onAction="#renameContainer" text="Apply" textFill="#162dc1">
+        <Button layoutX="359.0" layoutY="344.0" mnemonicParsing="false" onAction="#renameContainer" text="Apply" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light Italic" size="15.0" />
             </font>
         </Button>
-        <Button layoutX="472.0" layoutY="356.0" mnemonicParsing="false" onAction="#pressContainers" text="Go Back" textFill="#162dc1">
+        <Button layoutX="500.0" layoutY="344.0" mnemonicParsing="false" onAction="#pressContainers" text="Go Back" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light Italic" size="15.0" />
             </font>
         </Button>
-        <Button layoutX="357.0" layoutY="39.0" mnemonicParsing="false" onAction="#tapToListContainers" prefHeight="27.0" prefWidth="150.0" text="Tap to See Availables" textFill="#162dc1">
+        <Button layoutX="386.0" layoutY="54.0" mnemonicParsing="false" onAction="#tapToListContainers" prefHeight="27.0" prefWidth="150.0" text="Tap to See Availables" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>
         </Button>
-        <TextField layoutX="357.0" layoutY="174.0">
-            <effect>
-                <DropShadow />
-            </effect>
-        </TextField>
-        <Label layoutX="369.0" layoutY="152.0" text="Container Number">
-            <font>
-                <Font name="Calibri Light Italic" size="17.0" />
-            </font>
-        </Label>
     </children>
 </AnchorPane>
