@@ -41,8 +41,6 @@ public class ExecutorThread extends Thread {
             }
         }
     }
-
-
     private void performDockerAction(String actionType, String containerId) {
         // Logic to perform the Docker action based on actionType and containerId
         System.out.println("Performing action: " + actionType + " on container: " + containerId);
@@ -92,6 +90,7 @@ public class ExecutorThread extends Thread {
                 instance = c;
             }
         }
+        System.out.println(instance);
         return instance;
     }
     /*

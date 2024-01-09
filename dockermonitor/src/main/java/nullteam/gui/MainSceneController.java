@@ -135,14 +135,6 @@ public class MainSceneController implements Initializable {
             startHttpServer(performActionHandler);
             databaseThread(); //Executing / Running Database Thread (once)
         }
-        /*
-        GetHelp.listImage();
-        dockerImageNow = DockerImage.imageslist;
-        if (!dockerImageNow.equals(dockerImagesStart)) {
-            dockerImagesStart = new ArrayList<>(dockerImageNow);
-        }
-         */
-        //todo: UPDATE?
     }
     //This method runs the Database Thread
     public void databaseThread() {
@@ -419,7 +411,6 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to see the subnets of a container
     @FXML
     public void applyToSeeSubnets(ActionEvent event) throws IOException {
-        //todo: Executor.
         if (containerId != null) {
             openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets"); //Opens a new window to show the subnets
         }
@@ -494,14 +485,14 @@ public class MainSceneController implements Initializable {
     }
     //This method sets the field images in use
     public void setImagesInUse() {
+        int i = 0;
         List<String> usedImages = DockerImage.listUsedImages();
         for (String usedImage : usedImages) {
+            i++;
             imagesInUse.getItems().add(usedImage);
         }
-        if (imagesInUse.getItems().size() > 1) {
-            imagesInUse.getItems().remove(observableList);
-        } else {
-            imagesInUse.getItems().add("Nothing to Show Here");
+        if (i == 0) {
+            imagesInUse.getItems().add("NULL");
         }
     }
     //This Method sets the field containersList.
@@ -523,10 +514,8 @@ public class MainSceneController implements Initializable {
                         + "  Container ID ->" + containerId;
                 containersList.getItems().add(containersOut);
             }
-            if (containersList.getItems().size() == 1) {
-                containersList.getItems().add("Nothing to Show Here");
-            } else {
-                containersList.getItems().remove(observableList);
+            if (i == 0) {
+                containersList.getItems().add("NULL");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -539,10 +528,8 @@ public class MainSceneController implements Initializable {
             num++;
             imagesList.getItems().add(num + ") " + img.toString());
         }
-        if (imagesList.getItems().size() > 1) {
-            imagesList.getItems().remove(observableList);
-        } else {
-            imagesList.getItems().add("Nothing to Show Here");
+        if (num == 0) {
+            imagesList.getItems().add("NULL");
         }
     }
     //This Method sets the field exitedContainers.
@@ -561,10 +548,8 @@ public class MainSceneController implements Initializable {
                 String listOut = i + ") Name: " + name + "  Container ID ->" + containerId;
                 exitedContainers.getItems().add(listOut);
             }
-            if (i != 0) {
-                exitedContainers.getItems().remove(observableList);
-            } else {
-                exitedContainers.getItems().add("Nothing to Show Here");
+            if (i == 0) {
+                exitedContainers.getItems().add("NULL");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -586,10 +571,8 @@ public class MainSceneController implements Initializable {
                 String listOut = i + ") Name: " + name + "  Container ID ->" + containerId;
                 activeContainers.getItems().add(listOut);
             }
-            if (i != 0) {
-                activeContainers.getItems().remove(observableList);
-            } else {
-                activeContainers.getItems().add("Nothing to Show Here");
+            if (i == 0) {
+                activeContainers.getItems().add("NULL");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -613,10 +596,8 @@ public class MainSceneController implements Initializable {
                 String listOut = i + ") Name: " + name + ", Image: " + image + "  Container ID ->" + containerId;
                 restartListContainer.getItems().add(listOut);
             }
-            if (i != 0) {
-                restartListContainer.getItems().remove(observableList);
-            } else {
-                restartListContainer.getItems().add("Nothing to Show Here");
+            if (i == 0) {
+                restartListContainer.getItems().add("NULL");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -627,14 +608,14 @@ public class MainSceneController implements Initializable {
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
         String containerId = containers.getFirst().getId();
         //temporary gets only first id
+        int i = 0;
         List<String> containerLogs = DockerInstance.showlogs(containerId);
         for (String log : containerLogs) {
+            i++;
             logsList.getItems().add(log);
         }
-        if (logsList.getItems().size() > 1) {
-            logsList.getItems().remove(observableList);
-        } else {
-            logsList.getItems().add("Nothing to Show Here");
+        if (i == 0) {
+            logsList.getItems().add("NULL");
         }
     }
     //This Method sets the field subnetsList.
@@ -646,10 +627,8 @@ public class MainSceneController implements Initializable {
                 DockerNetwork.inspectContainersForSubnet(
                         containerId));
         subnetsList.getItems().add(d.toString());
-        if (subnetsList.getItems().size() > 1) {
-            subnetsList.getItems().remove(observableList);
-        } else {
-            subnetsList.getItems().add("Nothing to Show Here");
+        if (subnetsList.getItems().isEmpty()) {
+            subnetsList.getItems().add("NULL");
         }
     }
     //This Method sets the field volumesList.
@@ -659,10 +638,8 @@ public class MainSceneController implements Initializable {
             num++;
             volumesList.getItems().add(num + ") " + v.toString() + "\n");
         }
-        if (num != 0) {
-            volumesList.getItems().remove(observableList);
-        } else {
-            volumesList.getItems().add("Nothing to Show Here");
+        if (num == 0) {
+            volumesList.getItems().add("NULL");
         }
     }
     //This Method sets the field networksList.
@@ -672,10 +649,8 @@ public class MainSceneController implements Initializable {
             num++;
             networksList.getItems().add(num + ") " + n.toString());
         }
-        if (num != 0) {
-            networksList.getItems().remove(observableList);
-        } else {
-            networksList.getItems().add("Nothing to Show Here");
+        if (num == 0) {
+            networksList.getItems().add("NULL");
         }
     }
     //This method retrieves the id of the last exited container that user clicked on, on List View
@@ -686,6 +661,8 @@ public class MainSceneController implements Initializable {
             String[] c1 = c.split("->", 2);
             containerId = c1[1];
         }
+        System.out.println(exitedContainers.getSelectionModel().getSelectedItem());
+        System.out.println(containerId);
     }
     //This method retrieves the id of the last active container that user clicked on, on List View
     @FXML
