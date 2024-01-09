@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
 
 public class App extends Application {
     @Override

@@ -7,7 +7,6 @@ import com.nullteam.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,7 +26,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
@@ -91,12 +89,12 @@ public class MainSceneController implements Initializable {
     //API CONFIGURATION
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        GetHelp.listContainers();
+        GetHelp.listImage();
+        GetHelp.listVolumes();
+        GetHelp.listNetworks();
         if (!isPressed) {
             isPressed = true;
-            GetHelp.listContainers();
-            GetHelp.listImage();
-            GetHelp.listVolumes();
-            GetHelp.listNetworks();
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
             BlockingQueue<ActionRequest> actionQueue = new LinkedBlockingQueue<>();
@@ -284,11 +282,6 @@ public class MainSceneController implements Initializable {
         databaseThread();
     }
     @FXML
-    public void tapToSeePausedContainers(ActionEvent event) throws IOException {
-         setListPauseContainers();
-        pauseContainers = new ListView<>(pause);
-    }
-    @FXML
     public void pressUnpause(ActionEvent event) throws IOException {
         changeTheScenes("/unpauseContainerNew.fxml", event);
     }
@@ -351,7 +344,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
          //todo: Executor
-        openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirmation.fxml" );
+        openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirmation.fxml");
         databaseThread();
     }
     @FXML
@@ -398,7 +391,7 @@ public class MainSceneController implements Initializable {
                 name = containersOutput.getString("name");
                 image = containersOutput.getString("image");
                 state = containersOutput.getString("state");
-                String containersOut = i + ") " + name + ", " + image + ", " + state + " ";
+                String containersOut = i + ") Name: " + name + ", Image: " + image + ", State: " + state + " ";
                 containersList.getItems().add(containersOut);
             }
             if (i == 0) {
@@ -439,7 +432,7 @@ public class MainSceneController implements Initializable {
             while (resultSet.next()) {
                 i++;
                 String name = resultSet.getString("name");
-                String listOut = i + ", " + name + " ";
+                String listOut = i + ") Name: " + name + " ";
                 exitedContainers.getItems().add(listOut);
             }
             if (i == 0) {
@@ -468,7 +461,7 @@ public class MainSceneController implements Initializable {
             while (resultSet.next()) {
                 i++;
                 String name = resultSet.getString("name");
-                String listOut = i + ", " + name + " ";
+                String listOut = i + ") Name: " + name + " ";
                 activeContainers.getItems().add(listOut);
             }
             if (i == 0) {
@@ -483,66 +476,26 @@ public class MainSceneController implements Initializable {
             e.printStackTrace();
         }
     }
-    private ObservableList<String> pause = FXCollections.observableArrayList("name1");
-    @FXML
-    private ListView<String> pauseContainers = new ListView<>(pause);
-    public void setListPauseContainers() {
-        setListContainers();
-        if (containersList.getItems().size() > 1) {
-            int j = 0, i;
-            for (i = 0; i < containersList.getItems().size(); i++) {
-                String containerInfo = containersList.getItems().get(i);
-                String[] containerInfoArr = containerInfo.split(",");
-                String state = containerInfoArr[0];
-                if (!state.endsWith("(Paused)")) {
-                    j++;
-                    pauseContainers.getItems().add(containerInfoArr[0]);
-                }
-            }
-            if (i == 0 || j == 0) {
-                pauseContainers.getItems().removeAll();
-                ObservableList<String> pause1 = FXCollections.observableArrayList("No Paused Containers");
-                pauseContainers = new ListView<>(pause1);
-                pauseContainers.getItems().add("Nothing to Show Here :(");
-            } else {
-                pauseContainers.getItems().remove(pause);
-            }
-        } else {
-            pauseContainers.getItems().removeAll();
-            ObservableList<String> pause1 = FXCollections.observableArrayList("No Paused Containers");
-            pauseContainers = new ListView<>(pause1);
-            pauseContainers.getItems().add("Nothing to Show Here :(");
-        }
-    }
     private ObservableList<String> restart = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> restartListContainer = new ListView<>(restart);
     public void setListRestartContainers() {
-        setListContainers();
-        if (containersList.getItems().size() > 1) {
-            int j = 0, i;
-            for (i = 0; i < containersList.getItems().size(); i++) {
-                String containerInfo = containersList.getItems().get(i);
-                String[] containerInfoArr = containerInfo.split(",");
-                String state = containerInfoArr[0];
-                if (state.endsWith("(Paused)")) {
-                    j++;
-                    restartListContainer.getItems().add(containerInfoArr[0]);
-                }
+        try {
+            String queryPaused = "SELECT name, image FROM containers WHERE SystemIp = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(queryPaused);
+            preparedStatement.setString(1, ip);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            int i = 0;
+            while (resultSet.next()) {
+                i++;
+                String name, image;
+                name = resultSet.getString("name");
+                image = resultSet.getString("image");
+                String listOut = i + ") Name: " + name + ", Image: " + image + " ";
+                restartListContainer.getItems().add(listOut);
             }
-            if (i == 0 || j == 0) {
-                restartListContainer.getItems().removeAll();
-                ObservableList<String> restart1 = FXCollections.observableArrayList("No Paused Containers");
-                restartListContainer = new ListView<>(restart1);
-                restartListContainer.getItems().add("Nothing to Show Here :(");
-            } else {
-                restartListContainer.getItems().remove(restart);
-            }
-        } else {
-            restartListContainer.getItems().removeAll();
-            ObservableList<String> restart1 = FXCollections.observableArrayList("No Paused Containers");
-            restartListContainer = new ListView<>(restart1);
-            restartListContainer.getItems().add("Nothing to Show Here :(");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     private ObservableList<String> logs = FXCollections.observableArrayList("name");
