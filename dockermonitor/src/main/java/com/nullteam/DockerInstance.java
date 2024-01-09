@@ -455,62 +455,6 @@ public class DockerInstance {
             return chooseAContainer(); // Showing available containers again
         }
     }
-    /**
-     * This method is used to check in main if there are any active containers.
-     * It returns TRUE if there are no active containers in the list
-     * and FALSE otherwise.
-     * @return boolean
-     */
-    public static boolean noActiveContainers() {
-        boolean flag = true;
-        for (DockerInstance c :containerslist) {
-            if (c.getContainerStatus().startsWith("Up")) {
-                //It means there is at least one active container
-                flag = false;
-                break;
-            }
-        }
-        return flag;
-    }
-    // User presses UNPAUSE and there are no Paused Containers,
-    // he can't choose from nothing --> Exception
-    /**
-     * This method is used to check in main if there are any paused containers.
-     * It returns TRUE if there are no paused containers in the list
-     * and FALSE otherwise.
-     * @return boolean
-     */
-    public static boolean noPausedContainers() {
-        boolean flag = true;
-        for (DockerInstance c :containerslist) {
-            if (c.getContainerStatus().endsWith("(Paused)")) {
-                //It means there is at least one paused container
-                flag = false;
-                break;
-            }
-        }
-        return flag;
-    }
-    // User presses PAUSE and there are no active unpaused Containers,
-    // he can't choose from nothing --> Exception
-    /**
-     * This method is used to check in main
-     * if there are any unpaused containers.
-     * It returns TRUE if there are no unpaused containers in the list
-     * and FALSE otherwise.
-     * @return boolean
-     */
-    public static boolean noUnpausedContainers() {
-        boolean flag = true;
-        for (DockerInstance c :containerslist) {
-            if (c.getContainerStatus().startsWith("Up")
-                    && (!c.getContainerStatus().endsWith("(Paused)"))){
-                flag = false;
-                break;
-            }
-        }
-        return flag;
-    }
 
     public static void showContainerLogs(String containerId) {
         try (DockerClient client = DockerClientBuilder.getInstance().build()) {
