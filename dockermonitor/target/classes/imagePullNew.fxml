@@ -31,7 +31,7 @@
                 <Font name="Calibri Light Italic" size="17.0" />
             </font>
         </Label>
-        <TextField layoutX="365.0" layoutY="159.0">
+        <TextField fx:id="imageToPull" layoutX="365.0" layoutY="159.0" >
             <effect>
                 <DropShadow />
             </effect>
