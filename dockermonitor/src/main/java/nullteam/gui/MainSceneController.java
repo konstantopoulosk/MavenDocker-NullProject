@@ -561,6 +561,7 @@ public class MainSceneController implements Initializable {
     private ListView<String> logsList = new ListView<>(logs);
     public void setListLogs() {
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        String containerId = containers.getFirst().getId();
         //temporary gets only first id
         List<String> containerLogs = DockerInstance.showlogs(containerId);
         for (String log : containerLogs) {
