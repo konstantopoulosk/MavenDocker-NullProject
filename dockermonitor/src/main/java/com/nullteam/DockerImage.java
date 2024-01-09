@@ -93,31 +93,6 @@ public class DockerImage {
     }
     //helpful methods
     /**
-     * This method helps to match the numbers from
-     * the printed images with their ID.
-     * @return String
-    */
-    /*  REPLACED BY retrieveImage()
-    public static String chooseAnImage() {
-        DockerImage.listAllImages(); //Users sees his images with numbers
-        Scanner in = new Scanner(System.in); //chooses the image by typing the number next to the image
-        System.out.print("YOUR CHOICE---> ");
-        try {
-        int choice = in.nextInt(); //We find out the id of this specific image with this method.
-        if (choice < 1 || choice > imageslist.size()) {
-            System.out.println("Invalid choice.  Please choose on of the images below.");
-            return chooseAnImage(); }// Showing available images again
-
-            return imageslist.get(choice - 1).getImageId();
-
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input.  Please choose on of the images below.");
-            in.nextLine(); // Consume the invalid input
-            return chooseAnImage(); // Showing available images again
-        }
-    }
-    */
-    /**
      * This method creates and starts an instance of the selected image
      * (creates a new container of the image).
     */
@@ -241,12 +216,11 @@ public class DockerImage {
         return usedImages;
     }
 
-    /*
     public static void pullImage(String imageToPull) {
         try{
             PullImageCmd pullImageCmd = ClientUpdater.getUpdatedClient()
                     .pullImageCmd(imageToPull).withTag("latest");
-            System.out.println("\nPulling image...");
+            System.out.println("Pulling image...");
             System.out.println("This may take a while...");
             pullImageCmd.exec(new PullImageResultCallback() {
                 @Override
@@ -276,5 +250,5 @@ public class DockerImage {
                     -Image already in your DockerCluster"""); //could be more reasons
         }
     }
-    */
+
 }

@@ -136,7 +136,10 @@ public class MainSceneController implements Initializable {
             databaseThread(); //Executing / Running Database Thread (once)
         }
     }
-    //This method runs the Database Thread
+
+    /**
+     * This method runs the Database Thread.
+     */
     public void databaseThread() {
         DatabaseThread databaseThread = new DatabaseThread(connection);
         databaseThread.run();
@@ -146,7 +149,13 @@ public class MainSceneController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    //This method is changes the scenes
+
+    /**
+     * This method changes the scenes.
+     * @param fxmlFile String
+     * @param event ActionEvent
+     * @throws IOException
+     */
      public void changeTheScenes(String fxmlFile, ActionEvent event) throws IOException {
          root = FXMLLoader.load(getClass().getResource(fxmlFile));
          stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -154,7 +163,14 @@ public class MainSceneController implements Initializable {
          stage.setScene(scene);
          stage.show();
      }
-     //This method opens a new window when necessary
+
+    /**
+     * This method opens a new window when necessary.
+     * @param event ActionEvent
+     * @param fxml String
+     * @param title String
+     * @throws IOException
+     */
     @FXML
     public void openNewWindow(ActionEvent event, String fxml, String title) throws IOException {
         Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
@@ -163,7 +179,14 @@ public class MainSceneController implements Initializable {
         stage.setScene(new Scene(root1, 600,400));
         stage.show();
     }
-    //This method opens a confirmation window
+
+    /**
+     * This method opens a confirmation window.
+     * @param event ActionEvent
+     * @param title String
+     * @param fxml String
+     * @throws IOException
+     */
     @FXML
     public void openConfirmationWindow(ActionEvent event, String title, String fxml) throws IOException {
         Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
@@ -432,10 +455,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyPull(ActionEvent event) throws IOException {
         if (imageToPull != null && !DockerImage.imageslist.contains(imageId)) {
-            //todo: Executor PULL IMAGE.
             String image = imageToPull.getText(); //This is what User wrote he wants to pull.
             System.out.println(image);
             openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
+            DockerImage.pullImage(image);
+            //it should work but my computer is way too slow to process
         } else {
             System.out.println("Something Is Wrong!");
         }
