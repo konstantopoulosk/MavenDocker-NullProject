@@ -456,10 +456,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyPull(ActionEvent event) throws IOException {
         if (imageToPull != null && !DockerImage.imageslist.contains(imageId)) {
-            //todo: Executor PULL IMAGE.
             String image = imageToPull.getText(); //This is what User wrote he wants to pull.
             System.out.println(image);
             openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
+            DockerImage.pullImage(image);
+            //it should work but my computer is way too slow to process
         } else {
             System.out.println("Something Is Wrong!");
         }
