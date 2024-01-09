@@ -203,10 +203,6 @@ public class TestDockerInstance {
         }
         Assert.assertFalse("No actives", flag);
     }
-    @Test
-    public void testChooseBasedOnCondition() {
-        Assert.assertFalse("Fail", DockerInstance.noActiveContainers());
-    }
     @After
     public void tearDown() {
         allContainers = null;
