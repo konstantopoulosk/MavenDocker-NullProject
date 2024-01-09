@@ -88,29 +88,16 @@ public class DockerImage {
     */
     @Override
     public String toString() {
-        return "REPOSITORY: " + this.getImageRep() +  "   TAG: "
-                + this.getImageTag() + "   IMAGE ID: " + this.getImageId();
+        return "Repository: " + this.getImageRep() +  "   Tag: "
+                + this.getImageTag() + "   ImageID: " + this.getImageId();
     }
     //helpful methods
-    /**
-     * Images Menu: case 1 (Show All Images)
-     * This method prints all images with numbers in the
-     * beginning to make the output more user-friendly.
-    */
-    public static void listAllImages() {
-        System.out.println("Listing all the images...\n.\n.\n.");
-        int num = 0; //Numbers to make the output more User Friendly
-        for (DockerImage img : imageslist) {
-            num++;
-            System.out.println(num + ") "
-                    + img.toString()); //toString inside a for loop
-        }
-    }
     /**
      * This method helps to match the numbers from
      * the printed images with their ID.
      * @return String
     */
+    /*  REPLACED BY retrieveImage()
     public static String chooseAnImage() {
         DockerImage.listAllImages(); //Users sees his images with numbers
         Scanner in = new Scanner(System.in); //chooses the image by typing the number next to the image
@@ -129,6 +116,7 @@ public class DockerImage {
             return chooseAnImage(); // Showing available images again
         }
     }
+    */
     /**
      * This method creates and starts an instance of the selected image
      * (creates a new container of the image).
