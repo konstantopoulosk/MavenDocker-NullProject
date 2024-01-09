@@ -64,6 +64,8 @@ public class MainSceneController implements Initializable {
     private ListView<String> logsList = new ListView<>(observableList); //List View to see Logs of an active Container
     @FXML
     private TextField imageToPull; //Variable to get the text user types in order to pull the image.
+    @FXML
+    private TextField nameToRename; //Name that user types to rename a container
     private String containerId; //field for container id, user presses an item in List View and the container id is here
     private String imageId; //field for image id, user presses in list view an item and image id is here
     static final Connection connection = ClientUpdater.connectToDatabase(); //Variable to store the connection
@@ -89,7 +91,6 @@ public class MainSceneController implements Initializable {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
             // Check the response status
             if (response.statusCode() == 200) {
                 System.out.println("Action request successful");
@@ -323,6 +324,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
         //todo: Executor.
+        String newName = nameToRename.getText();
+        System.out.println(newName);
         if (containerId != null) {
             openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirmation.fxml");
             databaseThread();
@@ -534,16 +537,6 @@ public class MainSceneController implements Initializable {
         if (num == 0) {
             containersList.getItems().add("NULL");
         }
-        /* ?another way?
-        int num = 0;
-        for (DockerInstance cont : DockerInstance.containerslist) {
-            num++;
-            containersList.getItems().add(num + ") " + cont.toString());
-        }
-        if (num == 0) {
-            containersList.getItems().add("NULL");
-        }
-        */
     }
     //This Method sets the field imagesList.
     public void setListImages() {

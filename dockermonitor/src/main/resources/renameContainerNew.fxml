@@ -25,7 +25,7 @@
                 <Font name="Calibri Light Italic" size="17.0" />
             </font>
         </Label>
-        <TextField layoutX="386.0" layoutY="205.0">
+        <TextField fx:id="nameToRename" layoutX="386.0" layoutY="205.0">
             <effect>
                 <DropShadow />
             </effect>
