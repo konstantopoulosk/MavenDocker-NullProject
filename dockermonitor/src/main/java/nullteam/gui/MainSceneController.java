@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -38,6 +39,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class MainSceneController implements Initializable {
     //private List<DockerImage> dockerImagesStart;
     //private List<DockerImage> dockerImageNow;
+    @FXML
+    private TextField imageToPull;
     private String containerId;
     private String imageId;
     static final Connection connection = ClientUpdater.connectToDatabase();
@@ -377,7 +380,14 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void applyPull(ActionEvent event) throws IOException {
-         openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
+        if (imageToPull != null && !DockerImage.imageslist.contains(imageId)) {
+            //todo: Executor PULL IMAGE.
+            String image = imageToPull.getText(); //This is what User wrote he wants to pull.
+            System.out.println(image);
+            openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
+        } else {
+            System.out.println("Something Is Wrong!");
+        }
     }
     @FXML
     public void pressImplement(ActionEvent event) throws IOException {
@@ -551,7 +561,8 @@ public class MainSceneController implements Initializable {
     private ListView<String> logsList = new ListView<>(logs);
     public void setListLogs() {
         //todo.
-        /*List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        /*
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
         String containerId = containers.getFirst().getId();
         String d = DockerLogs.showAllLogsOfContainer(containerId);
         logsList.getItems().add(d);
