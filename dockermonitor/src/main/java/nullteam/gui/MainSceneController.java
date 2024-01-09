@@ -328,7 +328,6 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void applyToSeeSubnets(ActionEvent event) throws IOException {
-         //todo: Executor.
         openNewWindow(event, "listOfSubnets.fxml", "List of Subnets");
     }
     @FXML
@@ -555,8 +554,8 @@ public class MainSceneController implements Initializable {
     private ObservableList<String> subnets = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> subnetsList = new ListView<>(subnets);
-    public void setListSubnets() {
-        //todo.
+    public void setListSubnets() { //not sure
+        //todo : subnets info
     }
     private ObservableList<String> volumes = FXCollections.observableArrayList("name");
     @FXML
