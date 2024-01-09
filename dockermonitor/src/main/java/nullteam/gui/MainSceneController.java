@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
@@ -34,6 +35,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class MainSceneController implements Initializable {
+    private String containerId;
+    private String imageId;
     static final Connection connection = ClientUpdater.connectToDatabase();
     final String ip = ClientUpdater.getIp();
      Stage stage;
@@ -201,25 +204,21 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeExitedContainers(ActionEvent event) throws IOException {
         setListExitedContainers();
-        exitedContainers = new ListView<>(exitedContainersINIT);
     }
     @FXML
     public void startContainer(ActionEvent event) throws IOException {
-        //todo: Executor.
-        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
-        String containerId = containers.getFirst().getId();
-        //System.out.println(containerId);
-        // Create an ActionRequest object
-        ActionRequest actionRequest = new ActionRequest("START", containerId);
-        // Send the request to the API
-        CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
-                .thenRun(() -> System.out.println("Request sent successfully"))
-                .exceptionally(throwable -> {
-                    throwable.printStackTrace();
-                    return null;
-                });
-        openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
-        databaseThread();
+        if (containerId != null) {
+            ActionRequest actionRequest = new ActionRequest("START", containerId);
+            CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
+                    .thenRun(() -> System.out.println("Request sent successfully"))
+                    .exceptionally(throwable -> {
+                        throwable.printStackTrace();
+                        return null;
+                    });
+            openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
+            databaseThread();
+        }
+        exitedContainers = new ListView<>(exitedContainersINIT);
     }
     @FXML
     public void pressStop(ActionEvent event) throws IOException {
@@ -227,14 +226,23 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void stopContainer(ActionEvent event) throws IOException {
-        //todo: Executor.
-        openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirmation.fxml");
-        databaseThread();
+        if (containerId != null) {
+            ActionRequest actionRequest = new ActionRequest("STOP", containerId);
+            // Send the request to the API
+            CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
+                    .thenRun(() -> System.out.println("Request sent successfully"))
+                    .exceptionally(throwable -> {
+                        throwable.printStackTrace();
+                        return null;
+                    });
+            openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirmation.fxml");
+            databaseThread();
+        }
+        activeContainers = new ListView<>(actives);
     }
     @FXML
     public void tapToSeeActiveContainers(ActionEvent event) throws IOException {
         setListActiveContainers();
-        activeContainers = new ListView<>(actives);
     }
     @FXML
     public void pressRename(ActionEvent event) throws IOException {
@@ -243,8 +251,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirmation.fxml");
-        databaseThread();
+        if (containerId != null) {
+            openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirmation.fxml");
+            databaseThread();
+        }
+        containersList = new ListView<>(containers);
     }
     @FXML
     public void pressRemove(ActionEvent event) throws IOException {
@@ -253,8 +264,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void removeContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirmation.fxml");
-        databaseThread();
+        if (containerId != null) {
+            openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirmation.fxml");
+            databaseThread();
+        }
+        containersList = new ListView<>(containers);
     }
     @FXML
     public void pressRestart(ActionEvent event) throws IOException {
@@ -263,13 +277,15 @@ public class MainSceneController implements Initializable {
     @FXML
     public void restartContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
-        databaseThread();
+        if (containerId != null) {
+            openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
+            databaseThread();
+        }
+        activeContainers = new ListView<>(actives);
     }
     @FXML
     public void tapToSeeRestartContainers(ActionEvent event) throws IOException {
         setListRestartContainers();
-        restartListContainer = new ListView<>(restart);
     }
     @FXML
     public void pressPause(ActionEvent event) throws IOException {
@@ -278,8 +294,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void pauseContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
-        databaseThread();
+        if (containerId != null) {
+            openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
+            databaseThread();
+        }
+        restartListContainer = new ListView<>(restart);
     }
     @FXML
     public void pressUnpause(ActionEvent event) throws IOException {
@@ -288,8 +307,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void unpauseContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event,"Unpause Container Properties", "unpauseContainerConfirmation.fxml");
-        databaseThread();
+        if (containerId != null) {
+            openConfirmationWindow(event, "Unpause Container Properties", "unpauseContainerConfirmation.fxml");
+            databaseThread();
+        }
+        restartListContainer = new ListView<>(restart);
     }
     @FXML
     public void pressKill(ActionEvent event) throws IOException {
@@ -298,8 +320,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void killContainer(ActionEvent event) throws IOException {
         //todo: Executor.
-        openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
-        databaseThread();
+        if (containerId != null) {
+            openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
+            databaseThread();
+        }
+        containersList = new ListView<>(containers);
     }
     @FXML
     public void pressLogs(ActionEvent event) throws IOException {
@@ -308,7 +333,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyToSeeTheLogs(ActionEvent event) throws IOException {
         //todo: Executor.
-         openNewWindow(event, "listOfLogsNew.fxml", "List of Logs");
+        if (containerId != null) {
+
+            openNewWindow(event, "listOfLogsNew.fxml", "List of Logs");
+        }
+        activeContainers = new ListView<>(actives);
     }
     @FXML
     public void tapToSeeTheLogs(ActionEvent event) throws IOException {
@@ -321,7 +350,11 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void applyToSeeSubnets(ActionEvent event) throws IOException {
-        openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets");
+        //todo: Executor.
+        if (containerId != null) {
+            openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets");
+        }
+        activeContainers = new ListView<>(actives);
     }
     @FXML
     public void tapToSeeSubnets() {
@@ -344,8 +377,12 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
          //todo: Executor
-        openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirmation.fxml");
-        databaseThread();
+        System.out.println(imageId);
+        if (imageId != null) {
+            openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
+            databaseThread();
+        }
+        imagesList = new ListView<>(images);
     }
     @FXML
     public void pressRemoveImage(ActionEvent event) throws IOException {
@@ -354,8 +391,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyRemove(ActionEvent event) throws IOException {
          //todo: Executor.
-        openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
-        databaseThread();
+        if (imageId != null) {
+            openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
+            databaseThread();
+        }
+        imagesList = new ListView<>(images);
     }
     @FXML
     public void changeToSeeAnotherList(ActionEvent event) throws IOException {
@@ -380,18 +420,20 @@ public class MainSceneController implements Initializable {
     private ListView<String> containersList = new ListView<>(containers);
     public void setListContainers() {
         try {
-            String queryContainers = "SELECT name, image, state FROM containers WHERE SystemIp = ?";
+            String queryContainers = "SELECT containerId, name, image, state FROM containers WHERE SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryContainers);
             preparedStatement.setString(1, ip);
             ResultSet containersOutput = preparedStatement.executeQuery();
             int i = 0;
             while (containersOutput.next()) {
                 i++;
-                String name, image, state;
+                String name, image, state, containerId;
                 name = containersOutput.getString("name");
                 image = containersOutput.getString("image");
                 state = containersOutput.getString("state");
-                String containersOut = i + ") Name: " + name + ", Image: " + image + ", State: " + state + " ";
+                containerId = containersOutput.getString("containerId");
+                String containersOut = i + ") Name: " + name + "  Image: " + image + "  State: " + state
+                        + "  Container ID ->" + containerId;
                 containersList.getItems().add(containersOut);
             }
             if (i == 0) {
@@ -423,7 +465,7 @@ public class MainSceneController implements Initializable {
     private ListView<String> exitedContainers = new ListView<>(exitedContainersINIT);
     public void setListExitedContainers() {
         try {
-            String queryExited = "select name, id from containers where state = ? and SystemIp = ?";
+            String queryExited = "select name, containerId from containers where state = ? and SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryExited);
             preparedStatement.setString(1, "exited");
             preparedStatement.setString(2, ip);
@@ -432,7 +474,8 @@ public class MainSceneController implements Initializable {
             while (resultSet.next()) {
                 i++;
                 String name = resultSet.getString("name");
-                String listOut = i + ") Name: " + name + " ";
+                String containerId = resultSet.getString("containerId");
+                String listOut = i + ") Name: " + name + "  Container ID ->" + containerId;
                 exitedContainers.getItems().add(listOut);
             }
             if (i != 0) {
@@ -447,7 +490,7 @@ public class MainSceneController implements Initializable {
     private ListView<String> activeContainers = new ListView<>(actives);
     public void setListActiveContainers() {
         try {
-            String queryExited = "select name from containers where state = ? and SystemIp = ?";
+            String queryExited = "select name, containerId from containers where state = ? and SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryExited);
             preparedStatement.setString(1, "running");
             preparedStatement.setString(2, ip);
@@ -456,7 +499,8 @@ public class MainSceneController implements Initializable {
             while (resultSet.next()) {
                 i++;
                 String name = resultSet.getString("name");
-                String listOut = i + ") Name: " + name + " ";
+                String containerId = resultSet.getString("containerId");
+                String listOut = i + ") Name: " + name + "  Container ID ->" + containerId;
                 activeContainers.getItems().add(listOut);
             }
             if (i != 0) {
@@ -471,7 +515,7 @@ public class MainSceneController implements Initializable {
     private ListView<String> restartListContainer = new ListView<>(restart);
     public void setListRestartContainers() {
         try {
-            String queryPaused = "SELECT name, image FROM containers WHERE SystemIp = ? AND state = ?";
+            String queryPaused = "SELECT name, image, containerId FROM containers WHERE SystemIp = ? AND state = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(queryPaused);
             preparedStatement.setString(1, ip);
             preparedStatement.setString(2, "paused");
@@ -479,10 +523,11 @@ public class MainSceneController implements Initializable {
             int i = 0;
             while (resultSet.next()) {
                 i++;
-                String name, image;
+                String name, image, containerId;
                 name = resultSet.getString("name");
                 image = resultSet.getString("image");
-                String listOut = i + ") Name: " + name + ", Image: " + image + " ";
+                containerId = resultSet.getString("containerId");
+                String listOut = i + ") Name: " + name + ", Image: " + image + "  Container ID ->" + containerId;
                 restartListContainer.getItems().add(listOut);
             }
             if (i != 0) {
@@ -525,12 +570,49 @@ public class MainSceneController implements Initializable {
         }
     }
     @FXML
-    public void retrieveId(MouseEvent arg0) {
-        containersList.setOnMousePressed(event -> {
-            if(containersList.getSelectionModel().getSelectedItem() != null) {
-                String selectedValue = containersList.getSelectionModel().getSelectedItem();
-                System.out.println("Selected value: " + selectedValue);
-            }
-        });
+    public void retrieveIdToStart(MouseEvent mouseEvent) {
+        if (exitedContainers.getSelectionModel().getSelectedItem() != null) {
+            String c = exitedContainers.getSelectionModel().getSelectedItem().toString();
+            String[] c1 = c.split("->", 2);
+            containerId = c1[1];
+            System.out.println(containerId);
+        }
+    }
+    @FXML
+    public void retrieveIdToStop(MouseEvent mouseEvent) {
+        if (activeContainers.getSelectionModel().getSelectedItem() != null) {
+            String c = activeContainers.getSelectionModel().getSelectedItem().toString();
+            String[] c1 = c.split("->", 2);
+            containerId = c1[1];
+            System.out.println(containerId);
+        }
+    }
+    @FXML
+    public void retrieveId(MouseEvent mouseEvent) {
+        if (containersList.getSelectionModel().getSelectedItem() != null) {
+            String c = containersList.getSelectionModel().getSelectedItem().toString();
+            String[] c1 = c.split("->", 2);
+            containerId = c1[1];
+            System.out.println(containerId);
+        }
+    }
+    @FXML
+    public void retrieveIdToUnpause(MouseEvent mouseEvent) {
+        if (restartListContainer.getSelectionModel().getSelectedItem() != null) {
+            String c = restartListContainer.getSelectionModel().getSelectedItem().toString();
+            String[] c1 = c.split("->", 2);
+            containerId = c1[1];
+            System.out.println(containerId);
+        }
+    }
+    @FXML
+    public void retrieveIdForImage(MouseEvent mouseEvent) {
+        System.out.println(imagesList.getSelectionModel().getSelectedItem());
+        if (imagesList.getSelectionModel().getSelectedItem() != null) {
+            String c = imagesList.getSelectionModel().getSelectedItem().toString();
+            String[] c1 = c.split("IMAGE ID: ", 2);
+            imageId = c1[1];
+            System.out.println(imageId);
+        }
     }
 }

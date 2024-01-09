@@ -463,8 +463,8 @@ public class DockerInstance {
                     .withStdErr(true)
                     .withFollowStream(true)
                     .withTailAll();
-
-            client.logContainerCmd(containerId).withStdOut(true).withStdErr(true).exec(new LogCallback());
+            logContainerCmd.exec(new LogCallback());
+            //client.logContainerCmd(containerId).withStdOut(true).withStdErr(true).exec(new LogCallback());
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error displaying logs for container: " + containerId);
