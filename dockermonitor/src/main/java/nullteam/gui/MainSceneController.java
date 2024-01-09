@@ -357,12 +357,12 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressRemoveImage(ActionEvent event) throws IOException {
-        changeTheScenes("/imageRemove.fxml", event);
+        changeTheScenes("/imageRemoveNew.fxml", event);
     }
     @FXML
     public void applyRemove(ActionEvent event) throws IOException {
          //todo: Executor.
-        openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirm.fxml");
+        openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
         databaseThread();
     }
     @FXML
