@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -35,6 +36,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class MainSceneController implements Initializable {
+    //private List<DockerImage> dockerImagesStart;
+    //private List<DockerImage> dockerImageNow;
     private String containerId;
     private String imageId;
     static final Connection connection = ClientUpdater.connectToDatabase();
@@ -92,11 +95,11 @@ public class MainSceneController implements Initializable {
     //API CONFIGURATION
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        GetHelp.listContainers();
-        GetHelp.listImage();
-        GetHelp.listVolumes();
-        GetHelp.listNetworks();
         if (!isPressed) {
+            GetHelp.listImage();
+            //dockerImagesStart = DockerImage.imageslist;
+            GetHelp.listVolumes();
+            GetHelp.listNetworks();
             isPressed = true;
             DockerMonitor monitor = new DockerMonitor();
             monitor.start();
@@ -107,6 +110,14 @@ public class MainSceneController implements Initializable {
             startHttpServer(performActionHandler);
             databaseThread();
         }
+        /*
+        GetHelp.listImage();
+        dockerImageNow = DockerImage.imageslist;
+        if (!dockerImageNow.equals(dockerImagesStart)) {
+            dockerImagesStart = new ArrayList<>(dockerImageNow);
+        }
+         */
+        //todo: UPDATE?
     }
     public void databaseThread() {
         DatabaseThread databaseThread = new DatabaseThread(connection);
@@ -456,6 +467,7 @@ public class MainSceneController implements Initializable {
         for (DockerImage img : DockerImage.imageslist) {
             num++;
             imagesList.getItems().add(num + ") " + img.toString());
+
         }
     }
 
