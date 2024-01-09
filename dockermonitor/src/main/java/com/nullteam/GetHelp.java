@@ -256,29 +256,6 @@ public class GetHelp {
             throw new RuntimeException(e);
         }
     }
-    public static void goToContMenu() {
-        System.out.println("You chose: (..) "
-               + "Go back to Container Menu\n");
-        System.out.println("Transferring you "
-               + "to the Container Menu ...");
-    }
-    public static void goToMainMenu() {
-        System.out.println("You chose: (..) "
-               + "Go Back(Main Menu)\n");
-        System.out.println("Transferring you "
-               + "to the Main Menu ...");
-    }
-    /*
-    public static void imageCase1() {
-        System.out.println("You chose: (1) View available images\n");
-        DockerImage.listAllImages();
-    }
-    public static void imageCase2() {
-        System.out.println("You chose: (2) View images in use\n");
-        DockerImage.listUsedImages();
-    }
-
-     */
     /**
      * This method pulls an image from DockerHub
      * and adds it to the imagelist
