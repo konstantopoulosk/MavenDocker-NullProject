@@ -16,46 +16,62 @@ import java.util.Scanner;
 import java.util.concurrent.Executor;
 
 public class GetHelp {
+
+    /**
+     * Constructor to help call this class's
+     * methods in other classes.
+     */
     private GetHelp() {
     }
+
+    /**
+     * This method lists the updated images
+     * from the user's client and creates a
+     * DockerImage object for every image.
+     */
     public static void listImage() {
         List<Image> images =
                 ClientUpdater.getUpdatedImagesFromClient();
-        //Updated Client from ClientUpdater
-        for (Image i : images) { //For every one object in the images list
-                                 //creating an object DockerImage
+        for (Image i : images) {
             new DockerImage(i.getRepoDigests()[0],
                     "latest", i.getId());
         }
     }
+    /**
+     * This method lists the updated containers
+     * from the user's client and creates a
+     * DockerInstance object for every container.
+     */
     public static void listContainers() {
         List<Container> containers =
                 ClientUpdater.getUpdatedContainersFromClient();
-        //updated list with containers
         for (Container c : containers) {
-            //for every one object in the containers list
-            //create an object DockerInstance
             new DockerInstance(c.getNames()[0], c.getId(),
                     c.getImage(), c.getStatus());
         }
     }
+    /**
+     * This method lists the updated volumes
+     * from the user's client and creates a
+     * DockerVolume object for every volume.
+     */
     public static void listVolumes() {
         List<InspectVolumeResponse> volumes =
                 ClientUpdater.getUpdatedVolumesFromClient();
-        //Updated Client from ClientUpdater
         for (InspectVolumeResponse v : volumes) {
-            //creating an object DockerVolume
-            //we need to get the CreatedAt from inspect
             new DockerVolume(v.getDriver(), v.getName(),
                     DockerVolume.createdAt(v.getName()), v.getMountpoint());
         }
     }
+    /**
+     * This method lists the updated networks
+     * from the user's client and creates a
+     * DockerNetwork object for every network.
+     */
     public static void listNetworks() {
         List<Network> networks =
                 ClientUpdater.getUpdatedNetworksFromClient();
-        //Updated Client from ClientUpdater
         for (Network n : networks) {
-            //creating an object DockerNetwork
             new DockerNetwork(n.getId(), n.getName(),
                     n.getDriver(), n.getScope());
         }
@@ -231,7 +247,7 @@ public class GetHelp {
     /**
      * This method pauses the programm
      * for 2 seconds.
-*/
+     */
     public static void wait2seconds() {
         try {
             final int m = 2000;
@@ -336,12 +352,7 @@ public class GetHelp {
             avoidInterruption(executorRemoveImage);
         }
     } //end case 3 Image Menu: Remove an Image.
-    public static void goToContTools() {
-        System.out.println("You chose: "
-               + "3) Container Tools\n");
-        System.out.println("Transferring you to the "
-               + "Container Tools Menu ...");
-    }
+
     public static void repChoice() {
         System.out.println("Please choose one of the valid options below.\n");
     }

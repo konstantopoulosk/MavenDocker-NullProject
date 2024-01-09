@@ -228,6 +228,8 @@ public class DockerImage {
     /**
      * This method lists all the images that are in use.
      * This means all the images that run containers.
+     *
+     * @return List&lt;String&gt;
     */
     public static List<String> listUsedImages() {
         List<String> usedImages = new ArrayList<>();
