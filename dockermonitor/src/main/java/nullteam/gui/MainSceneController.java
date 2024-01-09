@@ -310,12 +310,12 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressLogs(ActionEvent event) throws IOException {
-        changeTheScenes("/logsOfContainerNew.fxml", event);
+        changeTheScenes("/logsOfContainer.fxml", event);
     }
     @FXML
     public void applyToSeeTheLogs(ActionEvent event) throws IOException {
         //todo: Executor.
-        openNewWindow(event, "listOfLogsNew.fxml", "List of Logs");
+         openNewWindow(event, "listOfLogs.fxml", "List of Logs");
     }
     @FXML
     public void tapToSeeTheLogs(ActionEvent event) throws IOException {
@@ -324,12 +324,11 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressSubnets(ActionEvent event) throws IOException {
-        changeTheScenes("/subnetsOfContainerNew.fxml", event);
+        changeTheScenes("/subnetsOfContainer.fxml", event);
     }
     @FXML
     public void applyToSeeSubnets(ActionEvent event) throws IOException {
-         //todo: Executor.
-        openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets");
+        openNewWindow(event, "listOfSubnets.fxml", "List of Subnets");
     }
     @FXML
     public void tapToSeeSubnets() {
@@ -338,21 +337,21 @@ public class MainSceneController implements Initializable {
     }
     @FXML
     public void pressPull(ActionEvent event) throws IOException {
-        changeTheScenes("/imagePullNew.fxml", event);
+        changeTheScenes("/imagePull.fxml", event);
     }
     @FXML
     public void applyPull(ActionEvent event) throws IOException {
          //todo: EXECUTOR
-         openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
+         openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirm.fxml");
     }
     @FXML
     public void pressImplement(ActionEvent event) throws IOException {
-        changeTheScenes("/imageImplementNew.fxml", event);
+        changeTheScenes("/imageImplement.fxml", event);
     }
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
          //todo: Executor
-        openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirmation.fxml" );
+        openConfirmationWindow(event,"Implement Image Properties", "imageImplementConfirm.fxml" );
         databaseThread();
     }
     @FXML
@@ -555,8 +554,8 @@ public class MainSceneController implements Initializable {
     private ObservableList<String> subnets = FXCollections.observableArrayList("name");
     @FXML
     private ListView<String> subnetsList = new ListView<>(subnets);
-    public void setListSubnets() {
-        //todo.
+    public void setListSubnets() { //not sure
+        //todo : subnets info
     }
     private ObservableList<String> volumes = FXCollections.observableArrayList("name");
     @FXML
