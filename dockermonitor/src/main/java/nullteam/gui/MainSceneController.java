@@ -560,7 +560,7 @@ public class MainSceneController implements Initializable {
         for (DockerInstance dockerInstance : DockerInstance.containerslist) {
             if (DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Exited")) {
                 i++;
-                exitedContainers.getItems().add(dockerInstance.toString());
+                exitedContainers.getItems().add(i + ") " + dockerInstance.toString());
             }
             num++;
         }
