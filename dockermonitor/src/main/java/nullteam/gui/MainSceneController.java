@@ -323,7 +323,6 @@ public class MainSceneController implements Initializable {
     //This is Executed when user presses apply to rename a container that he chose from List View
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
-        //todo: Executor.
         String newName = nameToRename.getText();
         System.out.println(newName);
         if (containerId != null) {
@@ -347,8 +346,8 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to remove a container
     @FXML
     public void removeContainer(ActionEvent event) throws IOException {
-        //todo: Executor.
         if (containerId != null) {
+            ImplementAPIRequest("REMOVE");
             openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirmation.fxml");
             databaseThread();
         }
@@ -362,8 +361,8 @@ public class MainSceneController implements Initializable {
     //Executed when user presses apply to Restart a Container.
     @FXML
     public void restartContainer(ActionEvent event) throws IOException {
-        //todo: Executor.
         if (containerId != null) {
+            ImplementAPIRequest("RESTART");
             openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
             databaseThread();
         }
@@ -382,8 +381,8 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to pause a container
     @FXML
     public void pauseContainer(ActionEvent event) throws IOException {
-        //todo: Executor.
         if (containerId != null) {
+            ImplementAPIRequest("PAUSE");
             openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
             databaseThread();
         }
@@ -397,8 +396,8 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to Unpause a container
     @FXML
     public void unpauseContainer(ActionEvent event) throws IOException {
-        //todo: Executor.
         if (containerId != null) {
+            ImplementAPIRequest("UNPAUSE");
             openConfirmationWindow(event, "Unpause Container Properties", "unpauseContainerConfirmation.fxml");
             databaseThread();
         }
@@ -412,8 +411,8 @@ public class MainSceneController implements Initializable {
     //This is executed when User presses apply to kill a container
     @FXML
     public void killContainer(ActionEvent event) throws IOException {
-        //todo: Executor.
         if (containerId != null) {
+            ImplementAPIRequest("KILL");
             openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
             databaseThread();
         }
@@ -489,9 +488,9 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to implement an image -> Start a new Container
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
-        //todo: Executor
         System.out.println(imageId);
         if (imageId != null) {
+            ImplementAPIRequest("IMPLEMENT");
             openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
             databaseThread();
         }
@@ -505,8 +504,8 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to remove an image
     @FXML
     public void applyRemove(ActionEvent event) throws IOException {
-        //todo: Executor.
         if (imageId != null) {
+            ImplementAPIRequest("REMOVEIMAGE");
             openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
             databaseThread();
         }
