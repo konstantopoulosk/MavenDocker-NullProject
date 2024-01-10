@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
     <children>
-        <ListView fx:id="subnetsList" layoutX="14.0" layoutY="58.0" prefHeight="327.0" prefWidth="400.0">
+        <ListView fx:id="subnetsList" onMouseClicked="#retrieveIdToStop" layoutX="14.0" layoutY="58.0" prefHeight="327.0" prefWidth="400.0">
             <effect>
                 <DropShadow />
             </effect>

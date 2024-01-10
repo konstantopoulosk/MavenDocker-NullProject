@@ -5,6 +5,7 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="789.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
@@ -13,7 +14,7 @@
          <children>
             <TextField alignment="TOP_CENTER" disable="true" layoutX="27.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.7" prefHeight="42.0" prefWidth="183.0" promptText="Containers Menu" text="Containers Menu">
                <font>
-                  <Font name="Calibri Bold Italic" size="22.0" />
+                  <Font name="Footlight MT Light" size="22.0" />
                </font>
                <effect>
                   <DropShadow />
@@ -193,12 +194,13 @@
             </ListView>
             <Button layoutX="304.0" layoutY="13.0" mnemonicParsing="false" onAction="#tapToListContainers" prefHeight="42.0" prefWidth="198.0" text="VIEW CONTAINERS">
                <font>
-                  <Font name="Marlett" size="14.0" />
+                  <Font name="Calibri Bold Italic" size="16.0" />
                </font>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Line endX="776.4000244140625" layoutX="19.0" layoutY="61.0" startX="-100.0" />
          </children></AnchorPane>
   </items>
 </SplitPane>

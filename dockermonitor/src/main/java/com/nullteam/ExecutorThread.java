@@ -67,14 +67,12 @@ public class ExecutorThread extends Thread {
             case "KILL":
                 killContainer(containerId);
                 break;
-            /*
             case "IMPLEMENT":
-                implementImage(containerId);
+                implementImage(containerId); //This is of course image id
                 break;
             case "REMOVEIMAGE":
-                removeImage(containerId);
+                removeImage(containerId); //Also image id
                 break;
-             */
             default:
                 System.out.println("Invalid action type");
         }
@@ -90,17 +88,15 @@ public class ExecutorThread extends Thread {
         System.out.println(instance); //This somehow is null :(
         return instance;
     }
-    /*
-    private DockerImage findImageInClient() {
+    private DockerImage findImageInClient(String id) {
         DockerImage image = null;
         for (DockerImage i : DockerImage.imageslist) {
-            if (i.getImageId().equals(this.id)) {
+            if (i.getImageId().equals(id)) {
                 image = i;
             }
         }
         return image;
     }
-     */
     //ALL THE EXECUTION METHODS
     private void startContainer(String id) {
         findContainerInClient(id).startContainer();
@@ -126,12 +122,10 @@ public class ExecutorThread extends Thread {
     private void killContainer(String id) {
         findContainerInClient(id).killContainer();
     }
-    /*
-    private void implementImage() {
-        findImageInClient().implementImage();
+    private void implementImage(String id) {
+        findImageInClient(id).implementImage();
     }
-    private void removeImage() {
-        findImageInClient().removeImage();
+    private void removeImage(String id) {
+        findImageInClient(id).removeImage();
     }
-     */
 }
