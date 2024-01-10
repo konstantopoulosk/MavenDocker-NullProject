@@ -28,14 +28,14 @@ public class ExecutorThread extends Thread {
                 //System.out.println("Executor is running..");
                 // Dequeue the ActionRequest from the actionQueue
                 ActionRequest actionRequest = actionQueue.take();
-
                 // Extract the actionType and containerId from the ActionRequest
                 String actionType = actionRequest.getActionType();
                 String containerId = actionRequest.getContainerId();
-
-                // Perform the corresponding Docker action based on actionType and containerId
-                performDockerAction(actionType, containerId);
-
+                if(!actionRequest.getNewName().isEmpty()) { //checking if there is a new name, so we use rename instead
+                    renameContainer(containerId, actionRequest.getNewName());
+                } else {
+                    performDockerAction(actionType, containerId);
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -51,9 +51,6 @@ public class ExecutorThread extends Thread {
                 break;
             case "STOP": //stop
                 stopContainer(containerId);
-                break;
-            case "RENAME": //rename
-                renameContainer(containerId);
                 break;
             case "REMOVE":
                 removeContainer(containerId);
@@ -111,8 +108,8 @@ public class ExecutorThread extends Thread {
     private void stopContainer(String id) {
         findContainerInClient(id).stopContainer();
     }
-    private void renameContainer(String id) {
-        findContainerInClient(id).renameContainer(this.name2Rename);
+    private void renameContainer(String id, String newName) {
+        findContainerInClient(id).renameContainer(newName);
     }
     private void removeContainer(String id) {
         findContainerInClient(id).removeContainer();

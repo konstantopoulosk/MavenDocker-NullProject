@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.nullteam.test.TestDockerMonitor
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.349 s <<< FAILURE! - in com.nullteam.test.TestDockerMonitor
+testWriteCsv(com.nullteam.test.TestDockerMonitor)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.List.iterator()" because "this.currentData" is null
+	at com.nullteam.test.TestDockerMonitor.testWriteCsv(TestDockerMonitor.java:35)
+

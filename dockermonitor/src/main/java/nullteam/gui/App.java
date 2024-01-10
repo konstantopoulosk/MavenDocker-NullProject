@@ -9,13 +9,14 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("/Scene1.fxml"));
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Scene1.fxml")));
             // Icon
             FileInputStream inputStream = new FileInputStream("Icon.png");
             Image icon = new Image(inputStream);
@@ -27,10 +28,10 @@ public class App extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("System IO exception thrown!");
         }
     }
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         ClientUpdater.connectionAccomplished();
         launch(args);
     }

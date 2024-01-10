@@ -120,6 +120,16 @@ public class MainSceneController implements Initializable {
             e.printStackTrace();
         }
     }
+    void ImplementAPIRequest(String action) {
+        ActionRequest actionRequest = new ActionRequest(action, containerId);
+        CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
+                .thenRun(() -> System.out.println("Request sent successfully"))
+                .exceptionally(throwable -> {
+                    throwable.printStackTrace();
+                    return null;
+                });
+    }
+
     //API CONFIGURATION
     //Initialize Method is necessary
     @Override
@@ -276,13 +286,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void startContainer(ActionEvent event) throws IOException {
         if (containerId != null) { //It may be null.
-            ActionRequest actionRequest = new ActionRequest("START", containerId);
-            CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
-                    .thenRun(() -> System.out.println("Request sent successfully"))
-                    .exceptionally(throwable -> {
-                        throwable.printStackTrace();
-                        return null;
-                    });
+            ImplementAPIRequest("START");
             openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
             databaseThread();
             exitedContainers = new ListView<>(observableList); //Initialize this again so Listing all Over again
@@ -297,14 +301,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void stopContainer(ActionEvent event) throws IOException {
         if (containerId != null) {
-            ActionRequest actionRequest = new ActionRequest("STOP", containerId);
-            // Send the request to the API
-            CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
-                    .thenRun(() -> System.out.println("Request sent successfully"))
-                    .exceptionally(throwable -> {
-                        throwable.printStackTrace();
-                        return null;
-                    });
+            ImplementAPIRequest("STOP");
             openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirmation.fxml");
             databaseThread();
         }
@@ -327,6 +324,13 @@ public class MainSceneController implements Initializable {
         String newName = nameToRename.getText();
         System.out.println(newName);
         if (containerId != null) {
+            ActionRequest actionRequest = new ActionRequest("RENAME", containerId, newName);
+            CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
+                    .thenRun(() -> System.out.println("Request sent successfully"))
+                    .exceptionally(throwable -> {
+                        throwable.printStackTrace();
+                        return null;
+                    });
             openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirmation.fxml");
             databaseThread();
         }
