@@ -1,5 +1,5 @@
 package com.nullteam.test;
 
-public class TestActionRequest {
+public class TestActionRequest extends TestDatabaseThread {
     //todo : TestActionRequest
 }
