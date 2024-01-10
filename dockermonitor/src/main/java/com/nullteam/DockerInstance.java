@@ -116,8 +116,8 @@ public class DockerInstance {
     @Override
     public String toString() {
         return "Name: " + name
-                + "  Image: " + image + "  STATUS: " + status
-                + "\nID: " + containerId;
+                + "  Image: " + image + "\n    STATUS: " + status
+                + "\n    ID: " + containerId;
     } //We choose to show only the Name, ID, Image and Status of a Container
 
     //Container Menu: case 3 (Container tools)

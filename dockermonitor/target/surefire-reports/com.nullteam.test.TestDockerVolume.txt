@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.nullteam.test.TestDockerVolume
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 31.038 s - in com.nullteam.test.TestDockerVolume
