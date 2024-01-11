@@ -17,6 +17,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Box;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.swing.text.BoxView;
@@ -743,19 +744,18 @@ public class MainSceneController implements Initializable {
     private TextField date;
     @FXML
     private ListView<String> measure = new ListView<>(observableList);
-    /*
     @FXML
-    private View uppers;
+    private Text upContainers;
     @FXML
-    private TextField downers;
-
-     */
+    private Text downContainers;
     @FXML
     public void measurements(ActionEvent event) throws  IOException{
         changeTheScenes("/measurements.fxml", event);
     }
     @FXML
     public void applyMeasurements(ActionEvent event) throws IOException {
+        upContainers.setText("0");
+        downContainers.setText("0");
         String d = this.date.getText();
         Date date = Date.valueOf(d);
         List<String> list = new ArrayList<>();
@@ -793,7 +793,8 @@ public class MainSceneController implements Initializable {
                 }
             }
             setListMeasure(list);
-            //uppers =
+            upContainers.setText(String.valueOf(up));
+            downContainers.setText(String.valueOf(down));
             measure = new ListView<>(observableList);
         } catch (Exception e) {
             e.printStackTrace();

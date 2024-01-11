@@ -71,21 +71,6 @@ public class DatabaseThread extends Thread {
              e.printStackTrace();
              return null;
          }
-         /*
-         Scanner in = new Scanner(System.in);
-         System.out.println("-----------------");
-        System.out.println("TYPE CREDENTIALS TWICE PLEASE: ");
-        System.out.print("DRIVER: ");
-        String driver = in.nextLine();
-        System.out.print("URL: ");
-        String url = in.nextLine();
-        System.out.print("USER: ");
-        String user = in.nextLine();
-        System.out.print("PASSWORD: ");
-        String password = in.nextLine();
-        System.out.println("-----------------");
-
-          */
     }
     //Reads the containers.csv and inserts everything into the table containers.
     public void readContainersFromCsv(Connection connection, int containers) {
