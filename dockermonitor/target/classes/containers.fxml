@@ -33,7 +33,7 @@
                   <DropShadow />
                </effect>
                <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="198.0" style="-fx-background-color: light blue;">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="198.0" style="-fx-background-color: #ffffff;">
                      <children>
                         <Button layoutX="27.0" layoutY="164.0" mnemonicParsing="false" onAction="#pressVolumes" prefHeight="42.0" prefWidth="130.0" text="Volumes" textFill="#162dc1">
                            <font>
@@ -87,7 +87,7 @@
                   <DropShadow />
                </effect>
                <items>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="198.0" style="-fx-background-color: light blue;">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="198.0" style="-fx-background-color: #ffffff;">
                      <children>
                         <Button layoutX="60.0" layoutY="90.0" mnemonicParsing="false" onAction="#pressRename" prefHeight="26.0" prefWidth="77.0" text="Rename" textFill="#162dc1">
                            <font>
