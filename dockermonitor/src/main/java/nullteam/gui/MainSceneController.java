@@ -195,7 +195,6 @@ public class MainSceneController implements Initializable {
             stage.show();
 
     }
-
     /**
      * This method opens a new window when necessary.
      * @param event ActionEvent
@@ -295,6 +294,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToListContainers(ActionEvent event) throws IOException {
+        System.out.println("You tapped to see the containers");
         setListContainers();
         databaseThread();
         containersList = new ListView<>(observableList);
@@ -523,12 +523,12 @@ public class MainSceneController implements Initializable {
     /**
      * This method is executed when user clicks a button to see
      * the paused containers in order to unpause.
-     * @param event
+     * @param event ActionEvent
      * @throws IOException
      */
     @FXML
     public void tapToSeeRestartContainers(ActionEvent event) throws IOException {
-        setListRestartContainers();
+        setListPausedContainers();
     }
     /**
      * This method takes the user to a new scene
@@ -605,7 +605,7 @@ public class MainSceneController implements Initializable {
         if (containerId != null && !containerId.equals("NULL")) {
             implementAPIRequest("KILL");
             openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
-           databaseThread();
+            databaseThread();
             activeContainers = new ListView<>(observableList);
         }
     }
@@ -706,7 +706,6 @@ public class MainSceneController implements Initializable {
                 System.out.println(image);
                 openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
                 DockerImage.pullImage(image);
-                //it should work but my computer is way too slow to process
             } else {
                 System.out.println(imageToPull);
                 System.out.println("Something Is Wrong!");
@@ -864,7 +863,7 @@ public class MainSceneController implements Initializable {
     /**
      * This Method sets the field pausedContainerss.
      */
-    public void setListRestartContainers() {
+    public void setListPausedContainers() {
         int num = 0, i = 0;
         for (DockerInstance dockerInstance : DockerInstance.containerslist) {
             if (DockerInstance.containerslist.get(num).getContainerStatus().endsWith("(Paused)")) {

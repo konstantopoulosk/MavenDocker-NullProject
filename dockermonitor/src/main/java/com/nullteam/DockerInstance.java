@@ -105,7 +105,8 @@ public class DockerInstance {
     @Override
     public String toString() {
         return "Name: " + name
-                + "  Image: " + image + "\n    STATUS: " + status
+                + "  Image: " + image + "\n    STATUS: "
+                + ClientUpdater.getUpdatedStatus(containerId)
                 + "\n    ID: " + containerId;
     } //We choose to show only the Name, ID, Image and Status of a Container
     /**
@@ -199,16 +200,7 @@ public class DockerInstance {
      * This method pauses an active container.
      */
     public void pauseContainer() {
-        System.out.println("Pausing");
-        // Check if the container is already paused
-        /*
-        if (this.getContainerStatus().equalsIgnoreCase("paused")) {
-            System.out.println("Container is already paused: "
-                    + containerId + "\n\n");
-            return;
-        }
-*/
-        // If not paused, pause the container
+        System.out.println("Pausing...");
         try (PauseContainerCmd pauseContainerCmd = ClientUpdater
                 .getUpdatedClient().pauseContainerCmd(containerId)) {
             pauseContainerCmd.exec(); //Pauses the container in Docker Cluster
@@ -230,7 +222,6 @@ public class DockerInstance {
                     + containerId + "\n\n");
             return;
         }
-
         // If not unpaused, unpause the container
         try (UnpauseContainerCmd unpauseContainerCmd = ClientUpdater
                 .getUpdatedClient().unpauseContainerCmd(containerId)) {
