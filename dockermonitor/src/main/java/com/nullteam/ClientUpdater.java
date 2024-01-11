@@ -163,20 +163,14 @@ public final class ClientUpdater {
      * username and password.
      * @return Connection
      */
-    public static Connection connectToDatabase() {
+    public static Connection connectToDatabase(String driver, String url, String user, String password) {
         Connection connection = null;
         try {
-            // Connect to the database
-            Class.forName("com.mysql.cj.jdbc.Driver"); //DRIVER
-            connection = DriverManager.getConnection(
-                    "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY",
-                    "2zi5nloj67hbyd2kj0v4",
-                    "pscale_pw_dFEza7bdXQNbpaaCwU328EFeSGXcSLdC6g4u0qEp6u9");
-            //Credentials.
-        } catch (SQLException e) {
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url, user, password);
+            System.out.println(connection);
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
         return connection;
     }

@@ -14,7 +14,7 @@
                 <Font name="Calibri Bold Italic" size="21.0" />
             </font>
         </Label>
-        <ListView fx:id="containersList" layoutX="71.0" layoutY="60.0" onMouseClicked="#retrieveId" prefHeight="280.0" prefWidth="458.0">
+        <ListView fx:id="exitedContainers" layoutX="71.0" layoutY="60.0" onMouseClicked="#retrieveIdToStart" prefHeight="280.0" prefWidth="458.0">
             <effect>
                 <DropShadow />
             </effect>
@@ -29,7 +29,7 @@
                 <Font name="Calibri Light Italic" size="15.0" />
             </font>
         </Button>
-        <Button layoutX="225.0" layoutY="356.0" mnemonicParsing="false" onAction="#tapToListContainers" prefHeight="27.0" prefWidth="150.0" text="Tap to See Availables" textFill="#162dc1">
+        <Button layoutX="225.0" layoutY="356.0" mnemonicParsing="false" onAction="#tapToSeeExitedContainers" prefHeight="27.0" prefWidth="150.0" text="Tap to See Availables" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>

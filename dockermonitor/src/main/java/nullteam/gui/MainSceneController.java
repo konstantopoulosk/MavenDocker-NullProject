@@ -4,6 +4,7 @@ import com.github.dockerjava.api.model.Container;
 import com.google.gson.Gson;
 import com.nullteam.ActionRequest;
 import com.nullteam.*;
+import com.sun.net.httpserver.HttpServer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 
 import javax.print.Doc;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -29,10 +31,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -68,7 +67,7 @@ public class MainSceneController implements Initializable {
     private TextField nameToRename; //Name that user types to rename a container
     private String containerId; //field for container id, user presses an item in List View and the container id is here
     private String imageId; //field for image id, user presses in list view an item and image id is here
-    static final Connection connection = ClientUpdater.connectToDatabase(); //Variable to store the connection
+    static Connection connection = null; //Variable to store the connection
     final String ip = ClientUpdater.getIp(); //variable to get the System Ip of a User.
     private static String id;
     Stage stage; //Stage to show
@@ -106,8 +105,8 @@ public class MainSceneController implements Initializable {
     private void startHttpServer(PerformActionHandler handler) {
         try {
             // Create an HTTP server on the specified port
-            com.sun.net.httpserver.HttpServer server =
-                    com.sun.net.httpserver.HttpServer.create(new java.net.InetSocketAddress(8080), 0);
+            HttpServer server =
+                    HttpServer.create(new InetSocketAddress(8080), 0);
 
             // Create a context for the API path and set the handler
             server.createContext("/api/perform-action", handler);
@@ -144,6 +143,7 @@ public class MainSceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!isPressed) {
+            connection = DatabaseThread.takeCredentials();
             GetHelp.listContainers();
             GetHelp.listImage(); //Creating objects of DockerImage class to use DockerImage.imagesList later
             GetHelp.listVolumes();//Creating objects of DockerVolume class to use DockerVolume.volumesList later
@@ -332,6 +332,11 @@ public class MainSceneController implements Initializable {
     public void pressRename(ActionEvent event) throws IOException {
         changeTheScenes("/renameContainerNew.fxml", event);
     }
+    @FXML
+    public void tapToListContainersToRename(ActionEvent event) throws IOException {
+        setListContainers();
+        databaseThread();
+    }
     //This is Executed when user presses apply to rename a container that he chose from List View
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
@@ -435,7 +440,7 @@ public class MainSceneController implements Initializable {
             ImplementAPIRequest("KILL");
             openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
            databaseThread();
-            containersList = new ListView<>(observableList);
+            activeContainers = new ListView<>(observableList);
         }
     }
     //This travels the User to a new Scene with a List View of active containers.
@@ -490,8 +495,6 @@ public class MainSceneController implements Initializable {
     //This is Executed when user presses apply to pull
     @FXML
     public void applyPull(ActionEvent event) throws IOException {
-        imageId = GetHelp.choiceImages.getLast();
-        if (imageId != null) {
             if (imageToPull != null && !DockerImage.imageslist.contains(imageId)) {
                 String image = imageToPull.getText(); //This is what User wrote he wants to pull.
                 System.out.println(image);
@@ -502,7 +505,6 @@ public class MainSceneController implements Initializable {
                 System.out.println(imageToPull);
                 System.out.println("Something Is Wrong!");
             }
-        }
         imagesList = new ListView<>(observableList);
     }
     //Travels the User to a new Scene with a List View of current images

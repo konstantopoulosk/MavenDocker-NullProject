@@ -199,13 +199,15 @@ public class DockerInstance {
      * This method pauses an active container.
      */
     public void pauseContainer() {
+        System.out.println("Pausing");
         // Check if the container is already paused
+        /*
         if (this.getContainerStatus().equalsIgnoreCase("paused")) {
             System.out.println("Container is already paused: "
                     + containerId + "\n\n");
             return;
         }
-
+*/
         // If not paused, pause the container
         try (PauseContainerCmd pauseContainerCmd = ClientUpdater
                 .getUpdatedClient().pauseContainerCmd(containerId)) {
