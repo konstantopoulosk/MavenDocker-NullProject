@@ -18,7 +18,7 @@ public class DatabaseThread extends Thread {
     static String ip; //System Ip to recognize the user.
     static int containers = giveMeCount(); //Auto increment primary key for measurements table.
     static Connection connection; //Connection to database.
-     public DatabaseThread(Connection connection, String ip) { //Moved the connectToDatabase to ClientUpdater
+    public DatabaseThread(Connection connection, String ip) { //Moved the connectToDatabase to ClientUpdater
         DatabaseThread.connection = connection; //Because connectivity methods
          DatabaseThread.ip = ip;
     }
@@ -33,6 +33,12 @@ public class DatabaseThread extends Thread {
                 updateDatabase();
             }
     }
+
+    /**
+     * This method returns the last number of measurements,
+     * to start from there.
+     * @return int
+     */
     public static int giveMeCount() { //gives the last number of measurements, to start from there.
          try {
              String query = "SELECT COUNT(*) FROM measurements";
@@ -48,7 +54,13 @@ public class DatabaseThread extends Thread {
              return -1;
          }
     }
-    //Reads the containers.csv and inserts everything into the table containers.
+
+    /**
+     * This method reads the containers.csv and
+     * inserts everything into the table containers.
+     * @param connection Connection
+     * @param containers int
+     */
     public void readContainersFromCsv(Connection connection, int containers) {
         try {
             FileReader fr = new FileReader("containers.csv");
@@ -73,7 +85,11 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
-    //adds measurement into table
+    /**
+     * This method adds measurements into the table.
+     * @param connection Connection
+     * @param containers int
+     */
     public void addToMeasurements(Connection connection,int containers) {
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -88,7 +104,14 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
-    //checks if user is new or not with his System Ip.
+
+    /**
+     * This method checks if the user is
+     * new or not with his System Ip.
+     * @param connection Connection
+     * @param ip String
+     * @return boolean
+     */
     public boolean newUser(Connection connection, String ip) {
          try {
              String query = "SELECT COUNT(*) FROM containers WHERE SystemIp = ?";
@@ -107,8 +130,15 @@ public class DatabaseThread extends Thread {
              return false;
          }
     }
-    public List<String[]> getEverythingFromDatabase() { //Returns a list with String[]
-        try { //with the rows from containers table but only the containerId, name, image, state columns
+
+    /**
+     * This method returns a list with the rows
+     * from containers table but only the columns
+     * containerId, name, image and state.
+     * @return List&lt;String[]&gt;
+     */
+    public List<String[]> getEverythingFromDatabase() {
+        try {
             List<String[]> containersInDatabase = new ArrayList<>();
             String query = "SELECT * FROM containers WHERE SystemIp = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -129,7 +159,12 @@ public class DatabaseThread extends Thread {
             return null;
         }
     }
-    //returns a list with String[] with the index of csv but only Container ID, Name, Image, State columns
+
+    /**
+     * This method returns a list with the index of the .csv
+     * file but only columns ID, Name, Image and State.
+     * @return
+     */
     public List<String[]> getEverythingFromCsv() {
         try {
             List<String[]> containersInCsv = new ArrayList<>();
@@ -137,7 +172,8 @@ public class DatabaseThread extends Thread {
             CSVReader csvReader = new CSVReader(fr);
             String[] container;
             while ((container = csvReader.readNext()) != null) {
-                if (!container[0].equals("Container ID")) { // Do not include the header from csv into database table.
+                // Do not include the header from csv into database table.
+                if (!container[0].equals("Container ID")) {
                     String[] data = new String[] {
                             container[0], //containerId
                             container[1], //Name
@@ -154,8 +190,12 @@ public class DatabaseThread extends Thread {
             return null;
         }
     }
-    //This method changes the name of a specific container and
-    //adds to measurements because Rename is a function
+    /**
+     * This method changes the name of a specific container and
+     * adds to table measurements because Rename is a measurement.
+     * @param newName String
+     * @param containerId String
+     */
     public void changeName(String newName, String containerId) {
         try {
             //THIS IS A MEASUREMENT SO ADD TO MEASUREMENTS
@@ -174,8 +214,13 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
-    //This method changes the name of a specific container
-    //adds to measurements because we consider it a function
+
+    /**
+     * This method changes the name of a specific container
+     * adds to measurements because we consider it a measurement.
+     * @param state String
+     * @param containerId String
+     */
     public void changeState(String state, String containerId) {
         try {
             containers++;
@@ -191,8 +236,12 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
-    //this method removes a container from the table because
-    //user either selected remove container or remove image
+
+    /**
+     * This method removes a container from the table
+     * because user either selected remove container or remove image.
+     * @param containerId String
+     */
     public void removeContainer(String containerId) {
         try {
             String queryRemove = "DELETE FROM containers WHERE SystemIp = ? AND containerId = ?";
@@ -205,9 +254,16 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
-    //this method inserts a new container into the table
-    //adds to measurements because it's a function
-    //User selected implement image
+
+    /**
+     * This method inserts a new container into the table
+     * adds to measurements because it's a measurement
+     * because user selected implement image.
+     * @param id String
+     * @param name String
+     * @param state String
+     * @param image String
+     */
     public void implementContainer(String id, String name, String state, String image) {
         try {
             //THIS IS A MEASUREMENT ADD TO TABLE
@@ -228,8 +284,10 @@ public class DatabaseThread extends Thread {
             e.printStackTrace();
         }
     }
-    //When it's not a new User, we have to update the old values into new values
-    //if there is any new values.
+    /**
+     * This method updates the old values of an
+     * old User into new ones if there are any.
+     */
     public void updateDatabase() {
         containers++;
         addToMeasurements(connection,containers);
@@ -261,6 +319,13 @@ public class DatabaseThread extends Thread {
              e.printStackTrace();
          }
     }
+
+    /**
+     * This method searches if a container
+     * exists in the .csv file based on its id.
+     * @param id String
+     * @return boolean
+     */
     public boolean searchInCsv(String id) {
          boolean flag = false;
          List<String[]> containersInCsv = getEverythingFromCsv();
@@ -273,6 +338,12 @@ public class DatabaseThread extends Thread {
         }
          return flag;
     }
+    /**
+     * This method searches if a container
+     * exists in the database based on its id.
+     * @param id String
+     * @return boolean
+     */
     public boolean searchInDatabase(String id) {
          try {
              String query = "SELECT COUNT(*) FROM containers WHERE containerId = ? AND SystemIp = ?";

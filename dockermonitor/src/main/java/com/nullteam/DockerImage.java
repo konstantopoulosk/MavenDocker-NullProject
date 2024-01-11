@@ -10,13 +10,9 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
-import com.github.dockerjava.core.DockerContextMetaFile;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.CompletableFuture;
 
 public class DockerImage {
     /**
@@ -80,8 +76,6 @@ public class DockerImage {
         String[] parts = this.imageId.split(":");
         return parts[1]; //to keep only the id without the 'sha256'
     }
-    //Classic toString for one DockerImage at the time
-
     /**
      * A classic toString method.
      * We use it to show every image's information

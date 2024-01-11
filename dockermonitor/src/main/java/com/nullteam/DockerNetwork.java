@@ -10,10 +10,22 @@ public class DockerNetwork {
      * all the networks in the DockerDesktop.
      */
     public static final List<DockerNetwork> networkslist = new ArrayList<>();
-    final String networkId;
-    final String name;
-    final String driver;
-    final String scope;
+    /**
+     * A field for the network's ID.
+     */
+    private final String networkId;
+    /**
+     * A field for the network's name.
+     */
+    private final String name;
+    /**
+     * A field for the network's driver.
+     */
+    private final String driver;
+    /**
+     * A field for the network's scope.
+     */
+    private final String scope;
 
     /**
      * Constructor of Class DockerNetwork.
@@ -121,7 +133,8 @@ public class DockerNetwork {
      * @param inspectResult String
      * @return StringBuilder
      */
-    public static StringBuilder formatSubnetsSettings(String inspectResult) {
+    public static StringBuilder formatSubnetsSettings(
+            final String inspectResult) {
         //we don't need all the network settings, just the network info
         //we also remove the outer quotation marks ''
         //and the last bracket } because it is not needed

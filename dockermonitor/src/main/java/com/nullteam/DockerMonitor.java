@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class DockerMonitor extends Thread {
     /**
      * List of all Container info,
-     * in last state.
+     * in their last state.
      */
     private List<String[]> lastState = null;
     /**
@@ -25,7 +25,7 @@ public class DockerMonitor extends Thread {
     private List<String[]> currentData = null;
 
     /**
-     * Method run to execute Monitor Thread.
+     * This method executes Monitor Thread.
      */
     public void run() {
         try {
@@ -41,7 +41,7 @@ public class DockerMonitor extends Thread {
     }
 
     /**
-     * Method writeCsv writes in containers.csv,
+     * This method writes in containers.csv,
      * info of every container.
      * Container ID, Name, Image,
      * Status, Command, Created.
@@ -67,7 +67,7 @@ public class DockerMonitor extends Thread {
         }
     }
     /**
-     * Method hasNewData checks if,
+     * This method checks if
      * container info has changed.
      * @return boolean
      */
@@ -96,11 +96,11 @@ public class DockerMonitor extends Thread {
         }
     }
     /**
-     * Method listsAreEqual checks if,
+     * This method checks if
      * two lists are equal.
-     * Current Data and Last State.
-     * @param list1 The Current Data-list.
-     * @param list2 The Last State-list.
+     * (Current Data and Last State)
+     * @param list1 List&lt;String[]&gt;
+     * @param list2 List&lt;String[]&gt;
      * @return boolean (true if the lists are equal, false otherwise).
      */
     public static boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {

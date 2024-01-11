@@ -2,24 +2,13 @@ package com.nullteam;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
-
-
 import com.github.dockerjava.api.exception.NotModifiedException;
-
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.InputMismatchException;
-
 import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.core.DockerClientBuilder;
+
 import com.github.dockerjava.core.command.LogContainerResultCallback;
-import org.glassfish.jersey.internal.util.collection.StringIgnoreCaseKeyComparator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class DockerInstance {
     /**
@@ -119,8 +108,6 @@ public class DockerInstance {
                 + "  Image: " + image + "\n    STATUS: " + status
                 + "\n    ID: " + containerId;
     } //We choose to show only the Name, ID, Image and Status of a Container
-
-    //Container Menu: case 3 (Container tools)
     /**
      * This method stops an active container.
      */
@@ -133,13 +120,13 @@ public class DockerInstance {
                 stopContainerCmd.exec(); //Changed the status from Up to Exited
                 System.out.println("Container stopped: " + containerId
                         + "\n\n"); //Friendly Message to User
-                this.setContainerStatus("Exited"); //Change the status of the object
+                this.setContainerStatus(ClientUpdater    //Change the status
+                        .getUpdatedStatus(containerId)); //of the object
             } catch (NotModifiedException e) {
                 // Container was already stopped or in the process of stopping
                 System.out.println("Container is already stopped "
-                        + "or in the process of stopping: " + containerId + "\n\n");
-                this.setContainerStatus(ClientUpdater
-                        .getUpdatedStatus(containerId));
+                        + "or in the process of stopping: "
+                        + containerId + "\n\n");
             } catch (Exception e) {
                 // Handle other exceptions
                 e.printStackTrace();
@@ -156,8 +143,8 @@ public class DockerInstance {
                 .getUpdatedClient().startContainerCmd(containerId)) {
         startContainerCmd.exec(); //Starts Container in the Cluster
             System.out.println("Container started: " + containerId + "\n\n");
-            this.setContainerStatus(ClientUpdater //changes the status of the object
-                    .getUpdatedStatus(containerId));
+            this.setContainerStatus(ClientUpdater    //changes the status
+                    .getUpdatedStatus(containerId)); //of the object
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -174,7 +161,7 @@ public class DockerInstance {
             System.out.println("Container with id: " + this.getContainerId()
                     + " has been renamed to: " + newName + "\n\n");
             this.name = newName; //Renames the object
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -186,8 +173,10 @@ public class DockerInstance {
         try (RemoveContainerCmd removeContainerCmd = ClientUpdater
                 .getUpdatedClient().removeContainerCmd(containerId)) {
             removeContainerCmd.exec(); //removes container from the cluster
-            System.out.println("Container removed: " + containerId + "\n\n");
-            containerslist.remove(this); //removes container from our containerslist
+            System.out.println("Container removed"
+                    + containerId + "\n\n");
+            containerslist.remove(this);
+            //removes container from our containerslist
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -200,8 +189,8 @@ public class DockerInstance {
                 .getUpdatedClient().restartContainerCmd(containerId)) {
             restartContainerCmd.exec(); //restarts container in the cluster
             System.out.println("Container restarted: " + containerId + "\n\n");
-            this.setContainerStatus(ClientUpdater //changes the status of the object
-                    .getUpdatedStatus(containerId));
+            this.setContainerStatus(ClientUpdater    //changes the status
+                    .getUpdatedStatus(containerId)); //of the object
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -212,7 +201,8 @@ public class DockerInstance {
     public void pauseContainer() {
         // Check if the container is already paused
         if (this.getContainerStatus().equalsIgnoreCase("paused")) {
-            System.out.println("Container is already paused: " + containerId + "\n\n");
+            System.out.println("Container is already paused: "
+                    + containerId + "\n\n");
             return;
         }
 
@@ -220,9 +210,10 @@ public class DockerInstance {
         try (PauseContainerCmd pauseContainerCmd = ClientUpdater
                 .getUpdatedClient().pauseContainerCmd(containerId)) {
             pauseContainerCmd.exec(); //Pauses the container in Docker Cluster
-            System.out.println("Container paused: " + containerId + "\n\n");
-            this.setContainerStatus(ClientUpdater //changes the status of the object
-                    .getUpdatedStatus(containerId));
+            System.out.println("Container paused: "
+                    + containerId + "\n\n");
+            this.setContainerStatus(ClientUpdater    //changes the status
+                    .getUpdatedStatus(containerId)); //of the object
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,7 +224,8 @@ public class DockerInstance {
     public void unpauseContainer() {
         // Check if the container is already unpaused
         if (this.getContainerStatus().equalsIgnoreCase("running")) {
-            System.out.println("Container is already unpaused: " + containerId + "\n\n");
+            System.out.println("Container is already unpaused: "
+                    + containerId + "\n\n");
             return;
         }
 
@@ -241,7 +233,8 @@ public class DockerInstance {
         try (UnpauseContainerCmd unpauseContainerCmd = ClientUpdater
                 .getUpdatedClient().unpauseContainerCmd(containerId)) {
             unpauseContainerCmd.exec(); //Unpauses container in cluster
-            System.out.println("Container unpaused: " + containerId + "\n\n");
+            System.out.println("Container unpaused: "
+                    + containerId + "\n\n");
             this.setContainerStatus(ClientUpdater //changes the status of the object
                     .getUpdatedStatus(containerId));
         } catch (Exception e) {
