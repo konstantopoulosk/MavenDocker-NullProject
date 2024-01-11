@@ -7,6 +7,7 @@ com.mysql.cj.jdbc.Driver
 ----URL----
 jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY
 ----USER----
-2zi5nloj67hbyd2kj0v4
+7buakymcihkpdh1qlbdr
 ----PASSWORD----
-pscale_pw_dFEza7bdXQNbpaaCwU328EFeSGXcSLdC6g4u0qEp6u9
+pscale_pw_t9e4g5RAZPOgUZzh785Ls72bPwGDWGRIf7UdHmdq2DE
+

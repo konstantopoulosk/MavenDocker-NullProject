@@ -61,10 +61,11 @@ public class DatabaseThread extends Thread {
                  String data = reader.nextLine();
                  list.add(data);
              }
-             String driver = list.get(4);
-             String url = list.get(5);
-             String user = list.get(6);
-             String password = list.get(7);
+             String driver = list.get(5);
+             String url = list.get(7);
+             String user = list.get(9);
+             String password = list.get(11);
+             //System.out.println(password + "/");
              return ClientUpdater.connectToDatabase(driver, url, user, password);
          } catch (Exception e) {
              e.printStackTrace();
