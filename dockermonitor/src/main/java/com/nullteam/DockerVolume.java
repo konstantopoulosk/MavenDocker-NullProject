@@ -10,12 +10,25 @@ public class DockerVolume {
      * List of all the DockerVolume objects,
      * all the volumes in the DockerDesktop.
      */
-    final String driver;
-    final String name;
-    final String created;
-    final String mountpoint;
     public static final List<DockerVolume> volumeslist = new ArrayList<>();
-
+    /**
+     * A field for the volume's driver.
+     */
+    private final String driver;
+    /**
+     * A field for the volume's name.
+     */
+    private final String name;
+    /**
+     * A field for the date and time
+     * the volume was created at.
+     */
+    private final String created;
+    /**
+     * A field for the mountpoint where
+     * the volume is stashed in the user's computer.
+     */
+    private final String mountpoint;
     /**
      * Constructor for Class DockerVolume.
      * It creates a new DockerImageVolume object
@@ -74,7 +87,7 @@ public class DockerVolume {
 
     /**
      * A classic toString method.
-     * We use it to show every volum's information
+     * We use it to show every volume's information
      * (driver, name, created, mountpoint)
      *
      * @return String
@@ -87,24 +100,10 @@ public class DockerVolume {
     }
 
     /**
-     * This method prints all the volumes inside the
-     * user's Docker Desktop with their information
-     * in a shorted list.
-     */
-    public static void showVolumes() {
-        System.out.println("Listing all the volumes...\n.\n.\n.");
-        int num = 0; //Numbers to make the output more User Friendly
-        for (DockerVolume v : volumeslist) {
-            num++;
-            System.out.println(num + ") "
-                    + v.toString() + "\n"); //toString inside a for loop
-        }
-    }
-
-    /**
      * This method returns the result of the command:
      * docker volume inspect --format='{{json .CreatedAt}}' [VOLUME]
-     * without the quotation marks.
+     * without the quotation marks and the letters T and Z
+     * that appeared.
      *
      * @param volumeName String
      * @return String
@@ -125,7 +124,9 @@ public class DockerVolume {
                 sb.append(line).append("\n");
             }
             return sb.toString().replace("'\"", "")
-                    .replace("\"'", "");
+                    .replace("\"'", "")
+                    .replace("T", " ")
+                    .replace("Z", " ");
         } catch (Exception e) {
             e.printStackTrace();
             return "Exception!";
