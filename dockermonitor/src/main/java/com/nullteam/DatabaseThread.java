@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvMalformedLineException;
 import com.opencsv.exceptions.CsvValidationException;
 
+import javax.xml.crypto.Data;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
@@ -13,26 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseThread extends Thread {
-    final String ip = ClientUpdater.getIp(); //System Ip to recognize the user.
+    static int timesCalled = 0;
+    static String ip; //System Ip to recognize the user.
     static int containers = giveMeCount(); //Auto increment primary key for measurements table.
-    Connection connection; //Connection to database.
-     public DatabaseThread(Connection connection) { //Moved the connectToDatabase to ClientUpdater
-        this.connection = connection; //Because connectivity methods
+    static Connection connection; //Connection to database.
+     public DatabaseThread(Connection connection, String ip) { //Moved the connectToDatabase to ClientUpdater
+        DatabaseThread.connection = connection; //Because connectivity methods
+         DatabaseThread.ip = ip;
     }
     @Override
     public void run() {
-         try {
-             if (newUser(connection, ip)) { //Checks if he is a new user.
+            if (newUser(connection, ip)) { //Checks if he is a new user.
                  //New user -> write his data.
                  containers++;
                  addToMeasurements(connection, containers);
                  readContainersFromCsv(connection, containers);
-             } else {
-                 updateDatabase();
-             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            } else {
+                updateDatabase();
+            }
     }
     public static int giveMeCount() { //gives the last number of measurements, to start from there.
          try {
@@ -209,7 +208,7 @@ public class DatabaseThread extends Thread {
     //this method inserts a new container into the table
     //adds to measurements because it's a function
     //User selected implement image
-    public void implementContainer(List<String[]> containersInCsv,int i) {
+    public void implementContainer(String id, String name, String state, String image) {
         try {
             //THIS IS A MEASUREMENT ADD TO TABLE
             containers++;
@@ -218,10 +217,10 @@ public class DatabaseThread extends Thread {
             String queryImplement = "INSERT INTO containers (containerId, name, image, state, SystemIp, id)" +
                     "VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatementImplement = connection.prepareStatement(queryImplement);
-            preparedStatementImplement.setString(1, containersInCsv.get(i)[0]); //ID
-            preparedStatementImplement.setString(2, containersInCsv.get(i)[1]); //NAME
-            preparedStatementImplement.setString(3, containersInCsv.get(i)[2]); //IMAGE
-            preparedStatementImplement.setString(4, containersInCsv.get(i)[3]); //STATE
+            preparedStatementImplement.setString(1, id); //ID
+            preparedStatementImplement.setString(2, name); //NAME
+            preparedStatementImplement.setString(3, image); //IMAGE
+            preparedStatementImplement.setString(4, state); //STATE
             preparedStatementImplement.setString(5, ip);
             preparedStatementImplement.setInt(6, containers);
             preparedStatementImplement.executeUpdate();
@@ -232,60 +231,67 @@ public class DatabaseThread extends Thread {
     //When it's not a new User, we have to update the old values into new values
     //if there is any new values.
     public void updateDatabase() {
-         //It's a measurement because
         containers++;
         addToMeasurements(connection,containers);
+        //Lists containing containers in DB and containers in CSV
+        List<String[]> containersInDatabase = new ArrayList<>(getEverythingFromDatabase());
+        List<String[]> containersInCsv = new ArrayList<>(getEverythingFromCsv());
          try {
-             //Lists containing containers in DB and containers in CSV
-             List<String[]> containersInDatabase = new ArrayList<>(getEverythingFromDatabase());
-             List<String[]> containersInCsv = new ArrayList<>(getEverythingFromCsv());
-            for (int i = 0; i < containersInDatabase.size(); i++) {
-                boolean exists = false; //Container in database does NOT exist in CSV
-                for (int j = 0; j < containersInCsv.size(); j++) {
-                    if (containersInDatabase.get(i)[0].equals(containersInCsv.get(j)[0])) {
-                        exists = true; //Container in database EXISTS in CSV
-                        //Checking with Container ID.
-                        if (!containersInDatabase.get(i)[1].equals(containersInCsv.get(j)[1])) {
-                            //Different Name -> RENAME HAPPENED.
-                            changeName(containersInCsv.get(j)[1], containersInDatabase.get(i)[0]);
-                        }
-                        if (!containersInDatabase.get(i)[3].equals(containersInCsv.get(j)[3])) {
-                            //Different STATE -> START STOP RESTART PAUSE KILL UNPAUSE ... happened
-                            changeState(containersInCsv.get(j)[3], containersInDatabase.get(i)[0]);
-                        }
-                    }
-                    String idImplement = containersInCsv.get(j)[0];
-                    List<String> c = new ArrayList<>(getListContainersDatabase());
-                    if(!c.contains(idImplement)) {
-                        System.out.println("SHOULD IMPLEMENT");
-                        implementContainer(containersInCsv, j);
-                    }
-                }
-                if (!exists) {
-                    System.out.println("SHOULD REMOVE");
-                    //Removed happened REMOVE or REMOVE IMAGE.
-                    removeContainer(containersInDatabase.get(i)[0]);
-                }
-            }
+             for (String[] containers : containersInCsv) {
+                 String id = containers[0];
+                 String name = containers[1];
+                 String image = containers[2];
+                 String state = containers[3];
+                 if (searchInDatabase(id)) {
+                     //EXISTS IN DATABASE
+                     changeName(name, id);
+                     changeState(state, id);
+                 } else {
+                     //NOT EXIST
+                     implementContainer(id, name, state, image);
+                 }
+             }
+             for (String[] c : containersInDatabase) {
+                 String id = c[0];
+                 if (!searchInCsv(id)) {
+                     removeContainer(id);
+                 }
+             }
          } catch (Exception e) {
              e.printStackTrace();
          }
     }
-    //takes in List the containers from the database.
-    public List<String> getListContainersDatabase() {
+    public boolean searchInCsv(String id) {
+         boolean flag = false;
+         List<String[]> containersInCsv = getEverythingFromCsv();
+        for (String[] strings : containersInCsv) {
+            String containerId = strings[0];
+            if (id.equals(containerId)) {
+                flag = true;
+                break;
+            }
+        }
+         return flag;
+    }
+    public boolean searchInDatabase(String id) {
          try {
-             String query = "SELECT containerId FROM containers WHERE SystemIp = ?"; //query to get them
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
-             preparedStatement.setString(1, ip);
-             ResultSet resultSet = preparedStatement.executeQuery(); // execute the query
-             List<String> databaseContainers = new ArrayList<>(); //List to return
-             while (resultSet.next()) {
-                 databaseContainers.add(resultSet.getString("containerId")); //adds element to the list
+             String query = "SELECT COUNT(*) FROM containers WHERE containerId = ? AND SystemIp = ?";
+             PreparedStatement p = connection.prepareStatement(query);
+             p.setString(1,id);
+             p.setString(2, ip);
+             ResultSet resultSet = p.executeQuery();
+             resultSet.next();
+             int count = resultSet.getInt(1);
+             if (count == 0) {
+                 System.out.println("COUNT IS ZERO");
+                 return false;
+             } else {
+                 System.out.println("EXISTS IN DATABASE");
+                 return true;
              }
-             return databaseContainers; //return the list.
          } catch (Exception e) {
              e.printStackTrace();
-             return null;
+             return false;
          }
     }
 }

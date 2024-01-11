@@ -1,8 +1,8 @@
 package com.nullteam;
 
-import java.util.concurrent.BlockingQueue;
+import com.github.dockerjava.core.DockerContextMetaFile;
 
-import com.google.gson.Gson;
+import java.util.concurrent.BlockingQueue;
 
 public class ExecutorThread extends Thread {
 
@@ -52,6 +52,8 @@ public class ExecutorThread extends Thread {
             case "STOP": //stop
                 stopContainer(containerId);
                 break;
+            case "RENAME":
+                renameContainer(containerId,name2Rename);
             case "REMOVE":
                 removeContainer(containerId);
                 break;
@@ -123,7 +125,8 @@ public class ExecutorThread extends Thread {
         findContainerInClient(id).killContainer();
     }
     private void implementImage(String id) {
-        findImageInClient(id).implementImage();
+        String containerId = findImageInClient(id).implementImage();
+        startContainer(containerId);
     }
     private void removeImage(String id) {
         findImageInClient(id).removeImage();

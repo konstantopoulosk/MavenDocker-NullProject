@@ -10,11 +10,13 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.core.DockerContextMetaFile;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
 
 public class DockerImage {
     /**
@@ -96,7 +98,8 @@ public class DockerImage {
      * This method creates and starts an instance of the selected image
      * (creates a new container of the image).
     */
-    public void implementImage() {
+    public String implementImage() {
+        String id = null;
         try (CreateContainerCmd createContainerCmd =
                      ClientUpdater.getUpdatedClient().createContainerCmd(
                              getImageRep())) {
@@ -118,29 +121,20 @@ public class DockerImage {
                     DockerInstance newContainer = new DockerInstance(
                             c.getNames()[0], c.getId(), c.getImage(), c.getStatus());
                     String containerIdStart = newContainer.getContainerId();
-                    /*
-                    ExecutorThread executorStart = new ExecutorThread(
-                            containerIdStart, ExecutorThread.TaskType.START);
-                    executorStart.start(); //we start the container
-                    try {
-                        executorStart.join(); // waiting for the thread to finish
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                     */
-                    System.out.println("The new container has been created and is running"
-                            + "\n");
+                    id = containerIdStart;
                 } else {
                     System.out.println("Error: Container names are null or empty.\n");
                 }
             } else {
                 System.out.println("Error: No created container found.\n");
             }
+            return id;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
+
     /**
      * This method removes an image from the DockerCluster
      * and from the image list

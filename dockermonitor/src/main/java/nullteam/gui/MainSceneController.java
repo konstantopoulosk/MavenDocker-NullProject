@@ -139,7 +139,6 @@ public class MainSceneController implements Initializable {
                     return null;
                 });
     }
-
     //API CONFIGURATION
     //Initialize Method is necessary
     @Override
@@ -157,7 +156,7 @@ public class MainSceneController implements Initializable {
             ExecutorThread executorThread = new ExecutorThread(actionQueue);
             executorThread.start(); //Starting Executor Thread
             startHttpServer(performActionHandler);
-            databaseThread(); //Executing / Running Database Thread (once)
+            databaseThread(); //Executing / Running Database Thread (ONCE)
         }
     }
 
@@ -165,7 +164,7 @@ public class MainSceneController implements Initializable {
      * This method runs the Database Thread.
      */
     public void databaseThread() {
-        DatabaseThread databaseThread = new DatabaseThread(connection);
+        DatabaseThread databaseThread = new DatabaseThread(connection, ip);
         databaseThread.run();
         try {
             databaseThread.join();
@@ -259,8 +258,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListContainers(ActionEvent event) throws IOException {
         setListContainers();
-        containersList = new ListView<>(observableList);
         databaseThread();
+        containersList = new ListView<>(observableList);
     }
     //This is used to go to Networks Menu
     @FXML
@@ -298,11 +297,12 @@ public class MainSceneController implements Initializable {
     @FXML
     public void startContainer(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) { //It may be null.
+        System.out.println(containerId);
+        if (containerId != null && !containerId.equals("NULL")) { //It may be null.
             ImplementAPIRequest("START");
             openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
             databaseThread();
-            exitedContainers = new ListView<>(observableList); //Initialize this again so Listing all Over again
+            //exitedContainers = new ListView<>(observableList); //Initialize this again so Listing all Over again
         } //and not below.
     }
     //This travels the User to a new Scene where he can see the active containers and choose one to stop
@@ -314,12 +314,13 @@ public class MainSceneController implements Initializable {
     @FXML
     public void stopContainer(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) {
+        System.out.println(containerId);
+        if (containerId != null && !containerId.equals("NULL")) {
             ImplementAPIRequest("STOP");
             openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirmation.fxml");
             databaseThread();
+            activeContainers = new ListView<>(observableList);
         }
-        activeContainers = new ListView<>(observableList);
     }
     //This is executed when user presses button to see his active containers in stop container scene.
     @FXML
@@ -335,9 +336,10 @@ public class MainSceneController implements Initializable {
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
+        System.out.println(containerId);
         String newName = nameToRename.getText();
         System.out.println(newName);
-        if (containerId != null) {
+        if (containerId != null && !containerId.equals("NULL")) {
             ActionRequest actionRequest = new ActionRequest("RENAME", containerId, newName);
             CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
                     .thenRun(() -> System.out.println("Request sent successfully"))
@@ -347,8 +349,8 @@ public class MainSceneController implements Initializable {
                     });
             openConfirmationWindow(event, "Rename Container Properties", "renameContainerConfirmation.fxml");
             databaseThread();
+            containersList = new ListView<>(observableList);
         }
-        containersList = new ListView<>(observableList);
     }
     //This travels the user to new Scene where user sees his containers and chooses one to remove
     @FXML
@@ -359,12 +361,13 @@ public class MainSceneController implements Initializable {
     @FXML
     public void removeContainer(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) {
+        System.out.println(containerId);
+        if (containerId != null && !containerId.equals("NULL")) {
             ImplementAPIRequest("REMOVE");
             openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirmation.fxml");
             databaseThread();
+            containersList = new ListView<>(observableList);
         }
-        containersList = new ListView<>(observableList);
     }
     //This travels the user to a new Scene with a List View with the active containers and User chooses one to restart
     @FXML
@@ -375,12 +378,12 @@ public class MainSceneController implements Initializable {
     @FXML
     public void restartContainer(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) {
+        if (containerId != null && !containerId.equals("NULL")) {
             ImplementAPIRequest("RESTART");
             openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
-            databaseThread();
+           databaseThread();
+            activeContainers = new ListView<>(observableList);
         }
-        activeContainers = new ListView<>(observableList);
     }
     //This is executed when User presses Button to see PAUSED CONTAINERS TO UNPAUSE IT.
     @FXML
@@ -396,12 +399,12 @@ public class MainSceneController implements Initializable {
     @FXML
     public void pauseContainer(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) {
+        if (containerId != null && !containerId.equals("NULL")) {
             ImplementAPIRequest("PAUSE");
             openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
-            databaseThread();
+           databaseThread();
+            restartListContainer = new ListView<>(observableList);
         }
-        restartListContainer = new ListView<>(observableList);
     }
     //This travels the user to a new Scene with a List View of PAUSED containers
     @FXML
@@ -412,12 +415,12 @@ public class MainSceneController implements Initializable {
     @FXML
     public void unpauseContainer(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) {
+        if (containerId != null && !containerId.equals("NULL")) {
             ImplementAPIRequest("UNPAUSE");
             openConfirmationWindow(event, "Unpause Container Properties", "unpauseContainerConfirmation.fxml");
-            databaseThread();
+           databaseThread();
+            restartListContainer = new ListView<>(observableList); //THIS SHOWS PAUSED CONTAINERS!!!!
         }
-        restartListContainer = new ListView<>(observableList); //THIS SHOWS PAUSED CONTAINERS!!!!
     }
     //Travels the user to a new Scene with a List View of all containers
     @FXML
@@ -428,12 +431,12 @@ public class MainSceneController implements Initializable {
     @FXML
     public void killContainer(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) {
+        if (containerId != null && !containerId.equals("NULL")) {
             ImplementAPIRequest("KILL");
             openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
-            databaseThread();
+           databaseThread();
+            containersList = new ListView<>(observableList);
         }
-        containersList = new ListView<>(observableList);
     }
     //This travels the User to a new Scene with a List View of active containers.
     @FXML
@@ -444,7 +447,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyToSeeTheLogs(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) {
+        if (containerId != null && !containerId.equals("NULL")) {
             openNewWindow(event, "listOfLogsNew.fxml", "List of Logs"); //Opens a new Window with a List View of the Logs
             id = containerId;
         }
@@ -466,7 +469,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyToSeeSubnets(ActionEvent event) throws IOException {
         containerId = GetHelp.choiceContainers.getLast();
-        if (containerId != null) {
+        if (containerId != null && !containerId.equals("NULL")) {
             openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets"); //Opens a new window to show the subnets
             id = containerId;
         }
@@ -488,15 +491,17 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyPull(ActionEvent event) throws IOException {
         imageId = GetHelp.choiceImages.getLast();
-        if (imageToPull != null && !DockerImage.imageslist.contains(imageId)) {
-            String image = imageToPull.getText(); //This is what User wrote he wants to pull.
-            System.out.println(image);
-            openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
-            DockerImage.pullImage(image);
-            //it should work but my computer is way too slow to process
-        } else {
-            System.out.println(imageToPull);
-            System.out.println("Something Is Wrong!");
+        if (imageId != null) {
+            if (imageToPull != null && !DockerImage.imageslist.contains(imageId)) {
+                String image = imageToPull.getText(); //This is what User wrote he wants to pull.
+                System.out.println(image);
+                openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
+                DockerImage.pullImage(image);
+                //it should work but my computer is way too slow to process
+            } else {
+                System.out.println(imageToPull);
+                System.out.println("Something Is Wrong!");
+            }
         }
         imagesList = new ListView<>(observableList);
     }
@@ -510,7 +515,7 @@ public class MainSceneController implements Initializable {
     public void applyImplement(ActionEvent event) throws IOException {
         imageId = GetHelp.choiceImages.getLast();
         System.out.println(imageId);
-        if (imageId != null) {
+        if (imageId != null && !imageId.equals("NULL")) {
             implementApiRequestForImages("IMPLEMENT");
             openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
             databaseThread();
@@ -526,7 +531,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyRemove(ActionEvent event) throws IOException {
         imageId = GetHelp.choiceImages.getLast();
-        if (imageId != null) {
+        if (imageId != null && !imageId.equals("NULL")) {
             implementApiRequestForImages("REMOVEIMAGE");
             openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
             databaseThread();
@@ -583,7 +588,8 @@ public class MainSceneController implements Initializable {
         int num = 0;
         int i = 0;
         for (DockerInstance dockerInstance : DockerInstance.containerslist) {
-            if (DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Exited")) {
+            if (DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Exited")
+            || DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Created")) {
                 i++;
                 exitedContainers.getItems().add(i + ") " + dockerInstance.toString());
             }
@@ -669,20 +675,21 @@ public class MainSceneController implements Initializable {
     @FXML
     public void retrieveIdToStart(MouseEvent mouseEvent) {
         System.out.println(exitedContainers.getSelectionModel().getSelectedItem());
-        if (exitedContainers.getSelectionModel().getSelectedItem() != null) {
+        if (exitedContainers.getSelectionModel().getSelectedItem() != null
+                && !exitedContainers.getSelectionModel().getSelectedItem().equals("NULL")) {
             String c = exitedContainers.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
             GetHelp.choiceContainers.add(c1[1]);
         }
         //System.out.println(exitedContainers.getSelectionModel().getSelectedItem());
         //System.out.println(containerId);
-
     }
     //This method retrieves the id of the last active container that user clicked on, on List View
     @FXML
     public void retrieveIdToStop(MouseEvent mouseEvent) {
         System.out.println(activeContainers.getSelectionModel().getSelectedItem());
-        if (activeContainers.getSelectionModel().getSelectedItem() != null) {
+        if (activeContainers.getSelectionModel().getSelectedItem() != null
+        && !activeContainers.getSelectionModel().getSelectedItem().equals("NULL")) {
             String c = activeContainers.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
             GetHelp.choiceContainers.add(c1[1]);
@@ -693,7 +700,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void retrieveId(MouseEvent mouseEvent) {
         System.out.println(containersList.getSelectionModel().getSelectedItem());
-        if (containersList.getSelectionModel().getSelectedItem() != null) {
+        if (containersList.getSelectionModel().getSelectedItem() != null
+                && !containersList.getSelectionModel().getSelectedItem().equals("NULL")) {
             String c = containersList.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
             GetHelp.choiceContainers.add(c1[1]);
@@ -704,7 +712,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void retrieveIdToUnpause(MouseEvent mouseEvent) {
         System.out.println(restartListContainer.getSelectionModel().getSelectedItem());
-        if (restartListContainer.getSelectionModel().getSelectedItem() != null) {
+        if (restartListContainer.getSelectionModel().getSelectedItem() != null
+                && !restartListContainer.getSelectionModel().getSelectedItem().equals("NULL")) {
             String c = restartListContainer.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
             GetHelp.choiceContainers.add(c1[1]);
@@ -715,7 +724,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void retrieveIdForImage(MouseEvent mouseEvent) {
         System.out.println(imagesList.getSelectionModel().getSelectedItem());
-        if (imagesList.getSelectionModel().getSelectedItem() != null) {
+        if (imagesList.getSelectionModel().getSelectedItem() != null
+                && !imagesList.getSelectionModel().getSelectedItem().equals("NULL")) {
             String c = imagesList.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ImageID: ", 2);
             GetHelp.choiceImages.add(c1[1]);
