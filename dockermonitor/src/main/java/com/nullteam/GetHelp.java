@@ -11,11 +11,14 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.PullResponseItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 
 public class GetHelp {
+    public static List<String> choiceContainers = new ArrayList<>();
+    public static List<String> choiceImages = new ArrayList<>();
 
     /**
      * Constructor to help call this class's

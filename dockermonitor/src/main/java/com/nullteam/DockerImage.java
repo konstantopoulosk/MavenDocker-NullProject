@@ -177,6 +177,9 @@ public class DockerImage {
                 }
 
                  */
+                //Image is In use by a container.
+                //Remove Container.
+                //todo: ANASTASIA DELETE ALL RUNNING - PAUSED - STOPPED CONTAINERS
             }
         }
         try (RemoveImageCmd removeImageCmd = ClientUpdater.getUpdatedClient().removeImageCmd(imageId)) {

@@ -130,6 +130,15 @@ public class MainSceneController implements Initializable {
                     return null;
                 });
     }
+    void implementApiRequestForImages(String action) {
+        ActionRequest actionRequest = new ActionRequest(action, imageId);
+        CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
+                .thenRun(() -> System.out.println("Request sent successfully"))
+                .exceptionally(throwable -> {
+                    throwable.printStackTrace();
+                    return null;
+                });
+    }
 
     //API CONFIGURATION
     //Initialize Method is necessary
@@ -239,7 +248,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListImages(ActionEvent event) throws IOException {
         setListImages();
-        imagesList = new ListView<>(observableList);
+        //imagesList = new ListView<>(observableList);
     }
     //This is used to go to Containers Menu
     @FXML
@@ -288,6 +297,7 @@ public class MainSceneController implements Initializable {
     //This is the method is executed when user presses apply to start a container that chose in List View
     @FXML
     public void startContainer(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) { //It may be null.
             ImplementAPIRequest("START");
             openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
@@ -303,6 +313,7 @@ public class MainSceneController implements Initializable {
     //This method is executed when user presses apply to stop a container
     @FXML
     public void stopContainer(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) {
             ImplementAPIRequest("STOP");
             openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirmation.fxml");
@@ -323,6 +334,7 @@ public class MainSceneController implements Initializable {
     //This is Executed when user presses apply to rename a container that he chose from List View
     @FXML
     public void renameContainer(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         String newName = nameToRename.getText();
         System.out.println(newName);
         if (containerId != null) {
@@ -346,6 +358,7 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to remove a container
     @FXML
     public void removeContainer(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) {
             ImplementAPIRequest("REMOVE");
             openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirmation.fxml");
@@ -361,6 +374,7 @@ public class MainSceneController implements Initializable {
     //Executed when user presses apply to Restart a Container.
     @FXML
     public void restartContainer(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) {
             ImplementAPIRequest("RESTART");
             openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
@@ -381,6 +395,7 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to pause a container
     @FXML
     public void pauseContainer(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) {
             ImplementAPIRequest("PAUSE");
             openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
@@ -396,6 +411,7 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to Unpause a container
     @FXML
     public void unpauseContainer(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) {
             ImplementAPIRequest("UNPAUSE");
             openConfirmationWindow(event, "Unpause Container Properties", "unpauseContainerConfirmation.fxml");
@@ -411,6 +427,7 @@ public class MainSceneController implements Initializable {
     //This is executed when User presses apply to kill a container
     @FXML
     public void killContainer(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) {
             ImplementAPIRequest("KILL");
             openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
@@ -426,6 +443,7 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to see the Logs of a container that he chose
     @FXML
     public void applyToSeeTheLogs(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) {
             openNewWindow(event, "listOfLogsNew.fxml", "List of Logs"); //Opens a new Window with a List View of the Logs
             id = containerId;
@@ -447,6 +465,7 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to see the subnets of a container
     @FXML
     public void applyToSeeSubnets(ActionEvent event) throws IOException {
+        containerId = GetHelp.choiceContainers.getLast();
         if (containerId != null) {
             openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets"); //Opens a new window to show the subnets
             id = containerId;
@@ -468,6 +487,7 @@ public class MainSceneController implements Initializable {
     //This is Executed when user presses apply to pull
     @FXML
     public void applyPull(ActionEvent event) throws IOException {
+        imageId = GetHelp.choiceImages.getLast();
         if (imageToPull != null && !DockerImage.imageslist.contains(imageId)) {
             String image = imageToPull.getText(); //This is what User wrote he wants to pull.
             System.out.println(image);
@@ -488,9 +508,10 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to implement an image -> Start a new Container
     @FXML
     public void applyImplement(ActionEvent event) throws IOException {
+        imageId = GetHelp.choiceImages.getLast();
         System.out.println(imageId);
         if (imageId != null) {
-            ImplementAPIRequest("IMPLEMENT");
+            implementApiRequestForImages("IMPLEMENT");
             openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
             databaseThread();
         }
@@ -504,8 +525,9 @@ public class MainSceneController implements Initializable {
     //This is executed when user presses apply to remove an image
     @FXML
     public void applyRemove(ActionEvent event) throws IOException {
+        imageId = GetHelp.choiceImages.getLast();
         if (imageId != null) {
-            ImplementAPIRequest("REMOVEIMAGE");
+            implementApiRequestForImages("REMOVEIMAGE");
             openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
             databaseThread();
         }
@@ -646,48 +668,59 @@ public class MainSceneController implements Initializable {
     //This method retrieves the id of the last exited container that user clicked on, on List View
     @FXML
     public void retrieveIdToStart(MouseEvent mouseEvent) {
+        System.out.println(exitedContainers.getSelectionModel().getSelectedItem());
         if (exitedContainers.getSelectionModel().getSelectedItem() != null) {
             String c = exitedContainers.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
-            containerId = c1[1];
+            GetHelp.choiceContainers.add(c1[1]);
         }
-        System.out.println(exitedContainers.getSelectionModel().getSelectedItem());
-        System.out.println(containerId);
+        //System.out.println(exitedContainers.getSelectionModel().getSelectedItem());
+        //System.out.println(containerId);
+
     }
     //This method retrieves the id of the last active container that user clicked on, on List View
     @FXML
     public void retrieveIdToStop(MouseEvent mouseEvent) {
+        System.out.println(activeContainers.getSelectionModel().getSelectedItem());
         if (activeContainers.getSelectionModel().getSelectedItem() != null) {
             String c = activeContainers.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
-            containerId = c1[1];
+            GetHelp.choiceContainers.add(c1[1]);
+            //containerId = c1[1];
         }
     }
     //This method retrieves the id of the last container that user clicked on, on List View
     @FXML
     public void retrieveId(MouseEvent mouseEvent) {
+        System.out.println(containersList.getSelectionModel().getSelectedItem());
         if (containersList.getSelectionModel().getSelectedItem() != null) {
             String c = containersList.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
-            containerId = c1[1];
+            GetHelp.choiceContainers.add(c1[1]);
+            //containerId = c1[1];
         }
     }
     //This method retrieves the id of the last paused container that user clicked on, on List View
     @FXML
     public void retrieveIdToUnpause(MouseEvent mouseEvent) {
+        System.out.println(restartListContainer.getSelectionModel().getSelectedItem());
         if (restartListContainer.getSelectionModel().getSelectedItem() != null) {
             String c = restartListContainer.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
-            containerId = c1[1];
+            GetHelp.choiceContainers.add(c1[1]);
+            //containerId = c1[1];
         }
     }
     //This method retrieves the id of the last image that user clicked on, on List View
     @FXML
     public void retrieveIdForImage(MouseEvent mouseEvent) {
+        System.out.println(imagesList.getSelectionModel().getSelectedItem());
         if (imagesList.getSelectionModel().getSelectedItem() != null) {
             String c = imagesList.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ImageID: ", 2);
-            imageId = c1[1];
+            GetHelp.choiceImages.add(c1[1]);
+            //imageId = c1[1];
         }
+        System.out.println(GetHelp.choiceImages.getLast());
     }
 }
