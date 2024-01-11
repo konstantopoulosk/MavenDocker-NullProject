@@ -9,7 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lists {
+    /**
+     * A static list used by MainSceneController when user
+     * clicks a container in a listview in order to
+     * store the id of the last clicked container.
+     */
     public static List<String> choiceContainers = new ArrayList<>();
+    /**
+     * A static list used by MainSceneController when user
+     * clicks an image in a listview in order to
+     * store the id of the last clicked image.
+     */
     public static List<String> choiceImages = new ArrayList<>();
     /**
      * This method lists the updated images
