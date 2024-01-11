@@ -134,48 +134,24 @@ public class DockerImage {
             return null;
         }
     }
+    public List<Container> findContainers() {
+        List<Container> containerList = new ArrayList<>();
+        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
+        for (Container c : containers) {
+            if (c.getImage().equals(getImageRep()) //e.g. 'mongo'
+                    || c.getImage().equals(getImageId().substring(0, 12)) //e.g. '76506809a39f'
+                    || c.getImage().startsWith(getImageRep())) {
+                containerList.add(c);
+            }
+        }
+        return containerList;
+    }
 
     /**
      * This method removes an image from the DockerCluster
      * and from the image list
     */
     public void removeImage() {
-        //first we need to remove all instances of this image
-        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
-        for (Container c : containers) {
-            if (c.getImage().equals(getImageRep()) //e.g. 'mongo'
-                    || c.getImage().equals(getImageId().substring(0, 12)) //e.g. '76506809a39f'
-                    || c.getImage().startsWith(getImageRep())) { //e.g. 'mongo:latest'
-                //now we have to check if the container is running
-                /*
-                if (c.getStatus().startsWith("Up")) {
-                    ExecutorThread executorStop = new ExecutorThread(
-                            c.getId(), ExecutorThread.TaskType.STOP);
-                    executorStop.start();
-                    try {
-                        executorStop.join(); // waiting for the thread to finish
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-                //finally we remove the container
-                ExecutorThread executorRemove = new ExecutorThread(
-                        c.getId(), ExecutorThread.TaskType.REMOVE);
-                executorRemove.start();
-                try {
-                    executorRemove.join(); // waiting for the thread to finish
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                 */
-                //Image is In use by a container.
-                //Remove Container.
-                //todo: ANASTASIA DELETE ALL RUNNING - PAUSED - STOPPED CONTAINERS
-            }
-        }
         try (RemoveImageCmd removeImageCmd = ClientUpdater.getUpdatedClient().removeImageCmd(imageId)) {
             removeImageCmd.exec();
             System.out.println("Image Removed: " + imageId + "\n");

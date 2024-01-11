@@ -1,7 +1,8 @@
 package com.nullteam;
 
-import com.github.dockerjava.core.DockerContextMetaFile;
+import com.github.dockerjava.api.model.Container;
 
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class ExecutorThread extends Thread {
@@ -116,6 +117,7 @@ public class ExecutorThread extends Thread {
         findContainerInClient(id).restartContainer();
     }
     private void pauseContainer(String id) {
+        System.out.println("Paused: " + id);
         findContainerInClient(id).pauseContainer();
     }
     private void unpauseContainer(String id) {
@@ -129,6 +131,15 @@ public class ExecutorThread extends Thread {
         startContainer(containerId);
     }
     private void removeImage(String id) {
+        List<Container> containers = findImageInClient(id).findContainers();
+        if (containers != null) {
+            for (Container c : containers) {
+                if (c.getStatus().startsWith("Up")) {
+                    stopContainer(c.getId());
+                }
+                removeContainer(c.getId());
+            }
+        }
         findImageInClient(id).removeImage();
     }
 }

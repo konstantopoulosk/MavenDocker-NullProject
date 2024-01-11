@@ -12,15 +12,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class DatabaseThread extends Thread {
-    static int timesCalled = 0;
     static String ip; //System Ip to recognize the user.
     static int containers = giveMeCount(); //Auto increment primary key for measurements table.
     static Connection connection; //Connection to database.
+    //static Connection connection1;
      public DatabaseThread(Connection connection, String ip) { //Moved the connectToDatabase to ClientUpdater
         DatabaseThread.connection = connection; //Because connectivity methods
          DatabaseThread.ip = ip;
+         //DatabaseThread.connection1 = connection1;
     }
     @Override
     public void run() {
@@ -36,17 +38,30 @@ public class DatabaseThread extends Thread {
     public static int giveMeCount() { //gives the last number of measurements, to start from there.
          try {
              String query = "SELECT COUNT(*) FROM measurements";
-             Connection connection1 = ClientUpdater.connectToDatabase(); //new connection
-             PreparedStatement preparedStatement = connection1.prepareStatement(query);
+             Connection c = takeCredentials();
+             PreparedStatement preparedStatement = c.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery(); //execute the query
              resultSet.next(); //get the number
              int count = resultSet.getInt(1); // count rows = the last number of measurement
-             connection1.close(); //close connection
+             c.close();
              return count;
          } catch (Exception e) {
              e.printStackTrace();
              return -1;
          }
+    }
+    public static Connection takeCredentials() {
+         Scanner in = new Scanner(System.in);
+        System.out.println("TYPE AGAIN PLEASE: ");
+        System.out.print("DRIVER: ");
+        String driver = in.nextLine();
+        System.out.print("URL: ");
+        String url = in.nextLine();
+        System.out.print("USER: ");
+        String user = in.nextLine();
+        System.out.print("PASSWORD: ");
+        String password = in.nextLine();
+        return ClientUpdater.connectToDatabase(driver, url, user, password);
     }
     //Reads the containers.csv and inserts everything into the table containers.
     public void readContainersFromCsv(Connection connection, int containers) {
