@@ -2,7 +2,6 @@ package nullteam.gui;
 
 import com.github.dockerjava.api.model.Container;
 import com.google.gson.Gson;
-import com.nullteam.ActionRequest;
 import com.nullteam.*;
 import com.sun.net.httpserver.HttpServer;
 import javafx.collections.FXCollections;
@@ -17,9 +16,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Box;
 import javafx.stage.Stage;
 
-import javax.print.Doc;
+import javax.swing.text.BoxView;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -28,10 +28,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -734,5 +737,76 @@ public class MainSceneController implements Initializable {
             //imageId = c1[1];
         }
         System.out.println(GetHelp.choiceImages.getLast());
+    }
+    //-------------------//
+    @FXML
+    private TextField date;
+    @FXML
+    private ListView<String> measure = new ListView<>(observableList);
+    /*
+    @FXML
+    private View uppers;
+    @FXML
+    private TextField downers;
+
+     */
+    @FXML
+    public void measurements(ActionEvent event) throws  IOException{
+        changeTheScenes("/measurements.fxml", event);
+    }
+    @FXML
+    public void applyMeasurements(ActionEvent event) throws IOException {
+        String d = this.date.getText();
+        Date date = Date.valueOf(d);
+        List<String> list = new ArrayList<>();
+        int up = 0, down = 0;
+        try {
+            String query = "select measurements.id, containerId, name, image, state from measurements, " +
+                    "containers where containers.SystemIp = ? " +
+                    "and containers.SystemIp = measurements.SystemIp and containers.id = measurements.id " +
+                    "and measurements.date = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, ip);
+            preparedStatement.setDate(2, date);
+            ResultSet output = preparedStatement.executeQuery();
+            while (output.next()) {
+                String containerId, name, image, state;
+                int id;
+                id = output.getInt("id");
+                System.out.println(id);
+                containerId = output.getString("containerId");
+                name = output.getString("name");
+                image = output.getString("image");
+                state = output.getString("state");
+                String s =
+                        "\nMeasurement ID: " + id
+                        + "\nContainer ID: " + containerId
+                        + "\nName: " + name
+                        + " Image: " + image
+                        + " State: " + state;
+
+                list.add(s);
+                if (state.startsWith("running")) {
+                    up++;
+                } else {
+                    down++;
+                }
+            }
+            setListMeasure(list);
+            //uppers =
+            measure = new ListView<>(observableList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void setListMeasure(List<String> list) {
+        int i = 0;
+        for (String s : list) {
+            i++;
+            measure.getItems().add("--> " + s);
+        }
+        if (i == 0) {
+            measure.getItems().add("NULL");
+        }
     }
 }

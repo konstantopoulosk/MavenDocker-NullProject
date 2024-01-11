@@ -1,18 +1,20 @@
 package com.nullteam;
 
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvMalformedLineException;
 import com.opencsv.exceptions.CsvValidationException;
-
-import javax.xml.crypto.Data;
+import org.bouncycastle.crypto.agreement.jpake.JPAKERound1Payload;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import static org.bouncycastle.cms.RecipientId.password;
 
 public class DatabaseThread extends Thread {
     static String ip; //System Ip to recognize the user.
@@ -51,8 +53,27 @@ public class DatabaseThread extends Thread {
          }
     }
     public static Connection takeCredentials() {
+         List<String> list = new ArrayList<>();
+         try {
+             File file = new File("README.md").getAbsoluteFile();
+             Scanner reader = new Scanner(file);
+             while (reader.hasNextLine()) {
+                 String data = reader.nextLine();
+                 list.add(data);
+             }
+             String driver = list.get(4);
+             String url = list.get(5);
+             String user = list.get(6);
+             String password = list.get(7);
+             return ClientUpdater.connectToDatabase(driver, url, user, password);
+         } catch (Exception e) {
+             e.printStackTrace();
+             return null;
+         }
+         /*
          Scanner in = new Scanner(System.in);
-        System.out.println("TYPE AGAIN PLEASE: ");
+         System.out.println("-----------------");
+        System.out.println("TYPE CREDENTIALS TWICE PLEASE: ");
         System.out.print("DRIVER: ");
         String driver = in.nextLine();
         System.out.print("URL: ");
@@ -61,7 +82,9 @@ public class DatabaseThread extends Thread {
         String user = in.nextLine();
         System.out.print("PASSWORD: ");
         String password = in.nextLine();
-        return ClientUpdater.connectToDatabase(driver, url, user, password);
+        System.out.println("-----------------");
+
+          */
     }
     //Reads the containers.csv and inserts everything into the table containers.
     public void readContainersFromCsv(Connection connection, int containers) {
@@ -89,14 +112,14 @@ public class DatabaseThread extends Thread {
         }
     }
     //adds measurement into table
-    public void addToMeasurements(Connection connection,int containers) {
+    public void addToMeasurements(Connection connection, int containers) {
         try {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now(); //DATETIME NOW
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDate today = LocalDate.now(); // LOCAL DATE (NO TIME)
             String query = String.format("INSERT INTO measurements (`id`, `date`, `SystemIp`) " +
-                    "VALUES (\"%s\", \"%s\", \"%s\")", containers, dtf.format(now), ip);
+                    "VALUES (\"%s\", \"%s\", \"%s\")", containers, dtf.format(today), ip);
             Statement statement = connection.createStatement();
-            statement.executeUpdate(query); //executes the query
+            statement.executeUpdate(query); //EXECUTING THE QUERY
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
