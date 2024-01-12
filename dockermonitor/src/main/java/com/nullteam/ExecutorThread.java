@@ -81,7 +81,7 @@ public class ExecutorThread extends Thread {
         }
     }
 
-    private DockerInstance findContainerInClient(String id) {
+     public static DockerInstance findContainerInClient(String id) {
         DockerInstance instance = null;
         for (DockerInstance c : DockerInstance.containerslist) {
             if (c.getContainerId().equals(id)) {
@@ -91,7 +91,7 @@ public class ExecutorThread extends Thread {
         System.out.println(instance); //This somehow is null :(
         return instance;
     }
-    private DockerImage findImageInClient(String id) {
+    public static DockerImage findImageInClient(String id) {
         DockerImage image = null;
         for (DockerImage i : DockerImage.imageslist) {
             if (i.getImageId().equals(id)) {

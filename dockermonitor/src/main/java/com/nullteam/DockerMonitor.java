@@ -39,7 +39,18 @@ public class DockerMonitor extends Thread {
             // Handle other runtime exceptions
         }
     }
-
+    public void setLastState(List<String[]> list) {
+        this.lastState = list;
+    }
+    public void setCurrentData(List<String[]> list) {
+        this.currentData = list;
+    }
+    public List<String[]> getLastState() {
+        return this.lastState;
+    }
+    public List<String[]> getCurrentData() {
+        return this.currentData;
+    }
     /**
      * This method writes in containers.csv,
      * info of every container.
