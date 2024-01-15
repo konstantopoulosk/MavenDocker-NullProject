@@ -23,7 +23,6 @@ public class DockerMonitor extends Thread {
      * currently.
      */
     private List<String[]> currentData = null;
-
     /**
      * This method executes Monitor Thread.
      */
@@ -38,23 +37,12 @@ public class DockerMonitor extends Thread {
             System.out.println("Caught Error: " + e.getMessage());
         }
     }
-    public void setLastState(List<String[]> list) {
-        this.lastState = list;
-    }
     public void setCurrentData(List<String[]> list) {
         this.currentData = list;
     }
-    public List<String[]> getLastState() {
-        return this.lastState;
-    }
-    public List<String[]> getCurrentData() {
-        return this.currentData;
-    }
     /**
-     * This method writes in containers.csv,
-     * info of every container.
-     * Container ID, Name, Image,
-     * Status, Command, Created.
+     * This method writes in containers.csv, info of every container.
+     * Container ID, Name, Image, Status, Command, Created.
      */
     public void writeCsv() { //Write/update the csv file
         final String csvFilePath = "containers.csv";
@@ -77,12 +65,11 @@ public class DockerMonitor extends Thread {
         }
     }
     /**
-     * This method checks if
-     * container info has changed.
+     * This method checks if container info has changed
+     * inside the cluster.
      * @return boolean
      */
     public boolean hasNewData() {
-        //Check if there is any change inside the cluster
         List<Container> containers =
                 ClientUpdater.getUpdatedContainersFromClient();
         currentData = new ArrayList<>();
@@ -106,15 +93,13 @@ public class DockerMonitor extends Thread {
         }
     }
     /**
-     * This method checks if
-     * two lists are equal.
+     * This method checks if two lists are equal.
      * (Current Data and Last State)
      * @param list1 List&lt;String[]&gt;
      * @param list2 List&lt;String[]&gt;
      * @return boolean (true if the lists are equal, false otherwise).
      */
     public static boolean listsAreEqual(List<String[]> list1, List<String[]> list2) {
-
         // Check for null references
         if (list1 == null && list2 == null) {
             return true;
