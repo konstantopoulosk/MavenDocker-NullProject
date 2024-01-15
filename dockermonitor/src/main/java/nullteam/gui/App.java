@@ -1,6 +1,7 @@
 package nullteam.gui;
 
 import com.nullteam.ClientUpdater;
+import com.nullteam.DatabaseThread;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
