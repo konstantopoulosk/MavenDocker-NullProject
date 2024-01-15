@@ -84,14 +84,13 @@ public class TestDockerImage {
     @Test
     public void testRemoveImage() {
         DockerImage dockerImage2 = DockerImage.imageslist.getLast();
-        imageslist.add(dockerImage2);
         int imgSize = DockerImage.imageslist.size();
         List<Container> containers = dockerImage2.findContainers();
         if (containers != null) {
             for (Container c : containers) {
                 for (DockerInstance i : DockerInstance.containerslist) {
                     if (c.getId().equals(i.getContainerId())) {
-                        if (c.getStatus().startsWith("Up")) {
+                        if (i.getContainerStatus().startsWith("Up")) {
                             i.stopContainer();
                         }
                         i.removeContainer();
