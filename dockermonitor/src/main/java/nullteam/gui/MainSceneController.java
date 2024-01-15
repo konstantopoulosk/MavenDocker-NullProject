@@ -275,7 +275,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListImages(ActionEvent event) throws IOException {
         setListImages();
-        //imagesList = new ListView<>(observableList);
+    }
+    @FXML
+    public void tapFirstListImages(ActionEvent event) throws IOException {
+        setListImages();
+        imagesList = new ListView<>(observableList);
     }
     /**
      * This method is used to go to Containers Menu.
@@ -710,7 +714,6 @@ public class MainSceneController implements Initializable {
                 System.out.println(imageToPull);
                 System.out.println("Something Is Wrong!");
             }
-            imagesList = new ListView<>(observableList);
     }
 
     /**
@@ -737,7 +740,6 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
             databaseThread();
         }
-        imagesList = new ListView<>(observableList);
     }
     /**
      * This method takes the user to a new scene with a
@@ -762,7 +764,6 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
             databaseThread();
         }
-        imagesList = new ListView<>(observableList);
     }
     /**
      * This method takes the user to a new scene with a
