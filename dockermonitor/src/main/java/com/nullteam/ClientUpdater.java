@@ -47,7 +47,7 @@ public final class ClientUpdater {
                     System.out.println("Failed to open file or application.");
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
+                System.out.println("Caught Error: " + ex.getMessage());
             }
         }
     }
@@ -64,7 +64,12 @@ public final class ClientUpdater {
         containers = dockerClient.listContainersCmd()
                 .withShowAll(true).exec(); //all containers from cluster
         closeClient(dockerClient);
-        return containers; //Updated Containers
+        if (containers != null) {
+            return containers; //Updated Containers
+        } else {
+            System.out.println("Containers = Null ... Either you do not have containers or something went wrong.");
+            return containers;
+        }
     }
     /**
      * This method gets a list of updated images from
@@ -77,7 +82,12 @@ public final class ClientUpdater {
         List<Image> images
                 = client.listImagesCmd().exec(); //Images from the cluster
         closeClient(client);
-        return images; //Updated Images
+        if (images != null) {
+            return images; //Updated Images
+        } else {
+            System.out.println("Images = Null ... Either you do not have any images or something went wrong.");
+            return images;
+        }
     }
     /**
      * This method gets a list of updated volumes from
@@ -91,7 +101,12 @@ public final class ClientUpdater {
         ListVolumesResponse volumesResponse = client.listVolumesCmd().exec();
         List<InspectVolumeResponse> volumes = volumesResponse.getVolumes();
         closeClient(client);
-        return volumes; //Updated Volumes
+        if (volumes != null) {
+            return volumes; //Updated Volumes
+        } else {
+            System.out.println("Volumes = Null ... Either you do not have any Volumes or something went wrong.");
+            return volumes;
+        }
     }
     /**
      * This method gets a list of updated networks from
@@ -108,7 +123,12 @@ public final class ClientUpdater {
         DockerClient client = getUpdatedClient(); //Method Below
         List<Network> networks = client.listNetworksCmd().exec();
         closeClient(client);
-        return networks; //Updated Networks
+        if (networks != null) {
+            return networks; //Updated Networks
+        } else {
+            System.out.println("Networks = Null ... Either you do not have any Networks or something went wrong.");
+            return networks;
+        }
     }
     /**
      * This method gets the Updated Docker Client.
@@ -117,26 +137,32 @@ public final class ClientUpdater {
      * @return DockerClient
      */
     public static DockerClient getUpdatedClient() {
-        DefaultDockerClientConfig.Builder builder
-                = DefaultDockerClientConfig.createDefaultConfigBuilder();
-        builder.withDockerHost("tcp://localhost:2375");
-        DockerClient dockerClient = DockerClientBuilder
-                .getInstance(builder).build();
-        dockerClient.versionCmd().exec();
-        return dockerClient; //The same docker client but UPDATED!
+        try {
+            DefaultDockerClientConfig.Builder builder
+                    = DefaultDockerClientConfig.createDefaultConfigBuilder();
+            builder.withDockerHost("tcp://localhost:2375");
+            DockerClient dockerClient = DockerClientBuilder
+                    .getInstance(builder).build();
+            dockerClient.versionCmd().exec();
+            return dockerClient; //The same docker client but UPDATED!
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
+            return null;
+        }
     }
 
     /**
      * This method makes sure that the client closes
      * after it's used.
      * If the process fails, there is a message.
-     * @param dockerClient
+     * @param dockerClient DockerClient
      */
     public static void closeClient(DockerClient dockerClient) {
         try {
             dockerClient.close();
         } catch (IOException e) {
             System.out.println("Failed to close the client");
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -170,7 +196,7 @@ public final class ClientUpdater {
             connection = DriverManager.getConnection(url, user, password);
             System.out.println(connection);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
         return connection;
     }
@@ -184,9 +210,8 @@ public final class ClientUpdater {
         try {
             localhost = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
-                throw new RuntimeException(e);
+                System.out.println("Caught Error: " + e.getMessage());
         }
-        System.out.println(String.valueOf(localhost));
         return String.valueOf(localhost);
     }
 }

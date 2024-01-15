@@ -34,9 +34,8 @@ public class DockerMonitor extends Thread {
                     writeCsv();
                 }
             }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            // Handle other runtime exceptions
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     public void setLastState(List<String[]> list) {
@@ -69,12 +68,12 @@ public class DockerMonitor extends Thread {
             try {
                 csvWriter.flush(); // To immediately write to the fill
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Caught Error: " + e.getMessage());
             }
             // Update the lastState with the currentData
             lastState = new ArrayList<>(currentData);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**

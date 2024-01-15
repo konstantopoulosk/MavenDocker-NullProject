@@ -128,7 +128,7 @@ public class DockerVolume {
                     .replace("T", " ")
                     .replace("Z", " ");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
             return "Exception!";
         }
     }

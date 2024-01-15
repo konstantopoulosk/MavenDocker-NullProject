@@ -26,7 +26,7 @@ public class ExecutorThread extends Thread {
     public void run() {
         while (true) {
             try {
-                //System.out.println("Executor is running..");
+                //System.out.println("Executor is running ...");
                 // Dequeue the ActionRequest from the actionQueue
                 ActionRequest actionRequest = actionQueue.take();
                 // Extract the actionType and containerId from the ActionRequest
@@ -39,6 +39,7 @@ public class ExecutorThread extends Thread {
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                System.out.println(e.getMessage());
             }
         }
     }

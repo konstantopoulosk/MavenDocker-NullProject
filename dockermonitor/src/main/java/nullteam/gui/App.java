@@ -32,6 +32,7 @@ public class App extends Application {
             primaryStage.show();
         } catch (IOException e) {
             System.out.println("System IO exception thrown!");
+            System.out.println(e.getMessage());
         }
     }
     public static void main(String[] args) {

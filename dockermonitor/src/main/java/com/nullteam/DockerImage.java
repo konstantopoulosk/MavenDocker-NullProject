@@ -124,7 +124,7 @@ public class DockerImage {
             }
             return id;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
             return null;
         }
     }
@@ -151,7 +151,7 @@ public class DockerImage {
             System.out.println("Image Removed: " + imageId + "\n");
             imageslist.remove(this);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
 
@@ -215,7 +215,7 @@ public class DockerImage {
                     -Not signed in DockerHub
                     -Image does not exist
                     -Image already in your DockerCluster"""); //could be more reasons
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
-
 }
