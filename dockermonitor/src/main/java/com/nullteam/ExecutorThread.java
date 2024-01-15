@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class ExecutorThread extends Thread {
-
     private final BlockingQueue<ActionRequest> actionQueue;
-
     public ExecutorThread(BlockingQueue<ActionRequest> actionQueue) {
         this.actionQueue= actionQueue;
     }
@@ -21,7 +19,6 @@ public class ExecutorThread extends Thread {
      * the thread based on a specific,
      * task.
      */
-
     @Override
     public void run() {
         while (true) {
@@ -42,8 +39,14 @@ public class ExecutorThread extends Thread {
             }
         }
     }
+
+    /**
+     * This method performs an action based on an actionType
+     * (Start, Stop, Rename...) and containerId or imageId.
+     * @param actionType String
+     * @param containerId String
+     */
     private void performDockerAction(String actionType, String containerId) {
-        // Logic to perform the Docker action based on actionType and containerId
         System.out.println("Performing action: " + actionType + " on container: " + containerId);
         switch (actionType) {
             case "START": //start
@@ -80,7 +83,12 @@ public class ExecutorThread extends Thread {
                 System.out.println("Invalid action type");
         }
     }
-
+    /**
+     * This method finds a Container in the DockerClient its id
+     * and returns the DockerInstance object that represents it.
+     * @param id String
+     * @return DockerInstance
+     */
      public static DockerInstance findContainerInClient(String id) {
         DockerInstance instance = null;
         for (DockerInstance c : DockerInstance.containerslist) {
@@ -91,6 +99,12 @@ public class ExecutorThread extends Thread {
         System.out.println(instance); //This somehow is null :(
         return instance;
     }
+    /**
+     * This method finds a Image in the DockerClient its id
+     * and returns the DockerImage object that represents it.
+     * @param id String
+     * @return DockerImage
+     */
     public static DockerImage findImageInClient(String id) {
         DockerImage image = null;
         for (DockerImage i : DockerImage.imageslist) {
