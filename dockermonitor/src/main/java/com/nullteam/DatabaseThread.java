@@ -48,14 +48,14 @@ public class DatabaseThread extends Thread {
      */
     @Override
     public void run() {
-        if (newUser(connection, ip)) { //Checks if he is a new user.
-            //New user -> write his data.
-            containers++;
-            addToMeasurements(connection, containers);
-            readContainersFromCsv(connection, containers);
-        } else {
-            updateDatabase();
-        }
+            if (newUser(connection, ip)) { //Checks if he is a new user.
+                //New user -> write his data.
+                containers++;
+                addToMeasurements(connection, containers);
+                readContainersFromCsv(connection, containers);
+            } else {
+                updateDatabase();
+            }
     }
     /**
      * This method returns the last number of measurements,
@@ -115,21 +115,29 @@ public class DatabaseThread extends Thread {
             String[] container;
             while ((container = csvReader.readNext()) != null) {
                 if (!container[0].equals("Container ID")) { // Does not insert the header.
-                    String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
-                            "VALUES (?, ?, ?, ?, ?, ?)";
-                    PreparedStatement preparedStatement = connection.prepareStatement(query);
-                    for (int i = 0; i < 4; i++) {
-                        preparedStatement.setString(i+1, container[i]); //easier with for loop.
-                    } //fewer lines.
-                    preparedStatement.setString(5, ip);
-                    preparedStatement.setInt(6, containers);
-                    //sets the ? with actual values.
-                    preparedStatement.executeUpdate(); //executes the query
+                    if (searchInDatabase(container[0])) {
+                        String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
+                                "VALUES (?, ?, ?, ?, ?, ?)";
+                        PreparedStatement preparedStatement = connection.prepareStatement(query);
+                        for (int i = 0; i < 4; i++) {
+                            preparedStatement.setString(i + 1, container[i]); //easier with for loop.
+                        } //fewer lines.
+                        preparedStatement.setString(5, ip);
+                        preparedStatement.setInt(6, containers);
+                        //sets the ? with actual values.
+                        preparedStatement.executeUpdate(); //executes the query
+                    }
                 }
             }
             csvReader.close(); //closes the csv
-        } catch (IOException | SQLException | CsvValidationException | ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
+        } catch (SQLException s) {
+            System.out.println("Caught Error: " + s.getMessage());
+        } catch (FileNotFoundException e1) {
+            System.out.println("File Not Found: " + e1.getMessage());
+        } catch (CsvValidationException e2) {
+            System.out.println("CSV Exception: " + e2.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
         }
     }
     /**
@@ -166,6 +174,7 @@ public class DatabaseThread extends Thread {
              ResultSet resultSet = preparedStatement.executeQuery();
              resultSet.next();
              int count = resultSet.getInt(1);
+             System.out.println(count);
              if (count > 0) { //count of the rows with SystemIp = ip
                  return false; //not a new user.
              } else {
@@ -394,11 +403,9 @@ public class DatabaseThread extends Thread {
              resultSet.next();
              int count = resultSet.getInt(1);
              if (count == 0) {
-                 System.out.println("COUNT IS ZERO");
-                 return false;
+                 return false; //Does not exist in database
              } else {
-                 System.out.println("EXISTS IN DATABASE");
-                 return true;
+                 return true; //Exists in database
              }
          } catch (Exception e) {
              e.printStackTrace();

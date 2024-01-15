@@ -14,7 +14,7 @@
                 <Font name="Calibri Bold Italic" size="21.0" />
             </font>
         </Label>
-        <ListView fx:id="restartListContainer" layoutX="48.0" layoutY="36.0" onMouseClicked="#retrieveIdToUnpause" prefHeight="302.0" prefWidth="502.0">
+        <ListView fx:id="pausedContainers" layoutX="48.0" layoutY="36.0" onMouseClicked="#retrieveIdToUnpause" prefHeight="302.0" prefWidth="502.0">
             <effect>
                 <DropShadow />
             </effect>

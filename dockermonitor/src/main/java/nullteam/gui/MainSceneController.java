@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -69,10 +70,11 @@ public class MainSceneController implements Initializable {
     private TextField imageToPull; //Variable to get the text user types in order to pull the image.
     @FXML
     private TextField nameToRename; //Name that user types to rename a container
-    private String containerId; //field for container id, user presses an item in List View and the container id is here
-    private String imageId; //field for image id, user presses in list view an item and image id is here
+    //private String containerId; //field for container id, user presses an item in List View and the container id is here
+    //private String imageId; //field for image id, user presses in list view an item and image id is here
     static Connection connection = null; //Variable to store the connection
     final String ip = ClientUpdater.getIp(); //variable to get the System Ip of a User.
+    private String idForApi;
     private static String id;
     Stage stage; //Stage to show
     Scene scene; //Current scene
@@ -139,7 +141,7 @@ public class MainSceneController implements Initializable {
      * @param action String
      */
     void implementAPIRequest(String action) {
-        ActionRequest actionRequest = new ActionRequest(action, id);
+        ActionRequest actionRequest = new ActionRequest(action, idForApi);
         CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
                 .thenRun(() -> System.out.println("Request sent successfully"))
                 .exceptionally(throwable -> {
@@ -187,12 +189,18 @@ public class MainSceneController implements Initializable {
      * @param event ActionEvent
      * @throws IOException
      */
-    public void changeTheScenes(String fxmlFile, ActionEvent event) throws IOException {
+    public void changeTheScenes(String fxmlFile, ActionEvent event) {
+        try {
             root = FXMLLoader.load(getClass().getResource(fxmlFile));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+        } catch (CannotChangeTheScenes e) {
+            System.out.println("Caught Error: " + e.getMessage());
+        } catch (Exception e1) {
+            System.out.println("Exception Happened ...");
+        }
 
     }
     /**
@@ -200,52 +208,61 @@ public class MainSceneController implements Initializable {
      * @param event ActionEvent
      * @param fxml String
      * @param title String
-     * @throws IOException
      */
     @FXML
-    public void openNewWindow(ActionEvent event, String fxml, String title) throws IOException {
-        Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
-        Stage stage = new Stage();
-        stage.setTitle(title);
-        stage.setScene(new Scene(root1, 600,400));
-        stage.show();
+    public void openNewWindow(ActionEvent event, String fxml, String title) {
+        try {
+            Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root1, 600, 400));
+            stage.show();
+        } catch (CannotOpenNewWindow e) {
+            System.out.println("Caught Error: " + e.getMessage());
+        } catch (Exception e1) {
+            System.out.println("Exception happened ...");
+        }
     }
     /**
      * This method opens a confirmation window.
      * @param event ActionEvent
      * @param title String
      * @param fxml String
-     * @throws IOException
      */
     @FXML
-    public void openConfirmationWindow(ActionEvent event, String title, String fxml) throws IOException {
-        Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
-        Stage stage = new Stage();
-        stage.setTitle(title);
-        stage.setScene(new Scene(root1, 300, 150));
-        stage.show();
+    public void openConfirmationWindow(ActionEvent event, String title, String fxml) {
+        try {
+            Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root1, 300, 150));
+            stage.show();
+        } catch (CannotOpenNewWindow cannotOpenNewWindow) {
+            System.out.println("Caught Error: " + cannotOpenNewWindow.getMessage());
+        } catch (Exception e) {
+            System.out.println("Exception Happened ...");
+        }
     }
     /**
      * This method closes any new window
      * when user clicks on close.
-     * @param event
-     * @throws IOException
+     * @param event ActionEvent
      */
     @FXML
-    public void closeNewWindow(ActionEvent event) throws IOException {
+    public void closeNewWindow(ActionEvent event) {
         id = null;
         final Node source = (Node) event.getSource();
         final Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+
     }
     /**
      * This method starts the application. It changes the scene from
      * Scene1 to Scene2, from our homepage to the main menu.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void startApp(ActionEvent event) throws IOException  {
+    public void startApp(ActionEvent event) {
         //Goes from Scene1 to Scene2.
         changeTheScenes("/Scene2.fxml", event);
     }
@@ -260,40 +277,46 @@ public class MainSceneController implements Initializable {
     /**
      * This method is used to go to Images Menu.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressImages(ActionEvent event) throws IOException {
+    public void pressImages(ActionEvent event) {
         changeTheScenes("/images.fxml", event);
     }
     /**
      * This method is used when user clicks
-     * on a Button to see his Images.
+     * to see user's images when
+     * is on an image tool.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToListImages(ActionEvent event) throws IOException {
+    public void tapToListImages(ActionEvent event) {
         setListImages();
-        //imagesList = new ListView<>(observableList);
+    }
+
+    /** This method is used when user clicks
+     * on a Button to see his images.
+     * @param event ActionEvent
+     */
+    @FXML
+    public void tapFirstListImages(ActionEvent event) {
+        setListImages();
+        imagesList = new ListView<>(observableList);
     }
     /**
      * This method is used to go to Containers Menu.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressContainers(ActionEvent event) throws IOException {
+    public void pressContainers(ActionEvent event) {
         changeTheScenes("/containers.fxml", event);
     }
     /**
      * This method is used when user clicks
      * on a Button to see his Containers.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToListContainers(ActionEvent event) throws IOException {
+    public void tapToListContainers(ActionEvent event) {
         System.out.println("You tapped to see the containers");
         setListContainers();
         databaseThread();
@@ -302,20 +325,18 @@ public class MainSceneController implements Initializable {
     /**
      * This method is used to go to Networsks Menu.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressNetworks(ActionEvent event) throws IOException {
+    public void pressNetworks(ActionEvent event) {
         changeTheScenes("/networks.fxml", event);
     }
     /**
      * This method is used when user clicks
      * on a button to see his Networks.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToSeeYourNetworks(ActionEvent event) throws IOException {
+    public void tapToSeeYourNetworks(ActionEvent event) {
         setListNetworks();
         networksList = new ListView<>(observableList);
     }
@@ -323,10 +344,9 @@ public class MainSceneController implements Initializable {
     /**
      * This method is used to go to Volumes Menu.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressVolumes(ActionEvent event) throws IOException {
+    public void pressVolumes(ActionEvent event) {
         changeTheScenes("/volumes.fxml", event);
     }
 
@@ -334,10 +354,9 @@ public class MainSceneController implements Initializable {
      * This method is used when user clicks
      * on a button to see his Volumes.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToSeeVolumes(ActionEvent event) throws IOException {
+    public void tapToSeeVolumes(ActionEvent event) {
         setListVolumes();
         volumesList = new ListView<>(observableList);
     }
@@ -346,10 +365,9 @@ public class MainSceneController implements Initializable {
      * where he/she can see the Exited containers
      * and choose one to start.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressStart(ActionEvent event) throws IOException {
+    public void pressStart(ActionEvent event) {
         changeTheScenes("/startContainerNew.fxml", event);
     }
 
@@ -357,10 +375,9 @@ public class MainSceneController implements Initializable {
      * This method is executed when user clicks
      * on a button to see the Exited Containers.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToSeeExitedContainers(ActionEvent event) throws IOException {
+    public void tapToSeeExitedContainers(ActionEvent event) {
         setListExitedContainers();
     }
 
@@ -368,13 +385,12 @@ public class MainSceneController implements Initializable {
      * This method is executed when user clicks
      * Apply to start a container chosen from the ListView.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void startContainer(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        System.out.println(containerId);
-        if (containerId != null && !containerId.equals("NULL")) { //It may be null.
+    public void startContainer(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
+        if (idForApi != null && !idForApi.equals("NULL")) { //It may be null.
             implementAPIRequest("START");
             openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
             databaseThread();
@@ -386,23 +402,21 @@ public class MainSceneController implements Initializable {
      * where he/she can see the Active containers
      * and choose one to stop.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressStop(ActionEvent event) throws IOException {
+    public void pressStop(ActionEvent event) {
         changeTheScenes("/stopContainerNew.fxml", event);
     }
     /**
      * This method is executed when user clicks
      * Apply to stop a container chosen from the ListView.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void stopContainer(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        System.out.println(containerId);
-        if (containerId != null && !containerId.equals("NULL")) {
+    public void stopContainer(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
+        if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("STOP");
             openConfirmationWindow(event, "Stop Container Properties", "stopContainerConfirmation.fxml");
             databaseThread();
@@ -413,20 +427,18 @@ public class MainSceneController implements Initializable {
      * This method is executed when user presses
      * a button to see the active containers.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToSeeActiveContainers(ActionEvent event) throws IOException {
+    public void tapToSeeActiveContainers(ActionEvent event) {
         setListActiveContainers();
     }
     /**
      * This method takes the user to a new scene that has a
      * List View and a Text Field for the new name.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressRename(ActionEvent event) throws IOException {
+    public void pressRename(ActionEvent event) {
         changeTheScenes("/renameContainerNew.fxml", event);
     }
 
@@ -434,10 +446,9 @@ public class MainSceneController implements Initializable {
      * This method is executed when user presses a button
      * to see all the containers and choose one to rename it.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToListContainersToRename(ActionEvent event) throws IOException {
+    public void tapToListContainersToRename(ActionEvent event) {
         setListContainers();
         databaseThread();
     }
@@ -445,17 +456,16 @@ public class MainSceneController implements Initializable {
     /**
      * This method is executed when user presses Apply to rename
      * a container chosen previously from the List View.
-     * @param event
-     * @throws IOException
+     * @param event ActionEvent
      */
     @FXML
-    public void renameContainer(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        System.out.println(containerId);
+    public void renameContainer(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
         String newName = nameToRename.getText();
         System.out.println(newName);
-        if (containerId != null && !containerId.equals("NULL")) {
-            ActionRequest actionRequest = new ActionRequest("RENAME", containerId, newName);
+        if (idForApi != null && !idForApi.equals("NULL")) {
+            ActionRequest actionRequest = new ActionRequest("RENAME", idForApi, newName);
             CompletableFuture.runAsync(() -> sendActionRequest(actionRequest, gson))
                     .thenRun(() -> System.out.println("Request sent successfully"))
                     .exceptionally(throwable -> {
@@ -471,23 +481,21 @@ public class MainSceneController implements Initializable {
      * This method takes the user to a new scene where he/she
      * can see all the containers and choose one to remove.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressRemove(ActionEvent event) throws IOException {
+    public void pressRemove(ActionEvent event) {
         changeTheScenes("/removeContainerNew.fxml", event);
     }
     /**
      * This method is executed when user presses Apply to remove
      * a container chosen previously from the List View.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void removeContainer(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        System.out.println(containerId);
-        if (containerId != null && !containerId.equals("NULL")) {
+    public void removeContainer(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
+        if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("REMOVE");
             openConfirmationWindow(event, "Remove Container Properties", "removeContainerConfirmation.fxml");
             databaseThread();
@@ -498,22 +506,20 @@ public class MainSceneController implements Initializable {
      * This method takes the user to a new scene where he/she
      * can see the Active containers and choose one to restart.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressRestart(ActionEvent event) throws IOException {
+    public void pressRestart(ActionEvent event) {
         changeTheScenes("/restartContainerNew.fxml", event);
     }
     /**
      * This method is executed when user presses Apply to restart
      * a container chosen previously from the List View.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void restartContainer(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        if (containerId != null && !containerId.equals("NULL")) {
+    public void restartContainer(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("RESTART");
             openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
             databaseThread();
@@ -524,10 +530,9 @@ public class MainSceneController implements Initializable {
      * This method is executed when user clicks a button to see
      * the paused containers in order to unpause.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToSeeRestartContainers(ActionEvent event) throws IOException {
+    public void tapToSeeRestartContainers(ActionEvent event) {
         setListPausedContainers();
     }
     /**
@@ -535,22 +540,20 @@ public class MainSceneController implements Initializable {
      * where he/she can see the Active containers
      * and choose one to pause.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressPause(ActionEvent event) throws IOException {
+    public void pressPause(ActionEvent event) {
         changeTheScenes("/pauseContainerNew.fxml", event);
     }
     /**
      * This method is executed when user presses Apply to pause
      * a container chosen previously from the List View.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pauseContainer(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        if (containerId != null && !containerId.equals("NULL")) {
+    public void pauseContainer(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("PAUSE");
             openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
             databaseThread();
@@ -561,22 +564,20 @@ public class MainSceneController implements Initializable {
      * This method takes the user to a new scene where he/she
      * can see the Paused containers and choose one to unpause.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressUnpause(ActionEvent event) throws IOException {
+    public void pressUnpause(ActionEvent event) {
         changeTheScenes("/unpauseContainerNew.fxml", event);
     }
     /**
      * This method is executed when user presses Apply to unpause
      * a container chosen previously from the List View.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void unpauseContainer(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        if (containerId != null && !containerId.equals("NULL")) {
+    public void unpauseContainer(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("UNPAUSE");
             openConfirmationWindow(event, "Unpause Container Properties", "unpauseContainerConfirmation.fxml");
             databaseThread();
@@ -587,22 +588,20 @@ public class MainSceneController implements Initializable {
      * This method takes the user to a new scene where he/she
      * can see all the active containers and choose one to kill.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressKill(ActionEvent event) throws IOException {
+    public void pressKill(ActionEvent event) {
         changeTheScenes("/killContainerNew.fxml", event);
     }
     /**
      * This method is executed when user presses Apply to kill
      * a container chosen previously from the List View.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void killContainer(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        if (containerId != null && !containerId.equals("NULL")) {
+    public void killContainer(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("KILL");
             openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
             databaseThread();
@@ -613,25 +612,23 @@ public class MainSceneController implements Initializable {
      * This method takes the user to a new scene
      * where he/she can see the Active containers.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressLogs(ActionEvent event) throws IOException {
+    public void pressLogs(ActionEvent event) {
         changeTheScenes("/logsOfContainerNew.fxml", event);
     }
     /**
      * This method is executed when user presses Apply to see the
      * logs of a container chosen previously from the List View.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void applyToSeeTheLogs(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        if (containerId != null && !containerId.equals("NULL")) {
+    public void applyToSeeTheLogs(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        if (idForApi != null && !idForApi.equals("NULL")) {
             openNewWindow(event, "listOfLogsNew.fxml", "List of Logs");
             //Opens a new Window with a List View of the Logs
-            id = containerId;
+            id = idForApi;
         }
         activeContainers = new ListView<>(observableList);
     }
@@ -639,10 +636,9 @@ public class MainSceneController implements Initializable {
      * This method is executed when the user presses a button
      * to see the logs of a container
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void tapToSeeTheLogs(ActionEvent event) throws IOException {
+    public void tapToSeeTheLogs(ActionEvent event) {
         System.out.println(id);
         setListLogs();
         logsList = new ListView<>(observableList);
@@ -651,25 +647,23 @@ public class MainSceneController implements Initializable {
      * This method takes the user to a new scene where he/she can
      * see the Active containers and choose one to see its subnets.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressSubnets(ActionEvent event) throws IOException {
+    public void pressSubnets(ActionEvent event) {
         changeTheScenes("/subnetsOfContainerNew.fxml", event);
     }
     /**
      * This method is executed when user presses Apply to see the
      * subnets of a container chosen previously from the List View.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void applyToSeeSubnets(ActionEvent event) throws IOException {
-        containerId = Lists.choiceContainers.getLast();
-        if (containerId != null && !containerId.equals("NULL")) {
+    public void applyToSeeSubnets(ActionEvent event) {
+        idForApi = Lists.choiceContainers.getLast();
+        if (idForApi != null && !idForApi.equals("NULL")) {
             openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets");
             //Opens a new window to show the subnets
-            id = containerId;
+            id = idForApi;
         }
         activeContainers = new ListView<>(observableList);
     }
@@ -687,21 +681,19 @@ public class MainSceneController implements Initializable {
      * the current images and a Text Field for the user to write
      * the image they want to pull.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressPull(ActionEvent event) throws IOException {
+    public void pressPull(ActionEvent event) {
         changeTheScenes("/imagePullNew.fxml", event);
     }
     /**
      * This method is executed when user presses Apply
      * to pull an image.
      * @param event ActionEvent
-     * @throw IOException
      */
     @FXML
-    public void applyPull(ActionEvent event) throws IOException {
-            if (imageToPull != null && !DockerImage.imageslist.contains(imageId)) {
+    public void applyPull(ActionEvent event) {
+            if (imageToPull != null && !DockerImage.imageslist.contains(idForApi)) {
                 String image = imageToPull.getText(); //This is what User wrote he wants to pull.
                 System.out.println(image);
                 openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
@@ -710,17 +702,15 @@ public class MainSceneController implements Initializable {
                 System.out.println(imageToPull);
                 System.out.println("Something Is Wrong!");
             }
-            imagesList = new ListView<>(observableList);
     }
 
     /**
      * THis method takes the user to a new scene with
      * a list view of the current images.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressImplement(ActionEvent event) throws IOException {
+    public void pressImplement(ActionEvent event) {
         changeTheScenes("/imageImplementNew.fxml", event);
     }
     /**
@@ -729,24 +719,22 @@ public class MainSceneController implements Initializable {
      * @param event ActionEvent
      */
     @FXML
-    public void applyImplement(ActionEvent event) throws IOException {
-        imageId = Lists.choiceImages.getLast();
-        System.out.println(imageId);
-        if (imageId != null && !imageId.equals("NULL")) {
+    public void applyImplement(ActionEvent event) {
+        idForApi = Lists.choiceImages.getLast();
+        System.out.println(idForApi);
+        if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("IMPLEMENT");
             openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
             databaseThread();
         }
-        imagesList = new ListView<>(observableList);
     }
     /**
      * This method takes the user to a new scene with a
      * ListView of the images.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void pressRemoveImage(ActionEvent event) throws IOException {
+    public void pressRemoveImage(ActionEvent event) {
         changeTheScenes("/imageRemoveNew.fxml", event);
     }
     /**
@@ -755,23 +743,21 @@ public class MainSceneController implements Initializable {
      * @param event ActionEvent
      */
     @FXML
-    public void applyRemove(ActionEvent event) throws IOException {
-        imageId = Lists.choiceImages.getLast();
-        if (imageId != null && !imageId.equals("NULL")) {
+    public void applyRemove(ActionEvent event) {
+        idForApi = Lists.choiceImages.getLast();
+        if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("REMOVEIMAGE");
             openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
             databaseThread();
         }
-        imagesList = new ListView<>(observableList);
     }
     /**
      * This method takes the user to a new scene with a
      * ListView only of the IN-USE images.
      * @param event ActionEvent
-     * @throws IOException
      */
     @FXML
-    public void changeToSeeAnotherList(ActionEvent event) throws IOException {
+    public void changeToSeeAnotherList(ActionEvent event) {
         changeTheScenes("/seeImagesInUse.fxml", event);
     }
     /**
@@ -871,6 +857,9 @@ public class MainSceneController implements Initializable {
                 pausedContainers.getItems().add(i + ") " + dockerInstance.toString());
             }
             num++;
+        }
+        if (i == 0) {
+            pausedContainers.getItems().add("NULL");
         }
     }
     /**
@@ -1015,7 +1004,6 @@ public class MainSceneController implements Initializable {
         }
         System.out.println(Lists.choiceImages.getLast());
     }
-    //-------------------//
     @FXML
     private TextField date;
     @FXML
@@ -1025,11 +1013,11 @@ public class MainSceneController implements Initializable {
     @FXML
     private Text downContainers;
     @FXML
-    public void measurements(ActionEvent event) throws  IOException{
+    public void measurements(ActionEvent event) {
         changeTheScenes("/measurements.fxml", event);
     }
     @FXML
-    public void applyMeasurements(ActionEvent event) throws IOException {
+    public void applyMeasurements(ActionEvent event) {
         upContainers.setText("0");
         downContainers.setText("0");
         String d = this.date.getText();

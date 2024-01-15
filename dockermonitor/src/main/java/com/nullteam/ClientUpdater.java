@@ -186,6 +186,7 @@ public final class ClientUpdater {
         } catch (UnknownHostException e) {
                 throw new RuntimeException(e);
         }
+        System.out.println(String.valueOf(localhost));
         return String.valueOf(localhost);
     }
 }
