@@ -128,12 +128,14 @@ public class DockerInstance {
                 System.out.println("Container is already stopped "
                         + "or in the process of stopping: "
                         + containerId + "\n\n");
+            } catch (NullPointerException e) {
+                System.out.println("Caught Error: " + e.getMessage());
             } catch (Exception e) {
                 // Handle other exceptions
-                e.printStackTrace();
+                System.out.println("Caught Error: " + e.getMessage());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -142,12 +144,12 @@ public class DockerInstance {
     public void startContainer() {
         try (StartContainerCmd startContainerCmd = ClientUpdater
                 .getUpdatedClient().startContainerCmd(containerId)) {
-        startContainerCmd.exec(); //Starts Container in the Cluster
+            startContainerCmd.exec(); //Starts Container in the Cluster
             System.out.println("Container started: " + containerId + "\n\n");
             this.setContainerStatus(ClientUpdater    //changes the status
                     .getUpdatedStatus(containerId)); //of the object
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -163,7 +165,7 @@ public class DockerInstance {
                     + " has been renamed to: " + newName + "\n\n");
             this.name = newName; //Renames the object
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -179,7 +181,7 @@ public class DockerInstance {
             containerslist.remove(this);
             //removes container from our containerslist
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -193,7 +195,7 @@ public class DockerInstance {
             this.setContainerStatus(ClientUpdater    //changes the status
                     .getUpdatedStatus(containerId)); //of the object
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -209,7 +211,7 @@ public class DockerInstance {
             this.setContainerStatus(ClientUpdater    //changes the status
                     .getUpdatedStatus(containerId)); //of the object
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -231,7 +233,7 @@ public class DockerInstance {
             this.setContainerStatus(ClientUpdater //changes the status of the object
                     .getUpdatedStatus(containerId));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -245,7 +247,7 @@ public class DockerInstance {
             this.setContainerStatus(ClientUpdater
                     .getUpdatedStatus(containerId)); //Changes the status
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
 
@@ -271,7 +273,7 @@ public class DockerInstance {
                         }
                     }).awaitCompletion();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
         return logs;
     }

@@ -119,7 +119,7 @@ public class DockerNetwork {
             }
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
             return "Exception!";
         }
     }

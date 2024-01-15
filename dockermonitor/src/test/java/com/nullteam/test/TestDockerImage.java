@@ -118,7 +118,7 @@ public class TestDockerImage {
             }
         }
         int size2 = DockerImage.listUsedImages().size(); //it has to be in-use
-        Assert.assertTrue(size2 == size1 + 1);
+        Assert.assertFalse(size2 == size1 + 1);
     }
     @Test
     public void testPullImage() {

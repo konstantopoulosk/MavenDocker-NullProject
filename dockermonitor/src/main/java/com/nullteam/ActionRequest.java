@@ -12,7 +12,7 @@ public class ActionRequest {
         this.actionType = actionType;
         this.containerId = containerId;
     }
-    //alternative contructor for rename usage
+    //alternative constructor for rename usage
     public ActionRequest(String actionType, String containerId, String newName) {
         this.actionType = actionType;
         this.containerId = containerId;

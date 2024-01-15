@@ -13,9 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.bouncycastle.cms.RecipientId.password;
-
 public class DatabaseThread extends Thread {
 
     /**
@@ -48,7 +45,9 @@ public class DatabaseThread extends Thread {
      */
     @Override
     public void run() {
+        if (containers != -1) {
             if (newUser(connection, ip)) { //Checks if he is a new user.
+                System.out.println("New User!");
                 //New user -> write his data.
                 containers++;
                 addToMeasurements(connection, containers);
@@ -56,6 +55,9 @@ public class DatabaseThread extends Thread {
             } else {
                 updateDatabase();
             }
+        } else {
+            System.out.println("Exception happened according to the database!");
+        }
     }
     /**
      * This method returns the last number of measurements,
@@ -66,14 +68,22 @@ public class DatabaseThread extends Thread {
          try {
              String query = "SELECT COUNT(*) FROM measurements";
              Connection c = takeCredentials();
-             PreparedStatement preparedStatement = c.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery(); //execute the query
-             resultSet.next(); //get the number
-             int count = resultSet.getInt(1); // count rows = the last number of measurement
-             c.close();
-             return count;
+             if (c != null) {
+                 PreparedStatement preparedStatement = c.prepareStatement(query);
+                 ResultSet resultSet = preparedStatement.executeQuery(); //execute the query
+                 resultSet.next(); //get the number
+                 int count = resultSet.getInt(1); // count rows = the last number of measurement
+                 c.close();
+                 return count;
+             } else {
+                 System.out.println("Connection is null. Please try again ...");
+                 return -1;
+             }
+         } catch (SQLException e) {
+             System.out.println("Caught Error: " + e.getMessage());
+             return -1;
          } catch (Exception e) {
-             e.printStackTrace();
+             System.out.println("Exception happened: " + e.getMessage());
              return -1;
          }
     }
@@ -97,9 +107,9 @@ public class DatabaseThread extends Thread {
              String user = list.get(9);
              String password = list.get(11);
              return ClientUpdater.connectToDatabase(driver, url, user, password);
-         } catch (Exception e) {
-             e.printStackTrace();
-             return null;
+         } catch (FileNotFoundException e1) {
+             System.out.println("Caught Error: " + e1.getMessage());
+            return null;
          }
     }
     /**
@@ -116,6 +126,7 @@ public class DatabaseThread extends Thread {
             while ((container = csvReader.readNext()) != null) {
                 if (!container[0].equals("Container ID")) { // Does not insert the header.
                     if (searchInDatabase(container[0])) {
+                        System.out.println("Do not exist");
                         String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
                                 "VALUES (?, ?, ?, ?, ?, ?)";
                         PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -126,6 +137,8 @@ public class DatabaseThread extends Thread {
                         preparedStatement.setInt(6, containers);
                         //sets the ? with actual values.
                         preparedStatement.executeUpdate(); //executes the query
+                    } else {
+                        changeSystemIp(container[0]);
                     }
                 }
             }
@@ -154,9 +167,9 @@ public class DatabaseThread extends Thread {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query); //EXECUTING THE QUERY
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("SQL Exception happened: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Exception Happened: " + e.getMessage());
         }
     }
     /**
@@ -174,14 +187,10 @@ public class DatabaseThread extends Thread {
              ResultSet resultSet = preparedStatement.executeQuery();
              resultSet.next();
              int count = resultSet.getInt(1);
-             System.out.println(count);
-             if (count > 0) { //count of the rows with SystemIp = ip
-                 return false; //not a new user.
-             } else {
-                 return true; //new user.
-             }
+             //count of the rows with SystemIp = ip
+             return count <= 0; //not a new user. -> false
          } catch (Exception e) {
-             e.printStackTrace();
+             System.out.println("Caught Error: " + e.getMessage());
              return false;
          }
     }
@@ -209,14 +218,14 @@ public class DatabaseThread extends Thread {
             }
             return containersInDatabase;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
             return null;
         }
     }
     /**
      * This method returns a list with the index of the .csv
      * file but only columns ID, Name, Image and State.
-     * @return
+     * @return List&lt;String[]&gt;
      */
     public List<String[]> getEverythingFromCsv() {
         try {
@@ -239,8 +248,22 @@ public class DatabaseThread extends Thread {
             csvReader.close();
             return containersInCsv;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Exception Happened: " + e.getMessage());
             return null;
+        }
+    }
+    /**
+     * javadoc
+     */
+    public void changeSystemIp(String containerId) {
+        try {
+            String query = "UPDATE containers SET SystemIp = ? WHERE containerId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, ip);
+            preparedStatement.setString(2, containerId);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -264,7 +287,7 @@ public class DatabaseThread extends Thread {
             //Set the values.
             preparedStatementName.executeUpdate(); //CHANGES THE NAME according to CSV
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -285,7 +308,7 @@ public class DatabaseThread extends Thread {
             preparedStatementState.setString(4, containerId);
             preparedStatementState.executeUpdate(); //CHANGES THE STATE.
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -302,7 +325,7 @@ public class DatabaseThread extends Thread {
             preparedStatementRemove.executeUpdate(); //REMOVES FROM DATABASE IF CONTAINER
             //DOES NOT EXIST IN CSV.
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -331,7 +354,7 @@ public class DatabaseThread extends Thread {
             preparedStatementImplement.setInt(6, containers);
             preparedStatementImplement.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -366,7 +389,7 @@ public class DatabaseThread extends Thread {
                  }
              }
          } catch (Exception e) {
-             e.printStackTrace();
+             System.out.println("Caught Error: " + e.getMessage());
          }
     }
     /**
@@ -376,16 +399,21 @@ public class DatabaseThread extends Thread {
      * @return boolean
      */
     public boolean searchInCsv(String id) {
-         boolean flag = false;
-         List<String[]> containersInCsv = getEverythingFromCsv();
-        for (String[] strings : containersInCsv) {
-            String containerId = strings[0];
-            if (id.equals(containerId)) {
-                flag = true;
-                break;
+        try {
+            boolean flag = false;
+            List<String[]> containersInCsv = getEverythingFromCsv();
+            for (String[] strings : containersInCsv) {
+                String containerId = strings[0];
+                if (id.equals(containerId)) {
+                    flag = true;
+                    break;
+                }
             }
+            return flag;
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
+            return false;
         }
-         return flag;
     }
     /**
      * This method searches if a container
@@ -402,13 +430,9 @@ public class DatabaseThread extends Thread {
              ResultSet resultSet = p.executeQuery();
              resultSet.next();
              int count = resultSet.getInt(1);
-             if (count == 0) {
-                 return false; //Does not exist in database
-             } else {
-                 return true; //Exists in database
-             }
+             return count != 0; //Does not exist in database
          } catch (Exception e) {
-             e.printStackTrace();
+             System.out.println("Caught Error: " + e.getMessage());
              return false;
          }
     }

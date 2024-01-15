@@ -108,7 +108,7 @@ public class MainSceneController implements Initializable {
                 System.out.println("Error: " + response.statusCode() + ", " + response.body());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -131,7 +131,7 @@ public class MainSceneController implements Initializable {
             // Start the server
             server.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
@@ -187,7 +187,6 @@ public class MainSceneController implements Initializable {
      * This method changes the scenes.
      * @param fxmlFile String
      * @param event ActionEvent
-     * @throws IOException
      */
     public void changeTheScenes(String fxmlFile, ActionEvent event) {
         try {
@@ -250,11 +249,14 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void closeNewWindow(ActionEvent event) {
-        id = null;
-        final Node source = (Node) event.getSource();
-        final Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
-
+        try {
+            id = null;
+            final Node source = (Node) event.getSource();
+            final Stage stage = (Stage) source.getScene().getWindow();
+            stage.close();
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
+        }
     }
     /**
      * This method starts the application. It changes the scene from
@@ -264,7 +266,11 @@ public class MainSceneController implements Initializable {
     @FXML
     public void startApp(ActionEvent event) {
         //Goes from Scene1 to Scene2.
-        changeTheScenes("/Scene2.fxml", event);
+        try {
+            changeTheScenes("/Scene2.fxml", event);
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
+        }
     }
     /**
      * This method is used to exit the application
@@ -273,6 +279,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void exitApp(ActionEvent event) {
         System.exit(0);
+
     }
     /**
      * This method is used to go to Images Menu.
@@ -301,6 +308,7 @@ public class MainSceneController implements Initializable {
     public void tapFirstListImages(ActionEvent event) {
         setListImages();
         imagesList = new ListView<>(observableList);
+
     }
     /**
      * This method is used to go to Containers Menu.
@@ -309,6 +317,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void pressContainers(ActionEvent event) {
         changeTheScenes("/containers.fxml", event);
+
     }
     /**
      * This method is used when user clicks
@@ -339,6 +348,7 @@ public class MainSceneController implements Initializable {
     public void tapToSeeYourNetworks(ActionEvent event) {
         setListNetworks();
         networksList = new ListView<>(observableList);
+
     }
 
     /**
@@ -388,14 +398,14 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void startContainer(ActionEvent event) {
-        idForApi = Lists.choiceContainers.getLast();
-        System.out.println(idForApi);
-        if (idForApi != null && !idForApi.equals("NULL")) { //It may be null.
-            implementAPIRequest("START");
-            openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
-            databaseThread();
-            //exitedContainers = new ListView<>(observableList); //Initialize this again so Listing all Over again
-        } //and not below.
+            idForApi = Lists.choiceContainers.getLast();
+            System.out.println(idForApi);
+            if (idForApi != null && !idForApi.equals("NULL")) { //It may be null.
+                implementAPIRequest("START");
+                openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
+                databaseThread();
+                //exitedContainers = new ListView<>(observableList); //Initialize this again so Listing all Over again
+            } //and not below.
     }
     /**
      * This method takes the user to a new scene
@@ -974,7 +984,7 @@ public class MainSceneController implements Initializable {
     /**
      * This method retrieves the id of the last paused
      * container that the user clicked on, on the List View.
-     * @param mouseEvent
+     * @param mouseEvent MouseEvent
      */
     @FXML
     public void retrieveIdToUnpause(MouseEvent mouseEvent) {
@@ -990,7 +1000,7 @@ public class MainSceneController implements Initializable {
     /**
      * This method retrieves the id of the last image
      * that the user clicked on, on the List View.
-     * @param mouseEvent
+     * @param mouseEvent MouseEvent
      */
     @FXML
     public void retrieveIdForImage(MouseEvent mouseEvent) {
@@ -1000,7 +1010,6 @@ public class MainSceneController implements Initializable {
             String c = imagesList.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ImageID: ", 2);
             Lists.choiceImages.add(c1[1]);
-            //imageId = c1[1];
         }
         System.out.println(Lists.choiceImages.getLast());
     }
@@ -1061,7 +1070,7 @@ public class MainSceneController implements Initializable {
             downContainers.setText(String.valueOf(down));
             measure = new ListView<>(observableList);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
 

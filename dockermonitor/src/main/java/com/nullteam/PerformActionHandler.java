@@ -36,7 +36,7 @@ public class PerformActionHandler implements HttpHandler {
             exchange.getResponseBody().write(response.getBytes());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caught Error: " + e.getMessage());
             exchange.sendResponseHeaders(500, 0);
         } finally {
             exchange.close();
