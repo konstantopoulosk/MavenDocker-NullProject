@@ -125,7 +125,7 @@ public class DatabaseThread extends Thread {
             String[] container;
             while ((container = csvReader.readNext()) != null) {
                 if (!container[0].equals("Container ID")) { // Does not insert the header.
-                    if (searchInDatabase(container[0])) {
+                    if (!searchInDatabase(container[0])) {
                         System.out.println("Do not exist");
                         String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
                                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -430,7 +430,11 @@ public class DatabaseThread extends Thread {
              ResultSet resultSet = p.executeQuery();
              resultSet.next();
              int count = resultSet.getInt(1);
-             return count != 0; //Does not exist in database
+             if (count > 0) {
+                 return true; //Exists
+             } else {
+                 return false;
+             }
          } catch (Exception e) {
              System.out.println("Caught Error: " + e.getMessage());
              return false;

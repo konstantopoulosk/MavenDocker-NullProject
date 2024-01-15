@@ -1034,19 +1034,11 @@ public class MainSceneController implements Initializable {
         List<String> list = new ArrayList<>();
         int up = 0, down = 0;
         try {
-            String query = "select measurements.id, containerId, name, image, state from measurements, " +
-                    "containers where containers.SystemIp = ? " +
-                    "and containers.SystemIp = measurements.SystemIp and containers.id = measurements.id " +
-                    "and measurements.date = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, ip);
-            preparedStatement.setDate(2, date);
-            ResultSet output = preparedStatement.executeQuery();
+            ResultSet output = measurementsQuery(date);
             while (output.next()) {
                 String containerId, name, image, state;
                 int id;
                 id = output.getInt("id");
-                System.out.println(id);
                 containerId = output.getString("containerId");
                 name = output.getString("name");
                 image = output.getString("image");
@@ -1073,7 +1065,21 @@ public class MainSceneController implements Initializable {
             System.out.println("Caught Error: " + e.getMessage());
         }
     }
-
+    public ResultSet measurementsQuery(Date date) {
+        try {
+            String query = "select measurements.id, containerId, name, image, state from measurements, " +
+                    "containers where containers.SystemIp = ? " +
+                    "and containers.SystemIp = measurements.SystemIp and containers.id = measurements.id " +
+                    "and measurements.date = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, ip);
+            preparedStatement.setDate(2, date);
+            return preparedStatement.executeQuery();
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
+            return null;
+        }
+    }
     /**
      * This method lists the measurements that the user
      * chose to see in the List View.

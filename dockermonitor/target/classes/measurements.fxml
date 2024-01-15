@@ -41,7 +41,7 @@
             <Font name="Calibri Bold Italic" size="21.0" />
          </font>
       </Label>
-      <Label layoutX="440.0" layoutY="104.0" prefHeight="28.0" prefWidth="150.0" text="e.g. 2024-01-13 16:16:04" textAlignment="CENTER" wrapText="true">
+      <Label layoutX="440.0" layoutY="104.0" prefHeight="28.0" prefWidth="150.0" text="e.g. 2024-01-13" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="Calibri Italic" size="13.0" />
          </font>
