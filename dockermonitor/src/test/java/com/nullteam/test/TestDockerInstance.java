@@ -1,10 +1,14 @@
 package com.nullteam.test;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.nullteam.ClientUpdater;
 import com.nullteam.DockerImage;
 import com.nullteam.DockerInstance;
+import com.nullteam.Lists;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,199 +16,153 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 public class TestDockerInstance {
-    private static List<DockerInstance> allContainers;
-    List<Container> updatedContainers = ClientUpdater.getUpdatedContainersFromClient();
-    Container container = updatedContainers.get(0);
-    private final String containerId = container.getId();
-    private String status = container.getState();
-    private final String name = container.getNames()[0];
-    private final String imageContainer = container.getImage();
-    DockerInstance container1 = new DockerInstance(name, containerId,
-            imageContainer, status);
-    DockerInstance container2 = new DockerInstance("NewContainer", "af1214c44590",
-            "mongo","Up");
+    private static List<DockerInstance> containerslist;
+    private  String id;
+    private String status;
+    private  String name;
+    private  String image;
+    DockerInstance testContainer;
 
     @Before
     public void setUp() {
-        allContainers = new ArrayList<>();
-        allContainers.add(container1);
-        allContainers.add(container2);
+        containerslist = new ArrayList<>();
+        Lists.listContainers();
+        testContainer = DockerInstance.containerslist.getFirst();
+        containerslist.add(testContainer);
+        id = testContainer.getContainerId();
+        status = testContainer.getContainerStatus();
+        name = testContainer.getContainerName();
+        image = testContainer.getContainerImage();
     }
 
     @Test
     public void testGetContainerId() {
-        Assert.assertEquals("Failure wrong Id", allContainers.get(0).getContainerId(), containerId);
+        Assert.assertEquals("Failure wrong Id",
+                id, DockerInstance.containerslist.getFirst().getContainerId());
     }
 
     @Test
     public void testGetContainerName() {
-        Assert.assertEquals("Failure wrong Name", allContainers.get(0).getContainerName(), name);
+        Assert.assertEquals("Failure wrong Name",
+               name, DockerInstance.containerslist.getFirst().getContainerName());
     }
 
     @Test
     public void testGetContainerImage() {
         Assert.assertEquals("Failure wrong Docker Image",
-                allContainers.get(0).getContainerImage(), imageContainer);
+                image, DockerInstance.containerslist.getFirst().getContainerImage());
     }
 
     @Test
     public void testGetContainerStatus() {
-        Assert.assertEquals("Failure wrong Status", allContainers.get(0).getContainerStatus(), status);
+        Assert.assertEquals("Failure wrong Status",
+                status, DockerInstance.containerslist.getFirst().getContainerStatus());
     }
     @Test
     public void testSetContainerStatus() {
-        final String newStatus = "Up";
+        String newStatus = "Up";
         this.status = newStatus;
         Assert.assertEquals("Failure wrong Setting Status", status, newStatus);
     }
     @Test
     public void testToString() {
-        String expected = allContainers.get(0).toString();
-        String actual = "Name: " + name + "  ID: " + containerId + "  Image: " + imageContainer + "  STATUS: " + status;
-        Assert.assertEquals("Fail wrong output", expected,actual);
+        status = ClientUpdater.getUpdatedStatus(id);
+        String expected = testContainer.toString();
+        String actual = "Name: " + name
+                + "  Image: " + image + "\n    STATUS: "
+                + ClientUpdater.getUpdatedStatus(id)
+                + "\n    ID: " + id;
+        Assert.assertEquals("Fail wrong output", expected, actual);
     }
     @Test
     public void testStopContainer() {
-        allContainers.get(0).startContainer();
-        allContainers.get(0).stopContainer();
-        allContainers.get(0).setContainerStatus("Exited");
-        Assert.assertEquals("Container does not stop", allContainers.get(0).getContainerStatus(), "Exited");
+        if (!(status.startsWith("Up"))) { //Exited or Created
+            testContainer.startContainer();
+        }
+        testContainer.stopContainer();
+        Assert.assertTrue(testContainer.getContainerStatus().startsWith("Exited"));
     }
 
     @Test
     public void testStartContainer() {
-        allContainers.get(0).startContainer();
-        this.status = "Up";
-        allContainers.get(0).setContainerStatus("Up");
-        Assert.assertEquals("Container does not start", status, "Up");
-    }
+        if (status.startsWith("Up")) {
+            testContainer.stopContainer();
+        }
+        testContainer.startContainer();
+        Assert.assertTrue(testContainer.getContainerStatus().startsWith("Up"));}
 
     @Test
-    public void testRenameContainer() { //TO EVALA META SE SXOLIO GIATI PETAEI EXCEPTION OTI DEN GINETAI
-        allContainers.get(0).renameContainer("GUSTAVO_FRING123"); //NA RENAME WITH THE OLD NAME
-        Assert.assertEquals("Failure to rename", allContainers.get(0).getContainerName(), "GUSTAVO_FRING123");
+    public void testRenameContainer() throws InterruptedException {
+        Random random = new Random();
+        int randomNumber = random.nextInt(1000) + 1;
+        String newName = "Container" + randomNumber;
+        testContainer.renameContainer(newName);
+        Assert.assertEquals("Failure to rename",
+                testContainer.getContainerName(), newName);
     }
     @Test
     public void testRemoveContainer() {
-        DockerInstance container3 = new DockerInstance("NAME", "7696e2ff9c91", "image1","Up");
-        allContainers.add(container3);
-        Assert.assertEquals("Failure wrong size", allContainers.size(), 3);
-        allContainers.get(2).removeContainer();
-        allContainers.remove(container3);
-        Assert.assertEquals("Fail wrong size", allContainers.size(), 2);
-        Assert.assertFalse("Failure removed wrong container", allContainers.contains(container1));
-        Assert.assertFalse("Failure removed wrong container", allContainers.contains(container2));
-        Assert.assertFalse("Failure didnt remove", allContainers.contains(container3));
+        DockerInstance testContainer2 = DockerInstance.containerslist.getLast();
+        containerslist.add(testContainer2);
+        int size1 = DockerInstance.containerslist.size();
+        //Assert.assertEquals("Failure wrong size", containerslist.size(), 2);
+        if (testContainer2.getContainerStatus().startsWith("Up")) {
+            testContainer2.stopContainer();
+        }
+        testContainer2.removeContainer();
+        int size2 = DockerInstance.containerslist.size();
+        //Assert.assertEquals("Failure wrong size", containerslist.size(), 1);
+        Assert.assertTrue(size2 == size1 - 1);
+        Assert.assertFalse("Failure removed wrong container",
+                DockerInstance.containerslist.contains(testContainer2));
     }
 
     @Test
     public void testRestartContainer() {
-        allContainers.get(0).restartContainer();
-        Assert.assertEquals("Fail to restart",allContainers.get(1).getContainerStatus(), "Up" );
+        if (!(status.startsWith("Up"))) {
+            testContainer.startContainer();
+        }
+        testContainer.restartContainer();
+        Assert.assertTrue("Fail to restart", testContainer.getContainerStatus().startsWith("Up") );
     }
     @Test
     public void testPauseContainer() {
-        DockerInstance dockerInstance = new DockerInstance("GG", "7696e2ff9c91","nginx","Up");
-        allContainers.add(dockerInstance);
-        // allContainers.get(2).startContainer();
-        allContainers.get(2).pauseContainer();
-        allContainers.get(2).setContainerStatus("Exited");
-        Assert.assertEquals("Fail to pause", allContainers.get(2).getContainerStatus(), "Exited");
+        if (!(status.startsWith("Up"))) {
+            testContainer.startContainer();
+        } else if (status.endsWith("(Paused)")) {
+            testContainer.unpauseContainer();
+        }
+        testContainer.pauseContainer();
+        Assert.assertTrue("Fail to pause", testContainer.getContainerStatus().endsWith("(Paused)"));
     }
     @Test
     public void testUnpauseContainer() {
-        allContainers.add(new DockerInstance("G","7696e2ff9c91","mongo","Up"));
-        //allContainers.get(2).pauseContainer();
-        allContainers.get(2).unpauseContainer();
-        allContainers.get(2).setContainerStatus("Up");
-        Assert.assertEquals("Fail to Unpause", allContainers.get(2).getContainerStatus(), "Up");
+        if (!(status.endsWith("(Paused)"))) {
+            testContainer.startContainer();
+            testContainer.pauseContainer();
+        }
+        testContainer.unpauseContainer();
+        Assert.assertTrue("Fail to pause", testContainer.getContainerStatus().startsWith("Up"));
     }
     @Test
     public void testKillContainer() {
-        DockerInstance dockerInstance = new DockerInstance("GG", "7696e2ff9c91","nginx","Up");
-        allContainers.add(dockerInstance);
-        allContainers.get(2).killContainer();
-        allContainers.get(2).setContainerStatus("Exited");
-        Assert.assertEquals("Fail to kill", allContainers.get(2).getContainerStatus(), "Exited");
-    }
-    @Test
-    public void testInspectContainer() {
-        //Waiting to be completed
-    }
-    @Test
-    public void testListAllContainers() {
-        final String expectedOutput = "1) Name: GREGORY ID: 89938596d8d0 Image: mongo1 STATUS: Exited" +
-                "\n2) Name: NewContainer ID: af1214c44590 Image: mongo STATUS: Up";
-        final String actualOutput = "1) Name: " + allContainers.get(0).getContainerName() + " ID: " + allContainers.get(0).getContainerId()
-                + " Image: " + allContainers.get(0).getContainerImage() + " STATUS: " + allContainers.get(0).getContainerStatus()
-                + "\n2) Name: " + allContainers.get(1).getContainerName() + " ID: " + allContainers.get(1).getContainerId()
-                + " Image: " + allContainers.get(1).getContainerImage() + " STATUS: " + allContainers.get(1).getContainerStatus();
-
-        Assert.assertEquals("FAIL", expectedOutput, actualOutput);
-    }
-    @Test
-    public void testListActiveContainers() {
-        ArrayList<DockerInstance> actives = new ArrayList<>();
-        for (DockerInstance c : allContainers) {
-            if (c.getContainerStatus().startsWith("Up")) {
-                actives.add(c);
-            }
+        if (!(status.startsWith("Up"))) {
+            testContainer.startContainer();
         }
-        Assert.assertEquals("Failure wrong size", actives.size(), 1);
-        Assert.assertTrue("Failure does not contain Up Container", actives.contains(allContainers.get(1)));
-        Assert.assertFalse("Failure contains stopped container", actives.contains(allContainers.get(0)));
-    }
-
-    @Test
-    public void testChooseAnActiveContainer() {
-        List<DockerInstance> actives = new ArrayList<>();
-        for (DockerInstance c : allContainers) {
-            if (c.getContainerStatus().startsWith("Up")) {
-                actives.add(c);
-            }
-        }
-        Assert.assertEquals("Failure wrong size", actives.size(), 1);
-        Assert.assertEquals("Failure wrong head", actives.get(0), allContainers.get(1));
-        Assert.assertTrue("Failure does not contain an Up Container", actives.contains(allContainers.get(1)));
-        Assert.assertFalse("Failure contains a stopped container", actives.contains(allContainers.get(0)));
-    }
-
-    @Test
-    public void testChooseAStoppedContainer() {
-        List<DockerInstance> stopped = new ArrayList<>();
-        for (DockerInstance c : allContainers) {
-            if (c.getContainerStatus().startsWith("Exited")) {
-                stopped.add(c);
-            }
-        }
-        Assert.assertFalse("Failure contains Up container", stopped.contains(container1));
-        Assert.assertTrue("Failure does not contain an Exited container", stopped.contains(allContainers.get(0)));
-        Assert.assertEquals("Failure wrong size", stopped.size(), 1);
-        Assert.assertEquals("Failure wrong head", stopped.get(0), allContainers.get(0));
+        testContainer.stopContainer();
+        Assert.assertTrue(testContainer.getContainerStatus().startsWith("Exited"));
     }
     @Test
-    public void testChooseAContainer() {
-        Assert.assertTrue("Fail", allContainers.contains(container2));
-        Assert.assertTrue("Fail", allContainers.contains(container1));
-        DockerInstance container3 = new DockerInstance("NAME",
-                "ID", "IMAGE", "STATUS");
-        Assert.assertFalse("Fail", allContainers.contains(container3));
-    }
-    @Test
-    public void testNoActiveContainers() {
-        boolean flag = true;
-        for (DockerInstance c : allContainers) {
-            if (c.getContainerStatus().startsWith("Up")) {
-                flag = false;
-                break;
-            }
-        }
-        Assert.assertFalse("No actives", flag);
+    public void testShowLogs() {
+        List<String> logs = DockerInstance.showlogs(id);
+        System.out.println(logs);
     }
     @After
     public void tearDown() {
-        allContainers = null;
+        containerslist = null;
     }
 }

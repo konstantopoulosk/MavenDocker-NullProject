@@ -128,6 +128,11 @@ public class DockerImage {
             return null;
         }
     }
+    /**
+     * This method returns a list of all the instances
+     * of an image.
+     * @return List&lt;Container&gt;
+     */
     public List<Container> findContainers() {
         List<Container> containerList = new ArrayList<>();
         List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
@@ -140,7 +145,6 @@ public class DockerImage {
         }
         return containerList;
     }
-
     /**
      * This method removes an image from the DockerCluster
      * and from the image list
@@ -164,7 +168,10 @@ public class DockerImage {
     public static List<String> listUsedImages() {
         List<String> usedImages = new ArrayList<>();
         int num = 0; //Numbers to make the output more User Friendly
+        List<Container> containerList;
         for (DockerImage img : imageslist) {
+            containerList = img.findContainers();
+            /*
             List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
             boolean f = false;
             for (Container c : containers) {
@@ -176,13 +183,19 @@ public class DockerImage {
                 }
             }
             if (f) {
+            */
+            if (containerList != null) {
                 num++;
                 usedImages.add(num + ") " + img);
             }
         }
         return usedImages;
     }
-
+    /**
+     * This method pulls an image from DockerHub
+     * and creates a DockerImage object.
+     * @param imageToPull String
+     */
     public static void pullImage(String imageToPull) {
         try{
             PullImageCmd pullImageCmd = ClientUpdater.getUpdatedClient()

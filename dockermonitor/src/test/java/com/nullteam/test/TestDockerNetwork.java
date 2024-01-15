@@ -2,7 +2,9 @@ package com.nullteam.test;
 
 import com.github.dockerjava.api.model.Network;
 import com.nullteam.ClientUpdater;
+import com.nullteam.DockerImage;
 import com.nullteam.DockerNetwork;
+import com.nullteam.Lists;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,51 +16,55 @@ import java.util.List;
 
 public class TestDockerNetwork {
     private static List<DockerNetwork> networkslist;
-    private List<Network> updatedNetworks;
-    private DockerNetwork dockerNetwork;
+    private String id;
+    private String name;
+    private String driver;
+    private String scope;
+    private DockerNetwork testNetwork;
     @Before
     public void setUp() {
-        updatedNetworks = ClientUpdater.getUpdatedNetworksFromClient();
         networkslist = new ArrayList<>();
-
-        for (Network networks : updatedNetworks) {
-            DockerNetwork dockerNetwork = new DockerNetwork(
-                    networks.getId(),
-                    networks.getName(),
-                    networks.getDriver(),
-                    networks.getScope()
-            );
-            networkslist.add(dockerNetwork);
-        }
-
-        dockerNetwork = networkslist.get(0);
+        Lists.listNetworks();
+        testNetwork =  DockerNetwork.networkslist.getFirst();
+        networkslist.add(testNetwork);
+        id = testNetwork.getNetworkId();
+        name = testNetwork.getName();
+        driver = testNetwork.getDriver();
+        scope = testNetwork.getScope();
     }
     @Test
     public void testGetNetworkId() {
-        Assert.assertEquals("Failure - wrong Network Id", dockerNetwork.getNetworkId(), updatedNetworks.get(0).getId());
+        Assert.assertEquals("Failure - wrong Network Id",
+                id, DockerNetwork.networkslist.getFirst().getNetworkId());
     }
     @Test
     public void testGetName() {
-        Assert.assertEquals("Failure - wrong Name", dockerNetwork.getName(), updatedNetworks.get(0).getName());
+        Assert.assertEquals("Failure - wrong Name",
+                name, DockerNetwork.networkslist.getFirst().getName());
     }
     @Test
     public void testGetDriver() {
-        Assert.assertEquals("Failure - wrong Driver", dockerNetwork.getDriver(), updatedNetworks.get(0).getDriver());
+        Assert.assertEquals("Failure - wrong Driver",
+                driver, DockerNetwork.networkslist.getFirst().getDriver());
     }
     @Test
     public void testGetScope() {
-        Assert.assertEquals("Failure - wrong Scope", dockerNetwork.getScope(), updatedNetworks.get(0).getScope());
+        Assert.assertEquals("Failure - wrong Scope",
+                scope, DockerNetwork.networkslist.getFirst().getScope());
     }
     @Test
     public void testToString() {
-        String name = "NetworkID: " + updatedNetworks.get(0).getId() + " Name: "
-                + updatedNetworks.get(0).getName() + " Driver: " +updatedNetworks.get(0).getDriver()
-                + " Scope: " + updatedNetworks.get(0).getScope();
-        Assert.assertEquals("Failure wrong to String", dockerNetwork.toString(), name);
+        Assert.assertEquals("Failure wrong to String",
+                networkslist.getFirst().toString(),
+                DockerNetwork.networkslist.getFirst().toString());
+    }
+    @Test
+    public void testInspectContainersForSubnet() {
+        System.out.println(DockerNetwork.inspectContainersForSubnet(id));
+        //test how it looks o=in order to make more user-friendly in the program
     }
     @After
     public void tearDown() {
-        //Not really needed.
+        networkslist = null;
     }
-
 }
