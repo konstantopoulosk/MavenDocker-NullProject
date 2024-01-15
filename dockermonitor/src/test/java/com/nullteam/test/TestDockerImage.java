@@ -85,7 +85,7 @@ public class TestDockerImage {
     public void testRemoveImage() {
         DockerImage dockerImage2 = DockerImage.imageslist.getLast();
         imageslist.add(dockerImage2);
-        int imgSize = imageslist.size();
+        int imgSize = DockerImage.imageslist.size();
         List<Container> containers = dockerImage2.findContainers();
         if (containers != null) {
             for (Container c : containers) {
@@ -101,8 +101,10 @@ public class TestDockerImage {
             }
         }
         dockerImage2.removeImage();
-        int newImgSize = imageslist.size();
+        int newImgSize = DockerImage.imageslist.size();
         Assert.assertEquals(newImgSize, imgSize - 1);
+        Assert.assertFalse("Failure removed wrong image",
+                DockerImage.imageslist.contains(dockerImage2));
     }
     @Test
     public void testListUsedImages() {

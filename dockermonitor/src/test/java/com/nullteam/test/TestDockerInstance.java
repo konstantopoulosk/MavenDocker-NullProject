@@ -80,7 +80,7 @@ public class TestDockerInstance {
     }
     @Test
     public void testStopContainer() {
-        if (status.startsWith("Exited")) {
+        if (!(status.startsWith("Up"))) { //Exited or Created
             testContainer.startContainer();
         }
         testContainer.stopContainer();
@@ -106,20 +106,24 @@ public class TestDockerInstance {
     }
     @Test
     public void testRemoveContainer() {
-        DockerInstance testContainer2 = DockerInstance.containerslist.get(1);
+        DockerInstance testContainer2 = DockerInstance.containerslist.getLast();
         containerslist.add(testContainer2);
-        Assert.assertEquals("Failure wrong size", containerslist.size(), 2);
+        int size1 = DockerInstance.containerslist.size();
+        //Assert.assertEquals("Failure wrong size", containerslist.size(), 2);
         if (testContainer2.getContainerStatus().startsWith("Up")) {
             testContainer2.stopContainer();
         }
         testContainer2.removeContainer();
-        Assert.assertEquals("Failure wrong size", containerslist.size(), 1);
-        Assert.assertFalse("Failure removed wrong container", containerslist.contains(testContainer2));
+        int size2 = DockerInstance.containerslist.size();
+        //Assert.assertEquals("Failure wrong size", containerslist.size(), 1);
+        Assert.assertTrue(size2 == size1 - 1);
+        Assert.assertFalse("Failure removed wrong container",
+                DockerInstance.containerslist.contains(testContainer2));
     }
 
     @Test
     public void testRestartContainer() {
-        if (status.startsWith("Exited")) {
+        if (!(status.startsWith("Up"))) {
             testContainer.startContainer();
         }
         testContainer.restartContainer();
@@ -127,7 +131,7 @@ public class TestDockerInstance {
     }
     @Test
     public void testPauseContainer() {
-        if (status.startsWith("Exited")) {
+        if (!(status.startsWith("Up"))) {
             testContainer.startContainer();
         } else if (status.endsWith("(Paused)")) {
             testContainer.unpauseContainer();
@@ -146,26 +150,15 @@ public class TestDockerInstance {
     }
     @Test
     public void testKillContainer() {
-        if (status.startsWith("Exited")) {
+        if (!(status.startsWith("Up"))) {
             testContainer.startContainer();
         }
         testContainer.stopContainer();
         Assert.assertTrue(testContainer.getContainerStatus().startsWith("Exited"));
     }
     @Test
-    public void testShowLogs() throws InterruptedException {
-        List<String> logs = new ArrayList<>();
-        DockerClient client = ClientUpdater.getUpdatedClient();
-        client.logContainerCmd(id)
-                .withStdOut(true)
-                .withStdErr(true)
-                .withTailAll()
-                .exec(new LogContainerResultCallback() {
-                    @Override
-                    public void onNext(Frame frame) {
-                        logs.add(new String(frame.getPayload()));
-                    }
-                }).awaitCompletion();
+    public void testShowLogs() {
+        List<String> logs = DockerInstance.showlogs(id);
         System.out.println(logs);
     }
     @After
