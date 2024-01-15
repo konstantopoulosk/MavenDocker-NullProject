@@ -170,8 +170,6 @@ public class DockerImage {
         int num = 0; //Numbers to make the output more User Friendly
         List<Container> containerList;
         for (DockerImage img : imageslist) {
-            containerList = img.findContainers();
-            /*
             List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
             boolean f = false;
             for (Container c : containers) {
@@ -183,8 +181,6 @@ public class DockerImage {
                 }
             }
             if (f) {
-            */
-            if (containerList != null) {
                 num++;
                 usedImages.add(num + ") " + img);
             }

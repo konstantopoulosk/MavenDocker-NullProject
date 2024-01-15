@@ -41,10 +41,8 @@ public class DockerMonitor extends Thread {
         this.currentData = list;
     }
     /**
-     * This method writes in containers.csv,
-     * info of every container.
-     * Container ID, Name, Image,
-     * Status, Command, Created.
+     * This method writes in containers.csv, info of every container.
+     * Container ID, Name, Image, Status, Command, Created.
      */
     public void writeCsv() { //Write/update the csv file
         final String csvFilePath = "containers.csv";
@@ -95,8 +93,7 @@ public class DockerMonitor extends Thread {
         }
     }
     /**
-     * This method checks if
-     * two lists are equal.
+     * This method checks if two lists are equal.
      * (Current Data and Last State)
      * @param list1 List&lt;String[]&gt;
      * @param list2 List&lt;String[]&gt;
