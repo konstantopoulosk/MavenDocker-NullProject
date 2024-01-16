@@ -102,10 +102,10 @@ public class DatabaseThread extends Thread {
                  String data = reader.nextLine();
                  list.add(data);
              }
-             String driver = list.get(5);
-             String url = list.get(7);
-             String user = list.get(9);
-             String password = list.get(11);
+             String driver = list.get(13);
+             String url = list.get(15);
+             String user = list.get(17);
+             String password = list.get(19);
              return ClientUpdater.connectToDatabase(driver, url, user, password);
          } catch (FileNotFoundException e1) {
              System.out.println("Caught Error: " + e1.getMessage());
