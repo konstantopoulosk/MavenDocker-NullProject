@@ -20,12 +20,8 @@ public class App extends Application {
         Parent root;
         try {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Home.fxml")));
-            // Icon
-            FileInputStream inputStream = new FileInputStream("Icon.png");
-            Image icon = new Image(inputStream);
-            // End Icon
             Scene scene = new Scene(root);
-            primaryStage.getIcons().add(icon);
+            primaryStage.getIcons().add(getIcon());
             primaryStage.setTitle("Docker Project");
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
@@ -33,6 +29,21 @@ public class App extends Application {
         } catch (IOException e) {
             System.out.println("System IO exception thrown!");
             System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @return icon Image
+     */
+    public static Image getIcon() {
+        try {
+            /* Getting the Image for the Icon. */
+            FileInputStream inputStream = new FileInputStream("Icon.png");
+            return new Image(inputStream); // Return the Icon
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
+            return null;
         }
     }
     public static void main(String[] args) {

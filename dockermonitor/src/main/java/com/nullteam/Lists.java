@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Network;
+import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,4 +74,19 @@ public class Lists {
                     n.getDriver(), n.getScope());
         }
     }
+    /**
+     * This Method sets the field containersList.
+     */
+    public static ListView<String> setListContainers(ListView<String> containersList) {
+        int num = 0;
+        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
+            num++;
+            containersList.getItems().add(num + ") " + dockerInstance.toString());
+        }
+        if (num == 0) {
+            containersList.getItems().add("NULL");
+        }
+        return containersList;
+    }
+
 }

@@ -16,12 +16,14 @@ import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Box;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.swing.text.BoxView;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -212,8 +214,9 @@ public class MainSceneController implements Initializable {
     public void openNewWindow(ActionEvent event, String fxml, String title) {
         try {
             Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
-            Stage stage = new Stage();
-            stage.setTitle(title);
+            Stage stage = new Stage(); //Stage
+            stage.setTitle(title); //Title of the Stage.
+            stage.getIcons().add(App.getIcon());
             stage.setScene(new Scene(root1, 600, 400));
             stage.show();
         } catch (CannotOpenNewWindow e) {
@@ -232,10 +235,11 @@ public class MainSceneController implements Initializable {
     public void openConfirmationWindow(ActionEvent event, String title, String fxml) {
         try {
             Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
-            Stage stage = new Stage();
-            stage.setTitle(title);
-            stage.setScene(new Scene(root1, 300, 150));
-            stage.show();
+            Stage stage = new Stage(); //Stage
+            stage.setTitle(title); //Title of the stage
+            stage.getIcons().add(App.getIcon()); //Added the Icon.
+            stage.setScene(new Scene(root1, 300, 150)); //Setting the Scene.
+            stage.show(); //Showing the Scene.
         } catch (CannotOpenNewWindow cannotOpenNewWindow) {
             System.out.println("Caught Error: " + cannotOpenNewWindow.getMessage());
         } catch (Exception e) {
@@ -327,7 +331,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToListContainers(ActionEvent event) {
         System.out.println("You tapped to see the containers");
-        setListContainers();
+        containersList = Lists.setListContainers(containersList);
         databaseThread();
         containersList = new ListView<>(observableList);
     }
@@ -458,7 +462,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToListContainersToRename(ActionEvent event) {
-        setListContainers();
+        containersList = Lists.setListContainers(containersList);
         databaseThread();
     }
 
@@ -791,19 +795,6 @@ public class MainSceneController implements Initializable {
         }
         if (i == 0) {
             imagesInUse.getItems().add("NULL");
-        }
-    }
-    /**
-     * This Method sets the field containersList.
-     */
-    public void setListContainers() {
-        int num = 0;
-        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
-            num++;
-            containersList.getItems().add(num + ") " + dockerInstance.toString());
-        }
-        if (num == 0) {
-            containersList.getItems().add("NULL");
         }
     }
     /**
