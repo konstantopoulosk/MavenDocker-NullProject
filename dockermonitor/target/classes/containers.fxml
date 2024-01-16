@@ -199,21 +199,21 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ListView>
-            <Button layoutX="223.0" layoutY="14.0" mnemonicParsing="false" onAction="#tapToListContainers" prefHeight="42.0" prefWidth="150.0" text="VIEW CONTAINERS">
+            <Button layoutX="233.0" layoutY="14.0" mnemonicParsing="false" onAction="#tapToListContainers" prefHeight="42.0" prefWidth="150.0" text="Preview Containers" textFill="#162dc1">
                <font>
-                  <Font name="Calibri Bold Italic" size="16.0" />
+                  <Font name="Calibri Light" size="14.0" />
                </font>
                <cursor>
-                  <Cursor fx:constant="HAND" />
+                  <Cursor fx:constant="HAND"/>
                </cursor>
             </Button>
             <Line endX="776.4000244140625" layoutX="19.0" layoutY="61.0" startX="-100.0" />
-            <Button layoutX="422.0" layoutY="14.0" mnemonicParsing="false" onAction="#measurements" prefHeight="42.0" prefWidth="150.0" text="MEASUREMENTS">
+            <Button layoutX="422.0" layoutY="14.0" mnemonicParsing="false" onAction="#measurements" prefHeight="42.0" prefWidth="150.0" text="Measurements" textFill="#162dc1">
                <font>
-                  <Font name="Calibri Bold Italic" size="16.0" />
+                  <Font name="Calibri Light" size="14.0" />
                </font>
                <cursor>
-                  <Cursor fx:constant="HAND" />
+                  <Cursor fx:constant="HAND"/>
                </cursor>
             </Button>
          </children></AnchorPane>
