@@ -19,7 +19,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root;
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Scene1.fxml")));
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Home.fxml")));
             // Icon
             FileInputStream inputStream = new FileInputStream("Icon.png");
             Image icon = new Image(inputStream);
