@@ -20,7 +20,7 @@
             <DropShadow />
          </effect>
       </ListView>
-      <Button layoutX="41.0" layoutY="358.0" mnemonicParsing="false" onAction="#tapToSeeImagesInUse" prefHeight="27.0" prefWidth="198.0" text="Tap to See Used Images" textFill="#162dc1">
+      <Button layoutX="41.0" layoutY="358.0" mnemonicParsing="false" onAction="#tapToSeeImagesInUse" prefHeight="27.0" prefWidth="198.0" text="View Used Images" textFill="#162dc1">
          <font>
             <Font name="Calibri Light" size="14.0" />
          </font>

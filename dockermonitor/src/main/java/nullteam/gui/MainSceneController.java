@@ -544,7 +544,7 @@ public class MainSceneController implements Initializable {
      * @param event ActionEvent
      */
     @FXML
-    public void tapToSeeRestartContainers(ActionEvent event) {
+    public void tapToSeePausedContainers(ActionEvent event) {
         pausedContainers = Lists.setListPausedContainers(pausedContainers);
     }
     /**

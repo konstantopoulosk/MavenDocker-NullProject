@@ -68,7 +68,7 @@
                   </AnchorPane>
                </items>
             </SplitPane>
-            <Button layoutX="394.0" layoutY="440.0" mnemonicParsing="false" onAction="#tapToSeeYourNetworks" prefHeight="27.0" prefWidth="200.0" text="Tap here to see the Networks" textFill="#162dc1">
+            <Button layoutX="394.0" layoutY="440.0" mnemonicParsing="false" onAction="#tapToSeeYourNetworks" prefHeight="27.0" prefWidth="200.0" text="View Networks" textFill="#162dc1">
                <font>
                   <Font name="Calibri Light" size="14.0" />
                </font>

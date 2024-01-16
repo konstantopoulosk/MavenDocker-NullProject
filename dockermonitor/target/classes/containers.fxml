@@ -199,7 +199,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ListView>
-            <Button layoutX="233.0" layoutY="14.0" mnemonicParsing="false" onAction="#tapToListContainers" prefHeight="42.0" prefWidth="150.0" text="Preview Containers" textFill="#162dc1">
+            <Button layoutX="233.0" layoutY="14.0" mnemonicParsing="false" onAction="#tapToListContainers" prefHeight="42.0" prefWidth="150.0" text="View Containers" textFill="#162dc1">
                <font>
                   <Font name="Calibri Light" size="14.0" />
                </font>

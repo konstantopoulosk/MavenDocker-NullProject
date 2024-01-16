@@ -14,7 +14,7 @@
                 <DropShadow />
             </effect>
         </ListView>
-        <Button layoutX="422.0" layoutY="129.0" mnemonicParsing="false" onAction="#tapToSeeSubnets" prefHeight="27.0" prefWidth="177.0" text="Tap here to see the subnets" textFill="#162dc1">
+        <Button layoutX="422.0" layoutY="129.0" mnemonicParsing="false" onAction="#tapToSeeSubnets" prefHeight="27.0" prefWidth="177.0" text="View Subnets" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>

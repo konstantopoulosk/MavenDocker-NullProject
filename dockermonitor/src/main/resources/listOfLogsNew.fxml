@@ -14,7 +14,7 @@
                 <DropShadow />
             </effect>
         </ListView>
-        <Button layoutX="423.0" layoutY="130.0" mnemonicParsing="false" onAction="#tapToSeeTheLogs" prefHeight="27.0" prefWidth="177.0" text="Tap here to see the logs" textFill="#162dc1">
+        <Button layoutX="423.0" layoutY="130.0" mnemonicParsing="false" onAction="#tapToSeeTheLogs" prefHeight="27.0" prefWidth="177.0" text="View Logs" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>

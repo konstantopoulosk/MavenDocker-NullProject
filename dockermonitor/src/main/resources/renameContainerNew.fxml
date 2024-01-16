@@ -49,7 +49,7 @@
                 <Cursor fx:constant="HAND"/>
             </cursor>
         </Button>
-        <Button layoutX="386.0" layoutY="54.0" mnemonicParsing="false" onAction="#tapToListContainersToRename" prefHeight="27.0" prefWidth="150.0" text="Tap to See Availables" textFill="#162dc1">
+        <Button layoutX="386.0" layoutY="54.0" mnemonicParsing="false" onAction="#tapToListContainersToRename" prefHeight="27.0" prefWidth="150.0" text="View Containers" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>

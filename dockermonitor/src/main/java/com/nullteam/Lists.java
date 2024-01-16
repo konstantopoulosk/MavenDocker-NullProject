@@ -84,7 +84,8 @@ public class Lists {
             containersList.getItems().add(num + ") " + dockerInstance.toString());
         }
         if (num == 0) {
-            containersList.getItems().add("NULL");
+            containersList.getItems().add("You do not have any Containers.");
+            containersList.getItems().add("---NULL---");
         }
         return containersList;
     }
@@ -103,7 +104,8 @@ public class Lists {
             num++;
         }
         if (i == 0) {
-            exitedContainers.getItems().add("NULL");
+            exitedContainers.getItems().add("All Containers are Running.");
+            exitedContainers.getItems().add("---NULL---");
         }
         return exitedContainers;
     }
@@ -120,7 +122,8 @@ public class Lists {
             num++;
         }
         if (i == 0) {
-            activeContainers.getItems().add("NULL");
+            activeContainers.getItems().add("All containers are Exited.");
+            activeContainers.getItems().add("---NULL---");
         }
         return activeContainers;
     }
@@ -137,7 +140,8 @@ public class Lists {
             num++;
         }
         if (i == 0) {
-            pausedContainers.getItems().add("NULL");
+            pausedContainers.getItems().add("There are no Paused Containers.");
+            pausedContainers.getItems().add("---NULL---");
         }
         return pausedContainers;
     }
@@ -151,7 +155,8 @@ public class Lists {
             imagesList.getItems().add(num + ") " + img.toString());
         }
         if (num == 0) {
-            imagesList.getItems().add("NULL");
+            imagesList.getItems().add("You do not have any Images.");
+            imagesList.getItems().add("---NULL---");
         }
         return imagesList;
     }
@@ -166,7 +171,8 @@ public class Lists {
             imagesInUse.getItems().add(usedImage);
         }
         if (i == 0) {
-            imagesInUse.getItems().add("NULL");
+            imagesInUse.getItems().add("You do not use any Images.");
+            imagesInUse.getItems().add("---NULL---");
         }
         return imagesInUse;
     }
@@ -180,7 +186,8 @@ public class Lists {
             volumesList.getItems().add(num + ") " + v.toString() + "\n");
         }
         if (num == 0) {
-            volumesList.getItems().add("NULL");
+            volumesList.getItems().add("No Volumes for you.");
+            volumesList.getItems().add("---NULL---");
         }
         return volumesList;
     }
@@ -194,7 +201,8 @@ public class Lists {
             networksList.getItems().add(num + ") " + n.toString());
         }
         if (num == 0) {
-            networksList.getItems().add("NULL");
+            networksList.getItems().add("No Networks for you.");
+            networksList.getItems().add("---NULL---");
         }
         return networksList;
     }
@@ -210,7 +218,8 @@ public class Lists {
             measure.getItems().add("--> " + s);
         }
         if (i == 0) {
-            measure.getItems().add("NULL");
+            measure.getItems().add("No Measurements that Day.");
+            measure.getItems().add("---NULL---");
         }
         return measure;
     }
@@ -225,7 +234,8 @@ public class Lists {
             logsList.getItems().add(log);
         }
         if (i == 0) {
-            logsList.getItems().add("NULL");
+            logsList.getItems().add("No Logs for this Container.");
+            logsList.getItems().add("---NULL---");
         }
         return logsList;
     }
@@ -238,7 +248,8 @@ public class Lists {
                         id));
         subnetsList.getItems().add(d.toString());
         if (subnetsList.getItems().isEmpty()) {
-            subnetsList.getItems().add("NULL");
+            subnetsList.getItems().add("No Subnets for this Container.");
+            subnetsList.getItems().add("---NULL---");
         }
         return subnetsList;
     }

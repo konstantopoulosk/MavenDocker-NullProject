@@ -20,7 +20,7 @@
                 <Font name="Calibri Bold Italic" size="21.0" />
             </font>
         </Label>
-        <Button layoutX="224.0" layoutY="363.0" mnemonicParsing="false" onAction="#tapToListImages" prefHeight="27.0" prefWidth="150.0" text="Tap to See Availables" textFill="#162dc1">
+        <Button layoutX="224.0" layoutY="363.0" mnemonicParsing="false" onAction="#tapToListImages" prefHeight="27.0" prefWidth="150.0" text="View Images" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>

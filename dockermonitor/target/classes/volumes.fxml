@@ -68,7 +68,7 @@
                   </AnchorPane>
                </items>
             </SplitPane>
-            <Button layoutX="394.0" layoutY="444.0" mnemonicParsing="false" onAction="#tapToSeeVolumes" prefHeight="27.0" prefWidth="200.0" text="Tap here to see the Volumes" textFill="#162dc1">
+            <Button layoutX="394.0" layoutY="444.0" mnemonicParsing="false" onAction="#tapToSeeVolumes" prefHeight="27.0" prefWidth="200.0" text="View Volumes" textFill="#162dc1">
                <font>
                   <Font name="Calibri Light" size="14.0" />
                </font>
