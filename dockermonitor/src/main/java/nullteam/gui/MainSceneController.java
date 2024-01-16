@@ -181,7 +181,7 @@ public class MainSceneController implements Initializable {
         try {
             databaseThread.join();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Caught Error: " + e.getMessage());
         }
     }
     /**
