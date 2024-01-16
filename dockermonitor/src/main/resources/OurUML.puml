@@ -156,9 +156,7 @@ class PerformActionHandler {
     +PerformActionHandler(BlockingQueue<ActionRequest>, Gson)
     +handle(HttpExchange): void
 }
-class MainSceneController {
-
-}
+class MainSceneController {}
 
 'Composition'
 ActionRequest <|--* PerformActionHandler
