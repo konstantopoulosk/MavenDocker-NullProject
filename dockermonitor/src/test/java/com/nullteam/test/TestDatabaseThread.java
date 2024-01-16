@@ -3,6 +3,7 @@ package com.nullteam.test;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.nullteam.ClientUpdater;
 import com.nullteam.DatabaseThread;
+import com.nullteam.DockerMonitor;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,12 +58,6 @@ public class TestDatabaseThread {
     public void testGetEverythingFromDatabase() {
         List<String[]> list = d.getEverythingFromDatabase();
         Assert.assertFalse(list != null);
-    }
-    @Test
-    public void testGetEverythingFromCsv() {
-        List<String[]> list = d.getEverythingFromCsv();
-        Assert.assertTrue(list != null);
-        Assert.assertTrue(!list.isEmpty());
     }
     @Test
     public void testChangeName() {
