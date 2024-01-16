@@ -156,4 +156,46 @@ class PerformActionHandler {
     +PerformActionHandler(BlockingQueue<ActionRequest>, Gson)
     +handle(HttpExchange): void
 }
+class MainSceneController {
+
+}
+
+'Composition'
+ActionRequest <|--* PerformActionHandler
+ActionRequest <|--* ExecutorThread
+'Dependency'
+ActionRequest <|.. MainSceneController
+
+ClientUpdater <|.. DatabaseThread
+ClientUpdater <|.. Lists
+ClientUpdater <|.. DockerImage
+ClientUpdater <|.. DockerInstance
+ClientUpdater <|.. DockerMonitor
+ClientUpdater <|.. MainSceneController
+
+DatabaseThread <|.. MainSceneController
+
+DockerImage <|.. ExecutorThread
+DockerImage <|.. Lists
+DockerImage <|.. MainSceneController
+
+DockerInstance <|.. ExecutorThread
+DockerInstance <|.. Lists
+DockerInstance <|.. DockerImage
+DockerInstance <|.. MainSceneController
+
+DockerMonitor <|.. MainSceneController
+
+DockerNetwork <|.. Lists
+DockerNetwork <|.. MainSceneController
+
+DockerVolume <|.. Lists
+DockerVolume <|.. MainSceneController
+
+ExecutorThread <|.. MainSceneController
+
+Lists <|.. MainSceneController
+
+PerformActionHandler <|.. MainSceneController
+
 @enduml
