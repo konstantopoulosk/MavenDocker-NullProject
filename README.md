@@ -15,4 +15,4 @@ pscale_pw_t9e4g5RAZPOgUZzh785Ls72bPwGDWGRIf7UdHmdq2DE
 ### Execution
 ## How to use our application
 ### UML
-[Our UML Diagram](dockermonitor/src/main/resources/OurUML.puml)
+[Our UML Diagram](dockermonitor/src/main/resources/UML.png)
