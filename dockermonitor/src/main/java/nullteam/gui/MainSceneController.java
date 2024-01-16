@@ -239,7 +239,7 @@ public class MainSceneController implements Initializable {
         } catch (CannotOpenNewWindow cannotOpenNewWindow) {
             System.out.println("Caught Error: " + cannotOpenNewWindow.getMessage());
         } catch (Exception e) {
-            System.out.println("Exception Happened ...");
+            System.out.println("Exception Happened ... 123");
         }
     }
     /**
@@ -348,7 +348,6 @@ public class MainSceneController implements Initializable {
     public void tapToSeeYourNetworks(ActionEvent event) {
         setListNetworks();
         networksList = new ListView<>(observableList);
-
     }
 
     /**
@@ -398,14 +397,14 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void startContainer(ActionEvent event) {
-            idForApi = Lists.choiceContainers.getLast();
-            System.out.println(idForApi);
-            if (idForApi != null && !idForApi.equals("NULL")) { //It may be null.
-                implementAPIRequest("START");
-                openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
-                databaseThread();
-                //exitedContainers = new ListView<>(observableList); //Initialize this again so Listing all Over again
-            } //and not below.
+        idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
+        if (idForApi != null && !idForApi.equals("NULL")) { //It may be null.
+            implementAPIRequest("START");
+            openConfirmationWindow(event, "Starting Container Properties", "startContainerConfirmation.fxml");
+            databaseThread();
+            //exitedContainers = new ListView<>(observableList); //Initialize this again so Listing all Over again
+        } //and not below.
     }
     /**
      * This method takes the user to a new scene
