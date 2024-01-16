@@ -10,9 +10,17 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PullResponseItem;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import nullteam.gui.CannotOpenNewWindow;
+import nullteam.gui.MainSceneController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DockerImage {
     /**
@@ -192,6 +200,7 @@ public class DockerImage {
      * and creates a DockerImage object.
      * @param imageToPull String
      */
+    @FXML
     public static void pullImage(String imageToPull) {
         try{
             PullImageCmd pullImageCmd = ClientUpdater.getUpdatedClient()
@@ -218,13 +227,18 @@ public class DockerImage {
             }
             System.out.println("Image pulled successfully");
         } catch (Exception e) {
-            System.out.println("""
-                    Exception due to one of these factors:
-                    -No Internet
-                    -Not signed in DockerHub
-                    -Image does not exist
-                    -Image already in your DockerCluster"""); //could be more reasons
-            System.out.println("Caught Error: " + e.getMessage());
+            try {
+                Parent root1 = FXMLLoader.load(Objects.requireNonNull(MainSceneController
+                        .class.getClassLoader().getResource("imagePullErrorMessage.fxml")));
+                Stage stage = new Stage();
+                stage.setTitle("Error while pulling image...");
+                stage.setScene(new Scene(root1, 300, 150));
+                stage.show();
+            } catch (CannotOpenNewWindow cannotOpenNewWindow) {
+                System.out.println("Caught Error: " + cannotOpenNewWindow.getMessage());
+            } catch (Exception e1) {
+                System.out.println("Exception Happened ...");
+            }
         }
     }
 }
