@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-
+<?import javafx.scene.text.*?>
 <SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="789.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="516.0" prefWidth="121.0">
@@ -32,26 +28,41 @@
                            <font>
                               <Font name="Calibri Light" size="14.0" />
                            </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND"/>
+                           </cursor>
                         </Button>
                         <Button layoutX="27.0" layoutY="234.0" mnemonicParsing="false" onAction="#pressNetworks" prefHeight="42.0" prefWidth="94.0" text="Networks" textFill="#162dc1">
                            <font>
                               <Font name="Calibri Light" size="14.0" />
                            </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND"/>
+                           </cursor>
                         </Button>
                         <Button layoutX="27.0" layoutY="304.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="42.0" prefWidth="94.0" text="Exit App" textFill="#162dc1">
                            <font>
                               <Font name="Calibri Light" size="14.0" />
                            </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND"/>
+                           </cursor>
                         </Button>
                         <Button layoutX="27.0" layoutY="94.0" mnemonicParsing="false" onAction="#pressImages" prefHeight="42.0" prefWidth="94.0" text="Images" textFill="#162dc1">
                            <font>
                               <Font name="Calibri Light" size="14.0" />
                            </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND"/>
+                           </cursor>
                         </Button>
                         <Button layoutX="27.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressContainers" prefHeight="42.0" prefWidth="94.0" text="Containers" textFill="#162dc1">
                            <font>
                               <Font name="Calibri Light" size="14.0" />
                            </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND"/>
+                           </cursor>
                         </Button>
                      </children>
                   </AnchorPane>
@@ -61,6 +72,9 @@
                <font>
                   <Font name="Calibri Light" size="14.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND"/>
+               </cursor>
             </Button>
             <ListView fx:id="networksList" layoutX="294.0" layoutY="94.0" prefHeight="327.0" prefWidth="400.0">
                <effect>

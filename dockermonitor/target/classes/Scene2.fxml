@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
-
 <AnchorPane centerShape="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="789.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
     <children>
         <TextField alignment="TOP_LEFT" disable="true" layoutX="14.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.7" prefHeight="42.0" prefWidth="763.0" promptText="Welcome!" text="                                                               MAIN MENU">
@@ -15,26 +15,41 @@
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
         </Button>
         <Button layoutX="410.0" layoutY="220.0" mnemonicParsing="false" onAction="#pressNetworks" prefHeight="86.0" prefWidth="188.0" text="Networks" textFill="#162dc1">
            <font>
               <Font name="Calibri Light" size="14.0" />
            </font>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
         </Button>
         <Button layoutX="184.0" layoutY="220.0" mnemonicParsing="false" onAction="#pressImages" prefHeight="86.0" prefWidth="188.0" text="Images" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
         </Button>
         <Button layoutX="410.0" layoutY="124.0" mnemonicParsing="false" onAction="#pressVolumes" prefHeight="86.0" prefWidth="188.0" text="Volumes" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
         </Button>
         <Button layoutX="665.0" layoutY="471.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="32.0" prefWidth="109.0" text="Exit App" textFill="#162dc1">
             <font>
                 <Font name="Calibri Light" size="14.0" />
             </font>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
         </Button>
     </children>
 </AnchorPane>

@@ -152,7 +152,6 @@ public class MainSceneController implements Initializable {
                 });
     }
     //API CONFIGURATION
-
     //Initialize Method is necessary
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -301,7 +300,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToListImages(ActionEvent event) {
-        setListImages();
+        imagesList = Lists.setListImages(imagesList);
     }
 
     /** This method is used when user clicks
@@ -310,7 +309,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapFirstListImages(ActionEvent event) {
-        setListImages();
+        imagesList = Lists.setListImages(imagesList);
         imagesList = new ListView<>(observableList);
 
     }
@@ -350,7 +349,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToSeeYourNetworks(ActionEvent event) {
-        setListNetworks();
+        networksList = Lists.setListNetworks(networksList);
         networksList = new ListView<>(observableList);
     }
 
@@ -370,7 +369,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToSeeVolumes(ActionEvent event) {
-        setListVolumes();
+        volumesList = Lists.setListVolumes(volumesList);
         volumesList = new ListView<>(observableList);
     }
     /**
@@ -391,7 +390,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToSeeExitedContainers(ActionEvent event) {
-        setListExitedContainers();
+        exitedContainers = Lists.setListExitedContainers(exitedContainers);
     }
 
     /**
@@ -443,7 +442,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToSeeActiveContainers(ActionEvent event) {
-        setListActiveContainers();
+        activeContainers = Lists.setListActiveContainers(activeContainers);
     }
     /**
      * This method takes the user to a new scene that has a
@@ -546,7 +545,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToSeeRestartContainers(ActionEvent event) {
-        setListPausedContainers();
+        pausedContainers = Lists.setListPausedContainers(pausedContainers);
     }
     /**
      * This method takes the user to a new scene
@@ -570,7 +569,7 @@ public class MainSceneController implements Initializable {
             implementAPIRequest("PAUSE");
             openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
             databaseThread();
-            pausedContainers = new ListView<>(observableList);
+            activeContainers = new ListView<>(observableList);
         }
     }
     /**
@@ -653,7 +652,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void tapToSeeTheLogs(ActionEvent event) {
         System.out.println(id);
-        setListLogs();
+        logsList = Lists.setListLogs(logsList, id);
         logsList = new ListView<>(observableList);
     }
     /**
@@ -686,7 +685,8 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToSeeSubnets() {
-        setListSubnets();
+        System.out.println(id);
+        subnetsList = Lists.setListSubnets(subnetsList, id);
         subnetsList = new ListView<>(observableList);
     }
     /**
@@ -716,7 +716,6 @@ public class MainSceneController implements Initializable {
                 System.out.println("Something Is Wrong!");
             }
     }
-
     /**
      * THis method takes the user to a new scene with
      * a list view of the current images.
@@ -780,145 +779,9 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void tapToSeeImagesInUse(ActionEvent event) {
-        setImagesInUse();
+        imagesInUse = Lists.setImagesInUse(imagesInUse);
         imagesInUse = new ListView<>(observableList);
     }
-    /**
-     * This method sets the field imagesInUse.
-     */
-    public void setImagesInUse() {
-        int i = 0;
-        List<String> usedImages = DockerImage.listUsedImages();
-        for (String usedImage : usedImages) {
-            i++;
-            imagesInUse.getItems().add(usedImage);
-        }
-        if (i == 0) {
-            imagesInUse.getItems().add("NULL");
-        }
-    }
-    /**
-     * This Method sets the field imagesList.
-     */
-    public void setListImages() {
-        int num = 0; //Numbers to make the output more User Friendly
-        for (DockerImage img : DockerImage.imageslist) {
-            num++;
-            imagesList.getItems().add(num + ") " + img.toString());
-        }
-        if (num == 0) {
-            imagesList.getItems().add("NULL");
-        }
-    }
-
-    /**
-     * This Method sets the field exitedContainers.
-     */
-    public void setListExitedContainers() {
-        int num = 0;
-        int i = 0;
-        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
-            if (DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Exited")
-            || DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Created")) {
-                i++;
-                exitedContainers.getItems().add(i + ") " + dockerInstance.toString());
-            }
-            num++;
-        }
-        if (i == 0) {
-            exitedContainers.getItems().add("NULL");
-        }
-    }
-    /**
-     * This Method sets the field activeContainers.
-     */
-    public void setListActiveContainers() {
-        int i = 0, num = 0;
-        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
-            if (DockerInstance.containerslist.get(num).getContainerStatus().startsWith("Up")) {
-                i++;
-                activeContainers.getItems().add(i + ") " + dockerInstance.toString());
-            }
-            num++;
-        }
-        if (i == 0) {
-            activeContainers.getItems().add("NULL");
-        }
-    }
-
-    /**
-     * This Method sets the field pausedContainerss.
-     */
-    public void setListPausedContainers() {
-        int num = 0, i = 0;
-        for (DockerInstance dockerInstance : DockerInstance.containerslist) {
-            if (DockerInstance.containerslist.get(num).getContainerStatus().endsWith("(Paused)")) {
-                i++;
-                pausedContainers.getItems().add(i + ") " + dockerInstance.toString());
-            }
-            num++;
-        }
-        if (i == 0) {
-            pausedContainers.getItems().add("NULL");
-        }
-    }
-    /**
-     * This Method sets the field logsList.
-     */
-    public void setListLogs() {
-        int i = 0;
-        List<String> containerLogs = DockerInstance.showlogs(id);
-        for (String log : containerLogs) {
-            i++;
-            logsList.getItems().add(log);
-        }
-        if (i == 0) {
-            logsList.getItems().add("NULL");
-        }
-    }
-    /**
-     * This Method sets the field subnetsList.
-     */
-    public void setListSubnets() {
-        List<Container> containers = ClientUpdater.getUpdatedContainersFromClient();
-        String containerId = containers.getFirst().getId();
-        //temporary to check
-        StringBuilder d = DockerNetwork.formatSubnetsSettings(
-                DockerNetwork.inspectContainersForSubnet(
-                        containerId));
-        subnetsList.getItems().add(d.toString());
-        if (subnetsList.getItems().isEmpty()) {
-            subnetsList.getItems().add("NULL");
-        }
-    }
-    /**
-     * This Method sets the field volumesList.
-     */
-    public void setListVolumes() {
-        int num = 0; //Numbers to make the output more User Friendly
-        for (DockerVolume v : DockerVolume.volumeslist) {
-            num++;
-            volumesList.getItems().add(num + ") " + v.toString() + "\n");
-        }
-        if (num == 0) {
-            volumesList.getItems().add("NULL");
-        }
-    }
-
-    /**
-     * This Method sets the field networksList.
-     */
-    public void setListNetworks() {
-        int num = 0;
-        for (DockerNetwork n : DockerNetwork.networkslist) {
-            num++;
-            networksList.getItems().add(num + ") " + n.toString());
-        }
-        if (num == 0) {
-            networksList.getItems().add("NULL");
-        }
-    }
-
     /**
      * This method retrieves the id of the last exited
      * container that user clicked on, on the List View.
@@ -933,10 +796,7 @@ public class MainSceneController implements Initializable {
             String[] c1 = c.split("ID: ", 2);
             Lists.choiceContainers.add(c1[1]);
         }
-        //System.out.println(exitedContainers.getSelectionModel().getSelectedItem());
-        //System.out.println(containerId);
     }
-
     /**
      * This method retrieves the id of the last active container
      * that user clicked on, on the List View.
@@ -953,7 +813,6 @@ public class MainSceneController implements Initializable {
             //containerId = c1[1];
         }
     }
-
     /**
      * This method retrieves the id of the last container
      * that user clicked on, on the List View
@@ -970,7 +829,6 @@ public class MainSceneController implements Initializable {
             //containerId = c1[1];
         }
     }
-
     /**
      * This method retrieves the id of the last paused
      * container that the user clicked on, on the List View.
@@ -1013,6 +871,7 @@ public class MainSceneController implements Initializable {
     private Text downContainers;
     @FXML
     public void measurements(ActionEvent event) {
+        databaseThread();
         changeTheScenes("/measurements.fxml", event);
     }
     @FXML
@@ -1041,13 +900,14 @@ public class MainSceneController implements Initializable {
                         + " State: " + state;
 
                 list.add(s);
-                if (state.startsWith("running")) {
+                if (state.startsWith("running")
+                    || state.endsWith("paused")) {
                     up++;
                 } else {
                     down++;
                 }
             }
-            setListMeasure(list);
+            measure = Lists.setListMeasure(list, measure);
             upContainers.setText(String.valueOf(up));
             downContainers.setText(String.valueOf(down));
             measure = new ListView<>(observableList);
@@ -1068,21 +928,6 @@ public class MainSceneController implements Initializable {
         } catch (Exception e) {
             System.out.println("Caught Error: " + e.getMessage());
             return null;
-        }
-    }
-    /**
-     * This method lists the measurements that the user
-     * chose to see in the List View.
-     * @param list List&lt;String&gt;
-     */
-    public void setListMeasure(List<String> list) {
-        int i = 0;
-        for (String s : list) {
-            i++;
-            measure.getItems().add("--> " + s);
-        }
-        if (i == 0) {
-            measure.getItems().add("NULL");
         }
     }
 }
