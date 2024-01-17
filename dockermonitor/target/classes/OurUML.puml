@@ -149,6 +149,17 @@ class Lists {
     +listContainers(): void
     +listVolumes(): void
     +listNetworks(): void
+    +setListContainers(ListView<String>): ListView<String>
+    +setListExitedContainers(ListView<String>): ListView<String>
+    +setListActiveContainers(ListView<String>): ListView<String>
+    +setListPausedContainers(ListView<String>): ListView<String>
+    +setListImages(ListView<String>): ListView<String>
+    +setListImagesInUse(ListView<String>): ListView<String>
+    +setListVolumes(ListView<String>): ListView<String>
+    +setListNetworks(ListView<String>): ListView<String>
+    +setListMeasure(ListView<String>): ListView<String>
+    +setListLogs(ListView<String>): ListView<String>
+    +setListSubnets(ListView<String>): ListView<String>
 }
 class PerformActionHandler {
     #actionQueue: BlockingQueue<ActionRequest>

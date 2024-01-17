@@ -1,3 +1,3 @@
 "Container ID","Name","Image","State"
-"d298298ba939a445fa4a534b756edbdb520b7d34e352910dce5952758a72b164","/nifty_haibt","nginx","running"
-"8d0c8088eb4fba3c8527c82d7b4d8a11a9d78aec208416aad1e5734878840a06","/beautiful_keldysh","nginx","running"
+"d298298ba939a445fa4a534b756edbdb520b7d34e352910dce5952758a72b164","/nifty_haibt","nginx","exited"
+"8d0c8088eb4fba3c8527c82d7b4d8a11a9d78aec208416aad1e5734878840a06","/beautiful_keldysh","nginx","exited"
