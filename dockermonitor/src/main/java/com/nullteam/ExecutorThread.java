@@ -23,15 +23,17 @@ public class ExecutorThread extends Thread {
     public void run() {
         while (true) {
             try {
-                //System.out.println("Executor is running ...");
+                System.out.println("Executor is running ...");
                 // Dequeue the ActionRequest from the actionQueue
                 ActionRequest actionRequest = actionQueue.take();
                 // Extract the actionType and containerId from the ActionRequest
                 String actionType = actionRequest.getActionType();
                 String containerId = actionRequest.getContainerId();
                 if(!actionRequest.getNewName().isEmpty()) { //checking if there is a new name, so we use rename instead
+                    System.out.println("Rename Container: " + containerId);
                     renameContainer(containerId, actionRequest.getNewName());
                 } else {
+                    System.out.println("Everything Else But Rename.");
                     performDockerAction(actionType, containerId);
                 }
             } catch (InterruptedException e) {
@@ -56,29 +58,38 @@ public class ExecutorThread extends Thread {
                 break;
             case "STOP": //stop
                 stopContainer(containerId);
+                System.out.println("Stopped Container: " + containerId);
                 break;
             case "RENAME":
                 renameContainer(containerId,name2Rename);
+                System.out.println("Renamed Container: " + containerId);
             case "REMOVE":
                 removeContainer(containerId);
+                System.out.println("Removed Container: " + containerId);
                 break;
             case "RESTART":
                 restartContainer(containerId);
+                System.out.println("Restarted Container: " + containerId);
                 break;
             case "PAUSE":
                 pauseContainer(containerId);
+                System.out.println("Paused Container: " + containerId);
                 break;
             case "UNPAUSE":
                 unpauseContainer(containerId);
+                System.out.println("Unpaused Container: " + containerId);
                 break;
             case "KILL":
                 killContainer(containerId);
+                System.out.println("Killed Container: " + containerId);
                 break;
             case "IMPLEMENT":
                 implementImage(containerId); //This is of course image id
+                System.out.println("Implemented Image: " + containerId);
                 break;
             case "REMOVEIMAGE":
                 removeImage(containerId); //Also image id
+                System.out.println("Removed Image: " + containerId);
                 break;
             default:
                 System.out.println("Invalid action type");

@@ -1,4 +1,2 @@
-
-*.csv
-*.class
-*.class
+# Hide keys from version control.
+database;

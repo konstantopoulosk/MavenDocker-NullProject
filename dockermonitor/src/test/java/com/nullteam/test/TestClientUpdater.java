@@ -85,21 +85,16 @@ public class TestClientUpdater {
     public void testConnectToDatabase() {
         List<String> list = new ArrayList<>();
         try {
-            File file = new File("README.md").getAbsoluteFile();
+            File file = new File("database").getAbsoluteFile();
             Scanner reader = new Scanner(file);
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
                 list.add(data);
             }
-            String driver = list.get(5);
-            String url = list.get(7);
-            String user = list.get(9);
-            String password = list.get(11);
-            connection = ClientUpdater.connectToDatabase(
-                    driver, url, user, password
+            String user = list.getFirst();
+            String password = list.get(1);
+            connection = ClientUpdater.connectToDatabase(user, password
             );
-            Assert.assertTrue(driver != null);
-            Assert.assertTrue(url != null);
             Assert.assertTrue(user != null);
             Assert.assertTrue(password != null);
             Assert.assertTrue(connection != null);

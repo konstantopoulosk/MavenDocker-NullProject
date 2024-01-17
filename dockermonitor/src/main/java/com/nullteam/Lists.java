@@ -30,10 +30,10 @@ public class Lists {
     public static void listImage() {
         List<Image> images =
                 ClientUpdater.getUpdatedImagesFromClient();
-        for (Image i : images) {
-            new DockerImage(i.getRepoDigests()[0],
-                    "latest", i.getId());
-        }
+            for (Image i : images) {
+                new DockerImage(i.getRepoDigests()[0],
+                        "latest", i.getId());
+            }
     }
     /**
      * This method lists the updated containers
@@ -43,10 +43,10 @@ public class Lists {
     public static void listContainers() {
         List<Container> containers =
                 ClientUpdater.getUpdatedContainersFromClient();
-        for (Container c : containers) {
-            new DockerInstance(c.getNames()[0], c.getId(),
-                    c.getImage(), c.getStatus());
-        }
+            for (Container c : containers) {
+                new DockerInstance(c.getNames()[0], c.getId(),
+                        c.getImage(), c.getStatus());
+            }
     }
     /**
      * This method lists the updated volumes
@@ -56,10 +56,10 @@ public class Lists {
     public static void listVolumes() {
         List<InspectVolumeResponse> volumes =
                 ClientUpdater.getUpdatedVolumesFromClient();
-        for (InspectVolumeResponse v : volumes) {
-            new DockerVolume(v.getDriver(), v.getName(),
-                    DockerVolume.createdAt(v.getName()), v.getMountpoint());
-        }
+            for (InspectVolumeResponse v : volumes) {
+                new DockerVolume(v.getDriver(), v.getName(),
+                        DockerVolume.createdAt(v.getName()), v.getMountpoint());
+            }
     }
     /**
      * This method lists the updated networks
@@ -69,10 +69,10 @@ public class Lists {
     public static void listNetworks() {
         List<Network> networks =
                 ClientUpdater.getUpdatedNetworksFromClient();
-        for (Network n : networks) {
-            new DockerNetwork(n.getId(), n.getName(),
-                    n.getDriver(), n.getScope());
-        }
+            for (Network n : networks) {
+                new DockerNetwork(n.getId(), n.getName(),
+                        n.getDriver(), n.getScope());
+            }
     }
     /**
      * This Method sets the field containersList.

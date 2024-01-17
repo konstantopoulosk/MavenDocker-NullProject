@@ -189,12 +189,14 @@ public final class ClientUpdater {
      * username and password.
      * @return Connection
      */
-    public static Connection connectToDatabase(String driver, String url, String user, String password) {
+    public static Connection connectToDatabase(String user, String password) {
         Connection connection = null;
+        String driver = "com.mysql.cj.jdbc.Driver";
+        String url = "jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY";
         try {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
-            System.out.println(connection);
+            System.out.println("Successful Connection to the Database: " + connection);
         } catch (Exception e) {
             System.out.println("Caught Error: " + e.getMessage());
         }

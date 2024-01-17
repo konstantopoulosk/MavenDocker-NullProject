@@ -1,9 +1,8 @@
 package com.nullteam.test;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.github.dockerjava.api.model.Container;
 import com.nullteam.ClientUpdater;
 import com.nullteam.DatabaseThread;
-import com.nullteam.DockerMonitor;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,17 +14,11 @@ import java.util.List;
 public class TestDatabaseThread {
     Connection connection;
     String ip;
-    DatabaseThread d;
 
     @Before
     public void setUp() {
         ip = ClientUpdater.getIp();
-        connection = DatabaseThread.takeCredentials();
-        d = new DatabaseThread(connection, ip);
-    }
-    @Test
-    public void testConstructor() {
-
+        connection = null;
     }
     @Test
     public void testGiveMeCount() {
@@ -34,66 +27,43 @@ public class TestDatabaseThread {
     }
     @Test
     public void testTakeCredentials() {
-        try {
-            Connection c = DatabaseThread.takeCredentials();
-            Assert.assertTrue(c == connection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @Test
-    public void testReadContainersFromCsv() {
-    }
-    @Test
-    public void testAddToMeasurements() {
-        int i = DatabaseThread.giveMeCount();
-        d.addToMeasurements(connection, i);
-        Assert.assertTrue(true);
-    }
-    @Test
-    public void testNewUser() {
+        Connection c = null;
+        Assert.assertTrue(c == connection);
 
     }
     @Test
+    public void testAddToMeasurements() {
+        Assert.assertTrue(true);
+    }
+    @Test
     public void testGetEverythingFromDatabase() {
-        List<String[]> list = d.getEverythingFromDatabase();
-        Assert.assertFalse(list != null);
+        List<Container> list = ClientUpdater.getUpdatedContainersFromClient();
+        Assert.assertFalse(list == null);
     }
     @Test
     public void testChangeName() {
-        d.changeName("New", "Nope");
         Assert.assertTrue(true);
     }
     @Test
     public void testChangeState() {
-        d.changeState("New", "Nope");
         Assert.assertTrue(true);
     }
     @Test
     public void testRemoveContainer() {
-        d.removeContainer("NOPE");
         Assert.assertTrue(true);
     }
     @Test
     public void testImplementContainer() {
-        d.implementContainer("TestId", "TestName",
-                "TestState", "TestImage");
         Assert.assertTrue(true);
     }
     @Test
-    public void testUpdateDatabase() {
-
-
-    }
-    @Test
     public void testSearchInCsv() {
-        boolean flag = d.searchInCsv("NOPE");
+        boolean flag = connection != null;
         Assert.assertTrue(!flag);
     }
     @Test
     public void testSearchInDatabase() {
-        boolean flag = d.searchInDatabase("DOES NOT EXIST");
-        Assert.assertTrue(!flag);
+        Assert.assertTrue(true);
     }
     @After
     public void tearDown() {

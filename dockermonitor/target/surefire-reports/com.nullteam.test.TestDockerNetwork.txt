@@ -1,10 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.nullteam.test.TestDockerNetwork
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.702 s <<< FAILURE! - in com.nullteam.test.TestDockerNetwork
-testToString(com.nullteam.test.TestDockerNetwork)  Time elapsed: 0.281 s  <<< FAILURE!
-org.junit.ComparisonFailure: 
-Failure wrong to String expected:<...3d769b95cdf20f469033[
-    Name: host   Driver: host  ] Scope: local> but was:<...3d769b95cdf20f469033[ Name: host Driver: host] Scope: local>
-	at com.nullteam.test.TestDockerNetwork.testToString(TestDockerNetwork.java:57)
-
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.403 s -- in com.nullteam.test.TestDockerNetwork

@@ -156,6 +156,18 @@ public class MainSceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!isPressed) {
+            if (!DockerImage.imageslist.isEmpty()) {
+                System.out.println("List not empty");
+                for (DockerImage i : DockerImage.imageslist) {
+                    DockerImage.imageslist.remove(i);
+                }
+            }
+            if (!DockerInstance.containerslist.isEmpty()) {
+                System.out.println("List Not Empty");
+                for (DockerInstance i : DockerInstance.containerslist) {
+                    DockerInstance.containerslist.remove(i);
+                }
+            }
             connection = DatabaseThread.takeCredentials();
             Lists.listContainers();
             Lists.listImage(); //Creating objects of DockerImage class to use DockerImage.imagesList later
@@ -176,8 +188,9 @@ public class MainSceneController implements Initializable {
      * This method runs the Database Thread.
      */
     public void databaseThread() {
+        System.out.println("This is a measurement for the database!");
         DatabaseThread databaseThread = new DatabaseThread(connection, ip);
-        databaseThread.run();
+        databaseThread.start();
         try {
             databaseThread.join();
         } catch (InterruptedException e) {
@@ -531,6 +544,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void restartContainer(ActionEvent event) {
         idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
         if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("RESTART");
             openConfirmationWindow(event, "Restart Container Properties", "restartContainerConfirmation.fxml");
@@ -565,12 +579,13 @@ public class MainSceneController implements Initializable {
     @FXML
     public void pauseContainer(ActionEvent event) {
         idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
         if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("PAUSE");
             openConfirmationWindow(event, "Pause Container Properties", "pauseContainerConfirmation.fxml");
             databaseThread();
-            activeContainers = new ListView<>(observableList);
         }
+        activeContainers = new ListView<>(observableList);
     }
     /**
      * This method takes the user to a new scene where he/she
@@ -589,12 +604,13 @@ public class MainSceneController implements Initializable {
     @FXML
     public void unpauseContainer(ActionEvent event) {
         idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
         if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("UNPAUSE");
             openConfirmationWindow(event, "Unpause Container Properties", "unpauseContainerConfirmation.fxml");
             databaseThread();
-            pausedContainers = new ListView<>(observableList); //THIS SHOWS PAUSED CONTAINERS!!!!
         }
+        pausedContainers = new ListView<>(observableList); //THIS SHOWS PAUSED CONTAINERS!!!!
     }
     /**
      * This method takes the user to a new scene where he/she
@@ -613,12 +629,14 @@ public class MainSceneController implements Initializable {
     @FXML
     public void killContainer(ActionEvent event) {
         idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
         if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("KILL");
             openConfirmationWindow(event, "Kill Container Properties", "killContainerConfirmation.fxml");
             databaseThread();
             activeContainers = new ListView<>(observableList);
         }
+        activeContainers = new ListView<>(observableList);
     }
     /**
      * This method takes the user to a new scene
@@ -637,6 +655,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyToSeeTheLogs(ActionEvent event) {
         idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
         if (idForApi != null && !idForApi.equals("NULL")) {
             openNewWindow(event, "listOfLogsNew.fxml", "List of Logs");
             //Opens a new Window with a List View of the Logs
@@ -672,6 +691,7 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyToSeeSubnets(ActionEvent event) {
         idForApi = Lists.choiceContainers.getLast();
+        System.out.println(idForApi);
         if (idForApi != null && !idForApi.equals("NULL")) {
             openNewWindow(event, "listOfSubnetsNew.fxml", "List of Subnets");
             //Opens a new window to show the subnets
@@ -715,6 +735,7 @@ public class MainSceneController implements Initializable {
                 System.out.println(imageToPull);
                 System.out.println("Something Is Wrong!");
             }
+            imagesList = new ListView<>(observableList);
     }
     /**
      * THis method takes the user to a new scene with
@@ -739,6 +760,7 @@ public class MainSceneController implements Initializable {
             openConfirmationWindow(event, "Implement Image Properties", "imageImplementConfirmation.fxml");
             databaseThread();
         }
+        imagesList = new ListView<>(observableList);
     }
     /**
      * This method takes the user to a new scene with a
@@ -757,11 +779,13 @@ public class MainSceneController implements Initializable {
     @FXML
     public void applyRemove(ActionEvent event) {
         idForApi = Lists.choiceImages.getLast();
+        System.out.println(idForApi);
         if (idForApi != null && !idForApi.equals("NULL")) {
             implementAPIRequest("REMOVEIMAGE");
             openConfirmationWindow(event, "Remove Image Properties", "imageRemoveConfirmation.fxml");
             databaseThread();
         }
+        imagesList = new ListView<>(observableList);
     }
     /**
      * This method takes the user to a new scene with a

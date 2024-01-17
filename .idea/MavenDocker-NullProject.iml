@@ -8,5 +8,28 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$PATH_TO_FX$/javafx.graphics.jar!/" />
+          <root url="jar://$PATH_TO_FX$/javafx.controls.jar!/" />
+          <root url="jar://$PATH_TO_FX$/javafx.base.jar!/" />
+          <root url="jar://$PATH_TO_FX$/javafx.fxml.jar!/" />
+          <root url="jar://$PATH_TO_FX$/javafx-swt.jar!/" />
+          <root url="jar://$PATH_TO_FX$/javafx.media.jar!/" />
+          <root url="jar://$PATH_TO_FX$/javafx.web.jar!/" />
+          <root url="jar://$PATH_TO_FX$/javafx.swing.jar!/" />
+          <root url="file://$MODULE_DIR$" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/dockermonitor/src/main/java" />
+          <root url="file://$MODULE_DIR$/dockermonitor/src/test/java" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="javafx-sdk-21.0" level="project" />
   </component>
 </module>

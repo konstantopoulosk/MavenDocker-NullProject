@@ -47,12 +47,13 @@ public class DatabaseThread extends Thread {
     public void run() {
         if (containers != -1) {
             if (newUser(connection, ip)) { //Checks if he is a new user.
-                System.out.println("New User!");
+                System.out.println("New User of our App!");
                 //New user -> write his data.
                 containers++;
                 addToMeasurements(connection, containers);
                 readContainersFromCsv(connection, containers);
             } else {
+                System.out.println("Welcome Back: " + connection);
                 updateDatabase();
             }
         } else {
@@ -96,17 +97,15 @@ public class DatabaseThread extends Thread {
     public static Connection takeCredentials() {
          List<String> list = new ArrayList<>();
          try {
-             File file = new File("README.md").getAbsoluteFile();
+             File file = new File("database").getAbsoluteFile();
              Scanner reader = new Scanner(file);
              while (reader.hasNextLine()) {
                  String data = reader.nextLine();
                  list.add(data);
              }
-             String driver = list.get(13);
-             String url = list.get(15);
-             String user = list.get(17);
-             String password = list.get(19);
-             return ClientUpdater.connectToDatabase(driver, url, user, password);
+             String user = list.get(0);
+             String password = list.get(1);
+             return ClientUpdater.connectToDatabase(user, password);
          } catch (FileNotFoundException e1) {
              System.out.println("Caught Error: " + e1.getMessage());
             return null;
@@ -126,18 +125,25 @@ public class DatabaseThread extends Thread {
             while ((container = csvReader.readNext()) != null) {
                 if (!container[0].equals("Container ID")) { // Does not insert the header.
                     if (!searchInDatabase(container[0])) {
-                        System.out.println("Do not exist");
+                        System.out.println("Container with id: " + container[0] + "does not exist in database.");
+                        System.out.println("Adding it ...");
                         String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
                                 "VALUES (?, ?, ?, ?, ?, ?)";
                         PreparedStatement preparedStatement = connection.prepareStatement(query);
-                        for (int i = 0; i < 4; i++) {
-                            preparedStatement.setString(i + 1, container[i]); //easier with for loop.
-                        } //fewer lines.
+                        try {
+                            System.out.println(container.length);
+                            for (int i = 0; i < 4; i++) {
+                                preparedStatement.setString(i + 1, container[i]); //easier with for loop.
+                            } //fewer lines.
+                        } catch (Exception e) {
+                            System.out.println("Caught Error: " + e.getMessage());
+                        }
                         preparedStatement.setString(5, ip);
                         preparedStatement.setInt(6, containers);
                         //sets the ? with actual values.
                         preparedStatement.executeUpdate(); //executes the query
                     } else {
+                        /* Not a new User, some bug happened (e.g. SystemIp Changed) so change user's SystemIp. */
                         changeSystemIp(container[0]);
                     }
                 }
@@ -151,6 +157,7 @@ public class DatabaseThread extends Thread {
             System.out.println("CSV Exception: " + e2.getMessage());
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
+            System.out.println(e.getLocalizedMessage());
         }
     }
     /**
@@ -378,13 +385,14 @@ public class DatabaseThread extends Thread {
                      changeName(name, id);
                      changeState(state, id);
                  } else {
-                     //NOT EXIST
+                     //NOT EXIST IN DATABASE
                      implementContainer(id, name, state, image);
                  }
              }
              for (String[] c : containersInDatabase) {
                  String id = c[0];
                  if (!searchInCsv(id)) {
+                     //NOT EXIST IN CSV BUT EXISTS IN DATABASE
                      removeContainer(id);
                  }
              }

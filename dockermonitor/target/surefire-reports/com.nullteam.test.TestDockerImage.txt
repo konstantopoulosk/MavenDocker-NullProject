@@ -1,24 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.nullteam.test.TestDockerImage
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 1, Errors: 4, Skipped: 0, Time elapsed: 0.369 s <<< FAILURE! - in com.nullteam.test.TestDockerImage
-testGetImageId(com.nullteam.test.TestDockerImage)  Time elapsed: 0.039 s  <<< ERROR!
-java.lang.ArrayIndexOutOfBoundsException: Index 1 out of bounds for length 1
-	at com.nullteam.test.TestDockerImage.testGetImageId(TestDockerImage.java:37)
-
-testToString(com.nullteam.test.TestDockerImage)  Time elapsed: 0 s  <<< ERROR!
-java.lang.ArrayIndexOutOfBoundsException: Index 1 out of bounds for length 1
-	at com.nullteam.test.TestDockerImage.testToString(TestDockerImage.java:42)
-
-testListAllImages(com.nullteam.test.TestDockerImage)  Time elapsed: 0.002 s  <<< ERROR!
-java.lang.ArrayIndexOutOfBoundsException: Index 1 out of bounds for length 1
-	at com.nullteam.test.TestDockerImage.testListAllImages(TestDockerImage.java:53)
-
-testGetImageTag(com.nullteam.test.TestDockerImage)  Time elapsed: 0.006 s  <<< FAILURE!
-org.junit.ComparisonFailure: Failure - wrong Tag expected:<[l]atest> but was:<[L]atest>
-	at com.nullteam.test.TestDockerImage.testGetImageTag(TestDockerImage.java:32)
-
-testConstructor(com.nullteam.test.TestDockerImage)  Time elapsed: 0.001 s  <<< ERROR!
-java.lang.ArrayIndexOutOfBoundsException: Index 1 out of bounds for length 1
-	at com.nullteam.test.TestDockerImage.testConstructor(TestDockerImage.java:47)
-
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.760 s -- in com.nullteam.test.TestDockerImage

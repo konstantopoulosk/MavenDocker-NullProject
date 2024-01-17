@@ -1,25 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.nullteam.test.TestDockerInstance
 -------------------------------------------------------------------------------
-Tests run: 21, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 11.524 s <<< FAILURE! - in com.nullteam.test.TestDockerInstance
-testChooseAStoppedContainer(com.nullteam.test.TestDockerInstance)  Time elapsed: 0.127 s  <<< FAILURE!
-java.lang.AssertionError: Failure does not contain an Exited container
-	at com.nullteam.test.TestDockerInstance.testChooseAStoppedContainer(TestDockerInstance.java:183)
-
-testToString(com.nullteam.test.TestDockerInstance)  Time elapsed: 0.153 s  <<< FAILURE!
-org.junit.ComparisonFailure: 
-Fail wrong output expected:<.../GUSTAVO_FRING123  I[mage: nginx  STATUS: running
-ID: ad952480f9f28d0992ec70b5942efc8b5d3b8b8aaa50551f22a14db4ebcc5c39]> but was:<.../GUSTAVO_FRING123  I[D: ad952480f9f28d0992ec70b5942efc8b5d3b8b8aaa50551f22a14db4ebcc5c39  Image: nginx  STATUS: running]>
-	at com.nullteam.test.TestDockerInstance.testToString(TestDockerInstance.java:66)
-
-testListAllContainers(com.nullteam.test.TestDockerInstance)  Time elapsed: 0.139 s  <<< FAILURE!
-org.junit.ComparisonFailure: 
-FAIL expected:<1) Name: [GREGORY ID: 89938596d8d0 Image: mongo1 STATUS: Exited]
-2) Name: NewContain...> but was:<1) Name: [/GUSTAVO_FRING123 ID: ad952480f9f28d0992ec70b5942efc8b5d3b8b8aaa50551f22a14db4ebcc5c39 Image: nginx STATUS: running]
-2) Name: NewContain...>
-	at com.nullteam.test.TestDockerInstance.testListAllContainers(TestDockerInstance.java:145)
-
-testRemoveContainer(com.nullteam.test.TestDockerInstance)  Time elapsed: 0.224 s  <<< FAILURE!
-java.lang.AssertionError: Failure removed wrong container
-	at com.nullteam.test.TestDockerInstance.testRemoveContainer(TestDockerInstance.java:97)
-
+Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.543 s -- in com.nullteam.test.TestDockerInstance
