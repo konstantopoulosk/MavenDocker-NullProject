@@ -1,2 +1,3 @@
-t9b9751irjev0yc1ntqr
-pscale_pw_3egAKBcxw9lOXQkR0jsSqyk2DbMGEQv9TCj88YLgu2K
+jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY
+ikq09y6zusu89t73yfjo
+pscale_pw_unGb9OEZhZKsaCnZ378JpEuvnwTi9RhbFNGBQ3qzvwg

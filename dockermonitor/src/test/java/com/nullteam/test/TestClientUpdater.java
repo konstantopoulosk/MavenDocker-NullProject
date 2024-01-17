@@ -91,9 +91,10 @@ public class TestClientUpdater {
                 String data = reader.nextLine();
                 list.add(data);
             }
-            String user = list.getFirst();
-            String password = list.get(1);
-            connection = ClientUpdater.connectToDatabase(user, password
+            String url = list.getFirst();
+            String user = list.get(1);
+            String password = list.get(2);
+            connection = ClientUpdater.connectToDatabase(url, user, password
             );
             Assert.assertTrue(user != null);
             Assert.assertTrue(password != null);

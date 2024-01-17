@@ -103,9 +103,10 @@ public class DatabaseThread extends Thread {
                  String data = reader.nextLine();
                  list.add(data);
              }
-             String user = list.get(0);
-             String password = list.get(1);
-             return ClientUpdater.connectToDatabase(user, password);
+             String url = list.get(0);
+             String user = list.get(1);
+             String password = list.get(2);
+             return ClientUpdater.connectToDatabase(url, user, password);
          } catch (FileNotFoundException e1) {
              System.out.println("Caught Error: " + e1.getMessage());
             return null;
