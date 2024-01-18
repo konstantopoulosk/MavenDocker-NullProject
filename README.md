@@ -19,16 +19,12 @@ git@github.com:konstantopoulosk/MavenDocker-NullProject.git
 ```sh
 mvn clean install
 ```
-```sh
-mvn mvn build
-```
 ### Running
 1. Inside `MavenDocker-NullProject`:
 ```sh
 copy c [path]\MavenDocker-NullProject\dockermonitor\target
 ```
 2. Run the app inside `dockermonitor/target`:
-
 ```sh
 java -jar nullteamproject-3.3.4-shaded.jar
 ```
@@ -50,3 +46,5 @@ Examples:
 - JavaFX graphics
 - JavaDoc comments
 
+## Promotion
+Check our [promotional video](https://www.youtube.com/watch?v=FigAYyGkeN8) 😉
