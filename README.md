@@ -3,8 +3,8 @@
 This project monitors a Docker Cluster and keeps track of all measurements made inside the Cluster    
 by storing them in a database. It also provides a simple Graphical User Interface through which the user can   
 see the Docker Cluster and interact with it with several actions on both Docker Instances and Docker Images:  
-- [x] **start - stop - rename - restart - pause - unpause - kill - remove - show logs - show subnet**  
-- [x] **pull - implement - remove**
+✔️ **start - stop - rename - restart - pause - unpause - kill - remove - show logs - show subnet**  
+✔️ **pull - implement - remove**
 ## How to use our application
 ### Prerequisites
 * Make sure Docker Desktop is downloaded and running in the background
