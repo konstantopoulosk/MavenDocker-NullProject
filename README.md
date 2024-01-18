@@ -6,20 +6,32 @@ see the Docker Cluster and interact with it with several actions on both Docker 
 - [x] **start - stop - rename - restart - pause - unpause - kill - remove - show logs - show subnet**  
 - [x] **pull - implement - remove**
 ## How to use our application
+### Prerequisites
+* Make sure Docker Desktop is downloaded and running in the background
+* Have at least two images and two containers in your Docker Cluster
+* Internet connection
 ### Building
-----edw prepei na mpei pws kanei `build`----  
-
-From here our program takes the Database Credentials to access our remote database.
-* _DRIVER:_
-com.mysql.cj.jdbc.Driver
-* _URL:_
-jdbc:mysql://gcp.connect.psdb.cloud/dockerdb?sslMode=VERIFY_IDENTITY
-* _USER:_
-7buakymcihkpdh1qlbdr
-* _PASSWORD:_
-pscale_pw_t9e4g5RAZPOgUZzh785Ls72bPwGDWGRIf7UdHmdq2DE
+1. Clone the repository:
+```sh
+git@github.com:konstantopoulosk/MavenDocker-NullProject.git
+```
+2. Build the app inside `dockermonitor`:
+```sh
+mvn clean install
+```
+```sh
+mvn mvn build
+```
 ### Running
-----edw prepei na mpei pws `trexei`----
+1. Inside `MavenDocker-NullProject`:
+```sh
+copy c C:\Users\[you]\MavenDocker-NullProject\dockermonitor\target
+```
+2. Run the app inside `dockermonitor/target`:
+
+```sh
+java -jar nullteamproject-3.3.4-shaded.jar
+```
 ### Inside the App
 Containers Menu:  
 ![This is a simple manual for the Containers Menu](dockermonitor%2Fsrc%2Fmain%2Fresources%2FManualPhotos%2FMenuManual.jpg)  
