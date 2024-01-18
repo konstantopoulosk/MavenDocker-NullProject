@@ -25,7 +25,7 @@ mvn mvn build
 ### Running
 1. Inside `MavenDocker-NullProject`:
 ```sh
-copy c C:\Users\[you]\MavenDocker-NullProject\dockermonitor\target
+copy c [path]\MavenDocker-NullProject\dockermonitor\target
 ```
 2. Run the app inside `dockermonitor/target`:
 
