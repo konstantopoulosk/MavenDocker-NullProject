@@ -156,6 +156,18 @@ public class MainSceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!isPressed) {
+            if (!DockerImage.imageslist.isEmpty()) {
+                System.out.println("List not empty");
+                for (DockerImage i : DockerImage.imageslist) {
+                    DockerImage.imageslist.remove(i);
+                }
+            }
+            if (!DockerInstance.containerslist.isEmpty()) {
+                System.out.println("List Not Empty");
+                for (DockerInstance i : DockerInstance.containerslist) {
+                    DockerInstance.containerslist.remove(i);
+                }
+            }
             connection = DatabaseThread.takeCredentials();
             Lists.listContainers();
             Lists.listImage(); //Creating objects of DockerImage class to use DockerImage.imagesList later
@@ -216,7 +228,7 @@ public class MainSceneController implements Initializable {
             Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
             Stage stage = new Stage(); //Stage
             stage.setTitle(title); //Title of the Stage.
-            stage.getIcons().add(App.getIcon());
+            stage.getIcons().add(new Image("Icon.png"));
             stage.setScene(new Scene(root1, 600, 400));
             stage.show();
         } catch (CannotOpenNewWindow e) {
@@ -237,7 +249,7 @@ public class MainSceneController implements Initializable {
             Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
             Stage stage = new Stage(); //Stage
             stage.setTitle(title); //Title of the stage
-            stage.getIcons().add(App.getIcon()); //Added the Icon.
+            stage.getIcons().add(new Image("Icon.png")); //Added the Icon.
             stage.setScene(new Scene(root1, 300, 150)); //Setting the Scene.
             stage.show(); //Showing the Scene.
         } catch (CannotOpenNewWindow cannotOpenNewWindow) {
@@ -714,16 +726,16 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     public void applyPull(ActionEvent event) {
-            if (imageToPull != null && !DockerImage.imageslist.contains(idForApi)) {
-                String image = imageToPull.getText(); //This is what User wrote he wants to pull.
-                System.out.println(image);
-                openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
-                DockerImage.pullImage(image);
-            } else {
-                System.out.println(imageToPull);
-                System.out.println("Something Is Wrong!");
-            }
-            imagesList = new ListView<>(observableList);
+        if (imageToPull != null && !DockerImage.imageslist.contains(idForApi)) {
+            String image = imageToPull.getText(); //This is what User wrote he wants to pull.
+            System.out.println(image);
+            openConfirmationWindow(event, "Pull Image Properties", "imagePullConfirmation.fxml");
+            DockerImage.pullImage(image);
+        } else {
+            System.out.println(imageToPull);
+            System.out.println("Something Is Wrong!");
+        }
+        imagesList = new ListView<>(observableList);
     }
     /**
      * THis method takes the user to a new scene with
@@ -818,7 +830,7 @@ public class MainSceneController implements Initializable {
     public void retrieveIdToStop(MouseEvent mouseEvent) {
         System.out.println(activeContainers.getSelectionModel().getSelectedItem());
         if (activeContainers.getSelectionModel().getSelectedItem() != null
-        && !activeContainers.getSelectionModel().getSelectedItem().equals("NULL")) {
+                && !activeContainers.getSelectionModel().getSelectedItem().equals("NULL")) {
             String c = activeContainers.getSelectionModel().getSelectedItem().toString();
             String[] c1 = c.split("ID: ", 2);
             Lists.choiceContainers.add(c1[1]);
@@ -906,14 +918,14 @@ public class MainSceneController implements Initializable {
                 state = output.getString("state");
                 String s =
                         "\nMeasurement ID: " + id
-                        + "\nContainer ID: " + containerId
-                        + "\nName: " + name
-                        + " Image: " + image
-                        + " State: " + state;
+                                + "\nContainer ID: " + containerId
+                                + "\nName: " + name
+                                + " Image: " + image
+                                + " State: " + state;
 
                 list.add(s);
                 if (state.startsWith("running")
-                    || state.endsWith("paused")) {
+                        || state.endsWith("paused")) {
                     up++;
                 } else {
                     down++;

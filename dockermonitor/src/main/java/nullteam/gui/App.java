@@ -1,7 +1,6 @@
 package nullteam.gui;
 
 import com.nullteam.ClientUpdater;
-import com.nullteam.DatabaseThread;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +11,6 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class App extends Application {
     @Override
@@ -21,7 +19,7 @@ public class App extends Application {
         try {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/homeNew.fxml")));
             Scene scene = new Scene(root);
-            primaryStage.getIcons().add(getIcon());
+            primaryStage.getIcons().add(new Image("Icon.png"));
             primaryStage.setTitle("Docker Project");
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
@@ -31,22 +29,7 @@ public class App extends Application {
             System.out.println(e.getMessage());
         }
     }
-    /**
-     *
-     * @return icon Image
-     */
-    public static Image getIcon() {
-        try {
-            /* Getting the Image for the Icon. */
-            FileInputStream inputStream = new FileInputStream("Icon.png");
-            return new Image(inputStream); // Return the Icon
-        } catch (Exception e) {
-            System.out.println("Caught Error: " + e.getMessage());
-            return null;
-        }
-    }
     public static void main(String[] args) {
-        System.out.println("EDW");
         ClientUpdater.connectionAccomplished();
         launch(args);
     }

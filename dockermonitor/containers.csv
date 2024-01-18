@@ -1,4 +1,3 @@
 "Container ID","Name","Image","State"
-"2412aec151043f6867a18214ea94c1d19d2699d013a3bea7d6553665c0b8899f","/festive_meitner","redis","running"
-"d298298ba939a445fa4a534b756edbdb520b7d34e352910dce5952758a72b164","/nifty_haibt","nginx","exited"
-"8d0c8088eb4fba3c8527c82d7b4d8a11a9d78aec208416aad1e5734878840a06","/beautiful_keldysh","nginx","running"
+"91003210c74c6d4d88927be0228aa9123f30d6bffd957cc026d7039732631556","/jovial_boyd","mongo","exited"
+"316fbed687204cc69291a4f8b65d97956817debc44431994485043c8f4523b22","/kostas","redis:latest","exited"
