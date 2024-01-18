@@ -24,7 +24,7 @@ public class DatabaseThread extends Thread {
      * A field for the auto-incremented
      * primary key of the measurements table.
      */
-    static int containers = giveMeCount();
+    static int containers = giveMeCount(); //Last Measurement on table measurements.
     /**
      * A Connection variable to connect to the database.
      */
@@ -37,7 +37,7 @@ public class DatabaseThread extends Thread {
      */
     public DatabaseThread(Connection connection, String ip) {
         DatabaseThread.connection = connection; //Because connectivity methods
-        DatabaseThread.ip = ip;
+        DatabaseThread.ip = ip; //System Ip of Each user.
     }
 
     /**
@@ -45,7 +45,7 @@ public class DatabaseThread extends Thread {
      */
     @Override
     public void run() {
-        if (containers != -1) {
+        if (containers != -1) { //Measurements of Containers (Primary - Foreign Key)
             if (newUser(connection, ip)) { //Checks if he is a new user.
                 System.out.println("New User of our App!");
                 //New user -> write his data.
@@ -53,6 +53,7 @@ public class DatabaseThread extends Thread {
                 addToMeasurements(connection, containers);
                 readContainersFromCsv(connection, containers);
             } else {
+                //Not a new user -> Update His data.
                 System.out.println("Welcome Back: " + connection);
                 updateDatabase();
             }
@@ -97,15 +98,15 @@ public class DatabaseThread extends Thread {
     public static Connection takeCredentials() {
          List<String> list = new ArrayList<>();
          try {
-             File file = new File("database").getAbsoluteFile();
+             File file = new File("c").getAbsoluteFile();
              Scanner reader = new Scanner(file);
              while (reader.hasNextLine()) {
                  String data = reader.nextLine();
                  list.add(data);
              }
-             String url = list.get(0);
-             String user = list.get(1);
-             String password = list.get(2);
+             String url = list.get(0).replace("---", "");
+             String user = list.get(1).replace("---", "");
+             String password = list.get(2).replace("---", "");
              return ClientUpdater.connectToDatabase(url, user, password);
          } catch (FileNotFoundException e1) {
              System.out.println("Caught Error: " + e1.getMessage());
@@ -125,14 +126,16 @@ public class DatabaseThread extends Thread {
             String[] container;
             while ((container = csvReader.readNext()) != null) {
                 if (!container[0].equals("Container ID")) { // Does not insert the header.
-                    if (!searchInDatabase(container[0])) {
+                    if (searchContainerInDatabase(container[0])) { // Container Exists in Database.
+                        changeSystemIpToMeasurements(container[0]);
+                        changeSystemIpToContainers(container[0]); // System Ip may change, container id never changes
+                    } else {
                         System.out.println("Container with id: " + container[0] + "does not exist in database.");
                         System.out.println("Adding it ...");
                         String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
                                 "VALUES (?, ?, ?, ?, ?, ?)";
                         PreparedStatement preparedStatement = connection.prepareStatement(query);
                         try {
-                            System.out.println(container.length);
                             for (int i = 0; i < 4; i++) {
                                 preparedStatement.setString(i + 1, container[i]); //easier with for loop.
                             } //fewer lines.
@@ -143,9 +146,6 @@ public class DatabaseThread extends Thread {
                         preparedStatement.setInt(6, containers);
                         //sets the ? with actual values.
                         preparedStatement.executeUpdate(); //executes the query
-                    } else {
-                        /* Not a new User, some bug happened (e.g. SystemIp Changed) so change user's SystemIp. */
-                        changeSystemIp(container[0]);
                     }
                 }
             }
@@ -263,13 +263,37 @@ public class DatabaseThread extends Thread {
     /**
      * javadoc
      */
-    public void changeSystemIp(String containerId) {
+    public void changeSystemIpToContainers(String containerId) {
         try {
             String query = "UPDATE containers SET SystemIp = ? WHERE containerId = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, ip);
             preparedStatement.setString(2, containerId);
             preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
+        }
+    }
+    public void changeSystemIpToMeasurements(String containerId) {
+        try {
+            String query = "SELECT measurements.SystemIp, measurements.id from measurements, containers Where containerId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, containerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            String systemIp = " ";
+            while (resultSet.next()) {
+                String oldIp = resultSet.getString("SystemIp");
+                int measurement = resultSet.getInt("id");
+                if (!oldIp.equals(systemIp)) {
+                    String q = "UPDATE measurements SET SystemIp = ? WHERE id = ? and SystemIp = ?";
+                    PreparedStatement p = connection.prepareStatement(q);
+                    p.setString(1, ip);
+                    p.setInt(2, measurement);
+                    p.setString(3, oldIp);
+                    p.executeUpdate();
+                    systemIp = oldIp;
+                }
+            }
         } catch (Exception e) {
             System.out.println("Caught Error: " + e.getMessage());
         }
@@ -439,6 +463,7 @@ public class DatabaseThread extends Thread {
              ResultSet resultSet = p.executeQuery();
              resultSet.next();
              int count = resultSet.getInt(1);
+             System.out.println(count);
              if (count > 0) {
                  return true; //Exists
              } else {
@@ -448,5 +473,24 @@ public class DatabaseThread extends Thread {
              System.out.println("Caught Error: " + e.getMessage());
              return false;
          }
+    }
+    public boolean searchContainerInDatabase(String id) {
+        try {
+            String query = "SELECT COUNT(*) FROM containers WHERE containerId = ?";
+            PreparedStatement p = connection.prepareStatement(query);
+            p.setString(1, id);
+            ResultSet resultSet = p.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            if (count == 1) {
+                //Container Exists in Database
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Caught Error: " + e.getMessage());
+            return false;
+        }
     }
 }

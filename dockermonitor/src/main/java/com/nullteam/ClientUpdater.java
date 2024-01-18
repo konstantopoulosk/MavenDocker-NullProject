@@ -51,7 +51,6 @@ public final class ClientUpdater {
             }
         }
     }
-
     /**
      * This method gets a list of updated containers from
      * the updated Docker Client in order to always have

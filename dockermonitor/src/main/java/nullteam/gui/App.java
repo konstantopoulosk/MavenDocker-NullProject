@@ -19,7 +19,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root;
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Home.fxml")));
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/homeNew.fxml")));
             Scene scene = new Scene(root);
             primaryStage.getIcons().add(getIcon());
             primaryStage.setTitle("Docker Project");
@@ -31,7 +31,6 @@ public class App extends Application {
             System.out.println(e.getMessage());
         }
     }
-
     /**
      *
      * @return icon Image
@@ -47,6 +46,7 @@ public class App extends Application {
         }
     }
     public static void main(String[] args) {
+        System.out.println("EDW");
         ClientUpdater.connectionAccomplished();
         launch(args);
     }

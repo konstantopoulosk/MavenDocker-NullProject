@@ -156,18 +156,6 @@ public class MainSceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!isPressed) {
-            if (!DockerImage.imageslist.isEmpty()) {
-                System.out.println("List not empty");
-                for (DockerImage i : DockerImage.imageslist) {
-                    DockerImage.imageslist.remove(i);
-                }
-            }
-            if (!DockerInstance.containerslist.isEmpty()) {
-                System.out.println("List Not Empty");
-                for (DockerInstance i : DockerInstance.containerslist) {
-                    DockerInstance.containerslist.remove(i);
-                }
-            }
             connection = DatabaseThread.takeCredentials();
             Lists.listContainers();
             Lists.listImage(); //Creating objects of DockerImage class to use DockerImage.imagesList later
