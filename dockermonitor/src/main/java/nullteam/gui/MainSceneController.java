@@ -22,6 +22,7 @@ import javafx.scene.shape.Box;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.awt.Desktop;
 import javax.swing.text.BoxView;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -937,6 +938,14 @@ public class MainSceneController implements Initializable {
             measure = new ListView<>(observableList);
         } catch (Exception e) {
             System.out.println("Caught Error: " + e.getMessage());
+        }
+    }
+    @FXML
+    public void handleLinkClick(ActionEvent event) {
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/konstantopoulosk/MavenDocker-NullProject"));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     public ResultSet measurementsQuery(Date date) {

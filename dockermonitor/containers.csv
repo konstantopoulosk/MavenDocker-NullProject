@@ -1,3 +1,0 @@
-"Container ID","Name","Image","State"
-"91003210c74c6d4d88927be0228aa9123f30d6bffd957cc026d7039732631556","/jovial_boyd","mongo","exited"
-"316fbed687204cc69291a4f8b65d97956817debc44431994485043c8f4523b22","/kostas","redis:latest","exited"

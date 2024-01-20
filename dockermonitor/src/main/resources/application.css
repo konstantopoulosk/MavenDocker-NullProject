@@ -13,3 +13,15 @@
     -fx-background-color: #297db9; /* Darker background color for hover state */
     -fx-text-fill: #fff; /* Text color for hover state */
 }
+
+.round-button {
+    -fx-border-radius: 0.5;
+    -fx-background-color: #9999ff;
+    -fx-background-radius: 10 20 20 10; /* Adjust these values to create a rounded rectangle */
+    -fx-border-color: black;
+    -fx-border-radius: 8 18 18 8; /* Adjust these values to match the background radius */
+    -fx-border-width: 2px;
+    -fx-font-size: 17;
+    -fx-font-family: "Inter Semi Bold";
+    -fx-cursor: hand;
+}
