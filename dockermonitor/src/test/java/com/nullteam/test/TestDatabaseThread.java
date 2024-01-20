@@ -17,7 +17,7 @@ public class TestDatabaseThread {
 
     @Before
     public void setUp() {
-        ip = ClientUpdater.getIp();
+        ip = ClientUpdater.getDeviceName();
         connection = null;
     }
     @Test

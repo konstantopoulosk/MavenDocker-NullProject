@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #9BC2F9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nullteam.gui.MainSceneController">
+    <children>
+        <Label layoutX="141.0" prefHeight="11.0" prefWidth="131.0" text="Measurements">
+            <font>
+                <Font name="Calibri Bold Italic" size="21.0" />
+            </font>
+        </Label>
+        <ListView fx:id="measure" layoutX="21.0" layoutY="26.0" onMouseClicked="#retrieveIdToStart" prefHeight="232.0" prefWidth="370.0">
+            <effect>
+                <DropShadow />
+            </effect>
+        </ListView>
+        <Button layoutX="406.0" layoutY="269.0" mnemonicParsing="false" onAction="#applyMeasurements" text="Apply" textFill="#162dc1">
+            <font>
+                <Font name="Calibri Light Italic" size="15.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </Button>
+        <Button layoutX="515.0" layoutY="269.0" mnemonicParsing="false" onAction="#pressContainers" text="Go Back" textFill="#162dc1">
+            <font>
+                <Font name="Calibri Light Italic" size="15.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </Button>
+      <TextField fx:id="date" layoutX="434.0" layoutY="142.0" opacity="0.7" prefHeight="35.0" prefWidth="131.0">
+         <effect>
+            <DropShadow />
+         </effect>
+          <cursor>
+              <Cursor fx:constant="HAND"/>
+          </cursor>
+      </TextField>
+      <Label layoutX="436.0" layoutY="78.0" text="Date and Time">
+         <font>
+            <Font name="Calibri Bold Italic" size="21.0" />
+         </font>
+      </Label>
+      <Label layoutX="440.0" layoutY="104.0" prefHeight="28.0" prefWidth="150.0" text="e.g. 2024-01-13" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font name="Calibri Italic" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="32.0" layoutY="270.0" text="UP:">
+         <font>
+            <Font name="Calibri Italic" size="21.0" />
+         </font>
+      </Label>
+      <Label layoutX="15.0" layoutY="348.0" text="DOWN:">
+         <font>
+            <Font name="Calibri Italic" size="21.0" />
+         </font>
+      </Label>
+      <Text fx:id="upContainers" layoutX="111.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="106.39999999999986">
+         <font>
+            <Font name="Calibri Italic" size="17.0" />
+         </font>
+      </Text>
+      <Text fx:id="downContainers" layoutX="111.0" layoutY="365.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="106.39999999999986">
+         <font>
+            <Font name="Calibri Italic" size="17.0" />
+         </font>
+      </Text>
+    </children>
+</AnchorPane>

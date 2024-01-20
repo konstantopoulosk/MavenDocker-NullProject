@@ -25,7 +25,7 @@ public class TestClientUpdater {
     String containerId;
     String status;
     Connection connection;
-    InetAddress ip;
+    String deviceName;
 
     @Before
     public void setUp() {
@@ -35,7 +35,7 @@ public class TestClientUpdater {
         status = ClientUpdater.getUpdatedContainersFromClient()
                 .get(0).getStatus();
         try {
-            ip = InetAddress.getLocalHost();
+            deviceName = String.valueOf(InetAddress.getLocalHost()).split("/", 2)[0];
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
@@ -105,7 +105,7 @@ public class TestClientUpdater {
     }
     @Test
     public void testGetIp() {
-        String ip1 = ClientUpdater.getIp();
-        Assert.assertTrue(ip1.equals(String.valueOf(ip)));
+        String deviceName1 = ClientUpdater.getDeviceName();
+        Assert.assertTrue(deviceName1.equals(String.valueOf(deviceName)));
     }
 }

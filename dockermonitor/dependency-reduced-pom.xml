@@ -28,7 +28,7 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.nullteam.Main</mainClass>
+              <mainClass>org.openjfx.Launcher</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

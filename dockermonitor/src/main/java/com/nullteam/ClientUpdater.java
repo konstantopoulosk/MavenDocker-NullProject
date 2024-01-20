@@ -205,13 +205,13 @@ public final class ClientUpdater {
      * from User to identify him.
      * @return String
      */
-    public static String getIp() {
+    public static String getDeviceName() {
         InetAddress localhost = null;
         try {
             localhost = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
                 System.out.println("Caught Error: " + e.getMessage());
         }
-        return String.valueOf(localhost);
+        return String.valueOf(localhost).split("/", 2)[0];
     }
 }

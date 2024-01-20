@@ -4,6 +4,7 @@ import com.github.dockerjava.api.model.Container;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.function.Consumer;
 
 public class ExecutorThread extends Thread {
     private final BlockingQueue<ActionRequest> actionQueue;
@@ -49,6 +50,7 @@ public class ExecutorThread extends Thread {
      * @param actionType String
      * @param containerId String
      */
+    /*
     private void performDockerAction(String actionType, String containerId) {
         System.out.println("Performing action: " + actionType + " on container: " + containerId);
         switch (actionType) {
@@ -94,6 +96,48 @@ public class ExecutorThread extends Thread {
             default:
                 System.out.println("Invalid action type");
         }
+    }
+    */
+    private void performDockerAction(String actionType, String containerId) {
+        System.out.println("Performing action: " + actionType + " on container: " + containerId);
+        switch (actionType) {
+            case "START":
+                executeContainerAction(containerId, this::startContainer, "Started");
+                break;
+            case "STOP":
+                executeContainerAction(containerId, this::stopContainer, "Stopped");
+                break;
+            case "RENAME":
+                executeContainerAction(containerId, id -> renameContainer(id, name2Rename), "Renamed");
+                break;
+            case "REMOVE":
+                executeContainerAction(containerId, this::removeContainer, "Removed");
+                break;
+            case "RESTART":
+                executeContainerAction(containerId, this::restartContainer, "Restarted");
+                break;
+            case "PAUSE":
+                executeContainerAction(containerId, this::pauseContainer, "Paused");
+                break;
+            case "UNPAUSE":
+                executeContainerAction(containerId, this::unpauseContainer, "Unpaused");
+                break;
+            case "KILL":
+                executeContainerAction(containerId, this::killContainer, "Killed");
+                break;
+            case "IMPLEMENT":
+                executeContainerAction(containerId, this::implementImage, "Implemented Image");
+                break;
+            case "REMOVEIMAGE":
+                executeContainerAction(containerId, this::removeImage, "Removed Image");
+                break;
+            default:
+                System.out.println("Invalid action type");
+        }
+    }
+    private void executeContainerAction(String containerId, Consumer<String> action, String actionDescription) {
+        action.accept(containerId);
+        System.out.println(actionDescription + " container: " + containerId);
     }
     /**
      * This method finds a Container in the DockerClient its id

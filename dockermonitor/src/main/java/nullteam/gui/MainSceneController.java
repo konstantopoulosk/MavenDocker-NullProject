@@ -76,7 +76,7 @@ public class MainSceneController implements Initializable {
     //private String containerId; //field for container id, user presses an item in List View and the container id is here
     //private String imageId; //field for image id, user presses in list view an item and image id is here
     static Connection connection = null; //Variable to store the connection
-    final String ip = ClientUpdater.getIp(); //variable to get the System Ip of a User.
+    final String deviceName = ClientUpdater.getDeviceName(); //variable to get the System Ip of a User.
     private String idForApi;
     private static String id;
     Stage stage; //Stage to show
@@ -190,7 +190,7 @@ public class MainSceneController implements Initializable {
      */
     public void databaseThread() {
         System.out.println("This is a measurement for the database!");
-        DatabaseThread databaseThread = new DatabaseThread(connection, ip);
+        DatabaseThread databaseThread = new DatabaseThread(connection, deviceName);
         databaseThread.start();
         try {
             databaseThread.join();
@@ -951,11 +951,11 @@ public class MainSceneController implements Initializable {
     public ResultSet measurementsQuery(Date date) {
         try {
             String query = "select measurements.id, containerId, name, image, state from measurements, " +
-                    "containers where containers.SystemIp = ? " +
-                    "and containers.SystemIp = measurements.SystemIp and containers.id = measurements.id " +
+                    "containers where containers.DeviceName = ? " +
+                    "and containers.DeviceName = measurements.DeviceName and containers.id = measurements.id " +
                     "and measurements.date = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, ip);
+            preparedStatement.setString(1, deviceName);
             preparedStatement.setDate(2, date);
             return preparedStatement.executeQuery();
         } catch (Exception e) {

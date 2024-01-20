@@ -19,7 +19,7 @@ public class DatabaseThread extends Thread {
      * A field for the System Ip
      * to recognise the user.
      */
-    static String ip;
+    static String deviceName;
     /**
      * A field for the auto-incremented
      * primary key of the measurements table.
@@ -33,11 +33,11 @@ public class DatabaseThread extends Thread {
      * Constructor for DatabaseThread object
      * that makes the connection to the database.
      * @param connection Connection
-     * @param ip String
+     * @param deviceName String
      */
-    public DatabaseThread(Connection connection, String ip) {
+    public DatabaseThread(Connection connection, String deviceName) {
         DatabaseThread.connection = connection; //Because connectivity methods
-        DatabaseThread.ip = ip; //System Ip of Each user.
+        DatabaseThread.deviceName = deviceName; //System Ip of Each user.
     }
 
     /**
@@ -46,7 +46,7 @@ public class DatabaseThread extends Thread {
     @Override
     public void run() {
         if (containers != -1) { //Measurements of Containers (Primary - Foreign Key)
-            if (newUser(connection, ip)) { //Checks if he is a new user.
+            if (newUser(connection, deviceName)) { //Checks if he is a new user.
                 System.out.println("New User of our App!");
                 //New user -> write his data.
                 containers++;
@@ -126,27 +126,21 @@ public class DatabaseThread extends Thread {
             String[] container;
             while ((container = csvReader.readNext()) != null) {
                 if (!container[0].equals("Container ID")) { // Does not insert the header.
-                    if (searchContainerInDatabase(container[0])) { // Container Exists in Database.
-                        changeSystemIpToMeasurements(container[0]);
-                        changeSystemIpToContainers(container[0]); // System Ip may change, container id never changes
-                    } else {
-                        System.out.println("Container with id: " + container[0] + "does not exist in database.");
-                        System.out.println("Adding it ...");
-                        String query = "INSERT INTO containers (containerId, name, image, state, SystemIp, id) " +
-                                "VALUES (?, ?, ?, ?, ?, ?)";
-                        PreparedStatement preparedStatement = connection.prepareStatement(query);
-                        try {
-                            for (int i = 0; i < 4; i++) {
-                                preparedStatement.setString(i + 1, container[i]); //easier with for loop.
-                            } //fewer lines.
-                        } catch (Exception e) {
-                            System.out.println("Caught Error: " + e.getMessage());
-                        }
-                        preparedStatement.setString(5, ip);
-                        preparedStatement.setInt(6, containers);
-                        //sets the ? with actual values.
-                        preparedStatement.executeUpdate(); //executes the query
+                    System.out.println("Adding to database container with id: " + container[0]);
+                    String query = "INSERT INTO containers (containerId, name, image, state, DeviceName, id) " +
+                            "VALUES (?, ?, ?, ?, ?, ?)";
+                    PreparedStatement preparedStatement = connection.prepareStatement(query);
+                    try {
+                        for (int i = 0; i < 4; i++) {
+                            preparedStatement.setString(i + 1, container[i]); //easier with for loop.
+                        } //fewer lines.
+                    } catch (Exception e) {
+                        System.out.println("Caught Error: " + e.getMessage());
                     }
+                    preparedStatement.setString(5, deviceName);
+                    preparedStatement.setInt(6, containers);
+                    //sets the ? with actual values.
+                    preparedStatement.executeUpdate(); //executes the query
                 }
             }
             csvReader.close(); //closes the csv
@@ -170,8 +164,8 @@ public class DatabaseThread extends Thread {
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
             LocalDate today = LocalDate.now(); // LOCAL DATE (NO TIME)
-            String query = String.format("INSERT INTO measurements (`id`, `date`, `SystemIp`) " +
-                    "VALUES (\"%s\", \"%s\", \"%s\")", containers, dtf.format(today), ip);
+            String query = String.format("INSERT INTO measurements (`id`, `date`, `DeviceName`) " +
+                    "VALUES (\"%s\", \"%s\", \"%s\")", containers, dtf.format(today), deviceName);
             Statement statement = connection.createStatement();
             statement.executeUpdate(query); //EXECUTING THE QUERY
         } catch (SQLException e) {
@@ -184,18 +178,18 @@ public class DatabaseThread extends Thread {
      * This method checks if the user is
      * new or not with his System Ip.
      * @param connection Connection
-     * @param ip String
+     * @param deviceName String
      * @return boolean
      */
-    public boolean newUser(Connection connection, String ip) {
+    public boolean newUser(Connection connection, String deviceName) {
          try {
-             String query = "SELECT COUNT(*) FROM containers WHERE SystemIp = ?";
+             String query = "SELECT COUNT(*) FROM containers WHERE DeviceName = ?";
              PreparedStatement preparedStatement = connection.prepareStatement(query);
-             preparedStatement.setString(1, ip);
+             preparedStatement.setString(1, deviceName);
              ResultSet resultSet = preparedStatement.executeQuery();
              resultSet.next();
              int count = resultSet.getInt(1);
-             //count of the rows with SystemIp = ip
+             //count of the rows with DeviceName = deviceName
              return count <= 0; //not a new user. -> false
          } catch (Exception e) {
              System.out.println("Caught Error: " + e.getMessage());
@@ -211,9 +205,9 @@ public class DatabaseThread extends Thread {
     public List<String[]> getEverythingFromDatabase() {
         try {
             List<String[]> containersInDatabase = new ArrayList<>();
-            String query = "SELECT * FROM containers WHERE SystemIp = ?";
+            String query = "SELECT * FROM containers WHERE DeviceName = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, ip);
+            preparedStatement.setString(1, deviceName);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 String[] c = new String[] {
@@ -261,44 +255,6 @@ public class DatabaseThread extends Thread {
         }
     }
     /**
-     * javadoc
-     */
-    public void changeSystemIpToContainers(String containerId) {
-        try {
-            String query = "UPDATE containers SET SystemIp = ? WHERE containerId = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, ip);
-            preparedStatement.setString(2, containerId);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("Caught Error: " + e.getMessage());
-        }
-    }
-    public void changeSystemIpToMeasurements(String containerId) {
-        try {
-            String query = "SELECT measurements.SystemIp, measurements.id from measurements, containers Where containerId = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, containerId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            String systemIp = " ";
-            while (resultSet.next()) {
-                String oldIp = resultSet.getString("SystemIp");
-                int measurement = resultSet.getInt("id");
-                if (!oldIp.equals(systemIp)) {
-                    String q = "UPDATE measurements SET SystemIp = ? WHERE id = ? and SystemIp = ?";
-                    PreparedStatement p = connection.prepareStatement(q);
-                    p.setString(1, ip);
-                    p.setInt(2, measurement);
-                    p.setString(3, oldIp);
-                    p.executeUpdate();
-                    systemIp = oldIp;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Caught Error: " + e.getMessage());
-        }
-    }
-    /**
      * This method changes the name of a specific container and
      * adds to table measurements because Rename is a measurement.
      * @param newName String
@@ -310,11 +266,11 @@ public class DatabaseThread extends Thread {
             containers++;
             addToMeasurements(connection, containers);
             //QUERY to UPDATE the name and id (foreign key)
-            String queryName = "UPDATE containers SET name = ?, id = ? WHERE SystemIp = ? AND containerId = ?";
+            String queryName = "UPDATE containers SET name = ?, id = ? WHERE DeviceName = ? AND containerId = ?";
             PreparedStatement preparedStatementName = connection.prepareStatement(queryName);
             preparedStatementName.setString(1, newName); //NEW NAME
             preparedStatementName.setInt(2, containers);
-            preparedStatementName.setString(3, ip);
+            preparedStatementName.setString(3, deviceName);
             preparedStatementName.setString(4, containerId);
             //Set the values.
             preparedStatementName.executeUpdate(); //CHANGES THE NAME according to CSV
@@ -332,11 +288,11 @@ public class DatabaseThread extends Thread {
         try {
             containers++;
             addToMeasurements(connection, containers);
-            String queryState = "UPDATE containers SET state = ?, id = ? WHERE SystemIp = ? AND containerId = ?";
+            String queryState = "UPDATE containers SET state = ?, id = ? WHERE DeviceName = ? AND containerId = ?";
             PreparedStatement preparedStatementState = connection.prepareStatement(queryState);
             preparedStatementState.setString(1, state); //NEW STATE
             preparedStatementState.setInt(2, containers);
-            preparedStatementState.setString(3, ip);
+            preparedStatementState.setString(3, deviceName);
             preparedStatementState.setString(4, containerId);
             preparedStatementState.executeUpdate(); //CHANGES THE STATE.
         } catch (Exception e) {
@@ -350,9 +306,9 @@ public class DatabaseThread extends Thread {
      */
     public void removeContainer(String containerId) {
         try {
-            String queryRemove = "DELETE FROM containers WHERE SystemIp = ? AND containerId = ?";
+            String queryRemove = "DELETE FROM containers WHERE DeviceName = ? AND containerId = ?";
             PreparedStatement preparedStatementRemove = connection.prepareStatement(queryRemove);
-            preparedStatementRemove.setString(1, ip);
+            preparedStatementRemove.setString(1, deviceName);
             preparedStatementRemove.setString(2, containerId);
             preparedStatementRemove.executeUpdate(); //REMOVES FROM DATABASE IF CONTAINER
             //DOES NOT EXIST IN CSV.
@@ -375,14 +331,14 @@ public class DatabaseThread extends Thread {
             containers++;
             addToMeasurements(connection, containers);
             //WRITE CONTAINER IN DATABASE IMPLEMENT IMAGE -> START NEW CONTAINER
-            String queryImplement = "INSERT INTO containers (containerId, name, image, state, SystemIp, id)" +
+            String queryImplement = "INSERT INTO containers (containerId, name, image, state, DeviceName, id)" +
                     "VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatementImplement = connection.prepareStatement(queryImplement);
             preparedStatementImplement.setString(1, id); //ID
             preparedStatementImplement.setString(2, name); //NAME
             preparedStatementImplement.setString(3, image); //IMAGE
             preparedStatementImplement.setString(4, state); //STATE
-            preparedStatementImplement.setString(5, ip);
+            preparedStatementImplement.setString(5, deviceName);
             preparedStatementImplement.setInt(6, containers);
             preparedStatementImplement.executeUpdate();
         } catch (Exception e) {
@@ -405,19 +361,16 @@ public class DatabaseThread extends Thread {
                  String name = containers[1];
                  String image = containers[2];
                  String state = containers[3];
-                 if (searchInDatabase(id)) {
-                     //EXISTS IN DATABASE
+                 if (searchInDatabase(id)) { //EXISTS IN DATABASE
                      changeName(name, id);
                      changeState(state, id);
-                 } else {
-                     //NOT EXIST IN DATABASE
+                 } else { //Container in CSV DOES NOT EXIST IN DATABASE
                      implementContainer(id, name, state, image);
                  }
              }
              for (String[] c : containersInDatabase) {
                  String id = c[0];
-                 if (!searchInCsv(id)) {
-                     //NOT EXIST IN CSV BUT EXISTS IN DATABASE
+                 if (!searchInCsv(id)) { //NOT EXIST IN CSV BUT EXISTS IN DATABASE
                      removeContainer(id);
                  }
              }
@@ -456,14 +409,13 @@ public class DatabaseThread extends Thread {
      */
     public boolean searchInDatabase(String id) {
          try {
-             String query = "SELECT COUNT(*) FROM containers WHERE containerId = ? AND SystemIp = ?";
+             String query = "SELECT COUNT(*) FROM containers WHERE containerId = ? AND DeviceName = ?";
              PreparedStatement p = connection.prepareStatement(query);
              p.setString(1,id);
-             p.setString(2, ip);
+             p.setString(2, deviceName);
              ResultSet resultSet = p.executeQuery();
              resultSet.next();
              int count = resultSet.getInt(1);
-             System.out.println(count);
              if (count > 0) {
                  return true; //Exists
              } else {
@@ -473,24 +425,5 @@ public class DatabaseThread extends Thread {
              System.out.println("Caught Error: " + e.getMessage());
              return false;
          }
-    }
-    public boolean searchContainerInDatabase(String id) {
-        try {
-            String query = "SELECT COUNT(*) FROM containers WHERE containerId = ?";
-            PreparedStatement p = connection.prepareStatement(query);
-            p.setString(1, id);
-            ResultSet resultSet = p.executeQuery();
-            resultSet.next();
-            int count = resultSet.getInt(1);
-            if (count == 1) {
-                //Container Exists in Database
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            System.out.println("Caught Error: " + e.getMessage());
-            return false;
-        }
     }
 }
