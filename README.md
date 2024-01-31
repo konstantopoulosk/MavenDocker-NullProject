@@ -10,6 +10,7 @@ see the Docker Cluster and interact with it with several actions on both Docker 
 * Make sure Docker Desktop is downloaded and running in the background
 * Have at least two images and two containers in your Docker Cluster
 * Internet connection
+* JDK 21
 ### Building
 1. Clone the repository:
 ```sh
