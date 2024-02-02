@@ -14,7 +14,7 @@ see the Docker Cluster and interact with it with several actions on both Docker 
 ### Building
 1. Clone the repository:
 ```sh
-git@github.com:konstantopoulosk/MavenDocker-NullProject.git
+git clone git@github.com:konstantopoulosk/MavenDocker-NullProject.git
 ```
 2. Build the app inside `dockermonitor`:
 ```sh
